@@ -798,6 +798,7 @@ body {
     <p class="sub-title">揭开你的隐藏性格面纱</p>
 
     <div class="input-card">
+      <div style="text-align:center;margin-bottom:16px;"><span class="loc-badge" id="loc-badge"><span class="dot"></span> <span id="loc-city">📍 定位中...</span></span></div>
       <div class="input-group">
         <label>✦ 你的名字</label>
         <input type="text" id="input-name" placeholder="请输入你的名字" maxlength="20" autocomplete="off">
@@ -827,7 +828,6 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <div style="text-align:center;"><span class="loc-badge" id="loc-badge" style="display:none;"><span class="dot"></span> <span id="loc-city">定位中...</span></span></div>
     <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v4.1</p>
   </div>
 
@@ -1800,18 +1800,21 @@ function copyAdminReport() {
 // GPS定位城市
 var userCity = '';
 (function(){
-  if(!navigator.geolocation) return;
+  var cityEl=document.getElementById('loc-city');
+  if(!navigator.geolocation){cityEl.textContent='📍 定位不可用';return;}
   navigator.geolocation.getCurrentPosition(function(pos){
     var url='https://nominatim.openstreetmap.org/reverse?format=json&lat='+pos.coords.latitude+'&lon='+pos.coords.longitude+'&zoom=10&accept-language=zh';
     fetch(url).then(function(r){return r.json();}).then(function(d){
       var addr=d.address||{};
-      userCity=addr.city||addr.town||addr.county||'';
-      if(userCity){
-        document.getElementById('loc-city').textContent=userCity;
-        document.getElementById('loc-badge').style.display='inline-flex';
-      }
-    }).catch(function(){});
-  },function(){},{timeout:8000,enableHighAccuracy:false});
+      userCity=addr.city||addr.town||addr.county||addr.state||'';
+      if(userCity){cityEl.textContent='📍 '+userCity;}
+      else{cityEl.textContent='📍 定位成功';userCity='未知';}
+    }).catch(function(){cityEl.textContent='📍 网络异常';});
+  },function(err){
+    if(err.code===1){cityEl.textContent='📍 请授权定位';}
+    else if(err.code===2){cityEl.textContent='📍 定位信号弱';}
+    else{cityEl.textContent='📍 定位超时';}
+  },{timeout:10000,enableHighAccuracy:false});
 })();
 </script>
 
