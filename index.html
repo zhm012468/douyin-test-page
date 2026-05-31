@@ -828,7 +828,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.1</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.2</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1437,16 +1437,23 @@ function onPalmPick(e){
   };r.readAsDataURL(f);
 }
 function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');p.src='';p.style.display='none';document.getElementById('palmBox').classList.remove('has-img');document.getElementById('palmTag').style.display='none';document.getElementById('palmFile').value='';}
-// 手心识别 —— 只认人体肤色，排除非手物体
+// 手心识别 —— 肤色 + 手指轮廓检测
 function classifyPalm(d){
-  var total=d.width*d.height,skin=0;
+  var w=d.width,h=d.height,total=w*h,skin=0;
+  var skinRow=[]; for(var y=0;y<h;y++)skinRow[y]=0;
   for(var i=0;i<total;i+=3){
     var idx=i*4,r=d[idx],g=d[idx+1],b=d[idx+2];
-    // 人体肤色：暖色调，R通道最高
-    if(r>75&&g>30&&b>10&&r>g&&r>b)skin++;
+    if(r>75&&g>30&&b>10&&r>g&&r>b){skin++;skinRow[Math.floor(i/w)]++;}
   }
-  // 肤色占比>8%即认为画面中有手
-  if(skin/total<0.08)return '未检测到人体手掌';
+  if(skin/total<0.06)return '未检测到人体手掌';
+  // 手指检测：扫描上半部分肤色行，统计独立峰数
+  var peaks=0,inPeak=false;
+  for(var y=Math.floor(h*0.1);y<Math.floor(h*0.5);y+=2){
+    var hasSkin=skinRow[y]>w*0.05;
+    if(hasSkin&&!inPeak){peaks++;inPeak=true;}
+    if(!hasSkin)inPeak=false;
+  }
+  if(peaks<2)return '未检测到手指轮廓，请展开五指拍摄';
   return 'ok';
 }
 
