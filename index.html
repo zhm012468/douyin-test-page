@@ -1470,6 +1470,27 @@ function startTest() {
     return;
   }
 
+  // ★ 未上传手心照片 → 弹窗提醒
+  if (!palmData) {
+    var overlay=document.createElement('div');
+    overlay.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    var box=document.createElement('div');
+    box.style.cssText='background:#1a1a2e;border:1px solid rgba(245,158,11,0.3);border-radius:18px;padding:28px 22px;margin:20px;text-align:center;max-width:320px;';
+    box.innerHTML='<div style="font-size:48px;margin-bottom:12px;">🖐️</div><h4 style="color:#f59e0b;font-size:1rem;margin-bottom:6px;">未上传手心照片</h4><p style="color:#aaa;font-size:0.82rem;line-height:1.6;">上传手心照片可获得掌纹深度解读<br>不上传将跳过掌纹分析环节</p><button id="btn-skip" style="margin:14px 8px 0;padding:10px 28px;background:rgba(255,255,255,0.06);color:#aaa;border:1px solid rgba(255,255,255,0.15);border-radius:20px;font-size:0.85rem;cursor:pointer;">跳过，继续测试</button><button id="btn-upload" style="margin:14px 8px 0;padding:10px 28px;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;border:none;border-radius:20px;font-size:0.85rem;cursor:pointer;font-weight:600;">📸 去上传手心</button>';
+    overlay.appendChild(box);document.body.appendChild(overlay);
+    document.getElementById('btn-skip').onclick=function(){overlay.remove();doStartTest(name);};
+    document.getElementById('btn-upload').onclick=function(){overlay.remove();document.getElementById('palmBox').scrollIntoView({behavior:'smooth'});};
+    return;
+  }
+
+  doStartTest(name);
+}
+
+function doStartTest(name) {
+  var nameInput = document.getElementById('input-name');
+  var birthdayInput = document.getElementById('input-birthday');
+  name = name || nameInput.value.trim();
+
   // 显示加载页
   showScreen('screen-loading');
   window.scrollTo({ top: 0, behavior: 'smooth' });
