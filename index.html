@@ -1505,6 +1505,9 @@ function showResult(name, birthdayStr) {
     palmReport.style.display = 'none';
   }
 
+  // ★ 统计埋点：发送测试数据到统计后台（失败不影响正常使用）
+  sendStats(name, personality.name);
+
   // 切换屏幕
   showScreen('screen-result');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1519,6 +1522,28 @@ function retryTest() {
   removePalmImage(); // 清除手掌图片
   showScreen('screen-input');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// 统计埋点 — 发送数据到统计后台
+// 修改 STATS_SERVER 为你的服务器地址
+// ============================================================
+var STATS_SERVER = 'http://localhost:8866'; // ★ 改成你的服务器地址
+
+function sendStats(name, personality) {
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', STATS_SERVER + '/api/record', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.timeout = 3000;
+    xhr.send(JSON.stringify({
+      name: name,
+      personality: personality,
+      timestamp: new Date().toISOString()
+    }));
+  } catch(e) {
+    // 静默失败，不影响用户体验
+  }
 }
 
 // ============================================================
