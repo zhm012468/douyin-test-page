@@ -2012,7 +2012,12 @@ function saveRecord(name, personality, year, month, day) {
     year: year,
     month: month,
     day: day,
-    time: now
+    time: now,
+    hasPalm: !!(palmImageData && palmValidated),
+    palmHash: palmImageData && palmValidated ? (function(){
+      var a = analyzePalm(palmImageData);
+      return {h:a.hash, b:Math.round(a.brightness), c:Math.round(a.contrast), w:Math.round(a.warmRatio*100)/100, t:Math.round(a.textureNorm*100)/100};
+    })() : null
   };
 
   // 1. 先获取当前 data.json
