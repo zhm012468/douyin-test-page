@@ -1446,16 +1446,6 @@ function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');
 	  if(top/total<0.003)return '请将手指展开拍摄';
 	  return 'ok';
 	}
-  // 统计独立手指：肤色列之间的间隔
-  var fingers=0,last=0;
-  for(var i=1;i<skinCols.length;i++){
-    if(skinCols[i]===1&&skinCols[i-1]===0)last++;
-    else if(skinCols[i]===0&&last>0){fingers++;last=0;}
-  }
-  if(last>0)fingers++;
-  if(fingers<2)return '请将五指自然展开拍摄';
-  return 'ok';
-}
 
 // ============================================================
 // 开始测试
