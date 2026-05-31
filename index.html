@@ -828,7 +828,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.4</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.5</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1414,7 +1414,7 @@ function getLuckyDirection(seed) {
 }
 
 // ============================================================
-// 手心上传 + 二分类识别
+// 手心上传
 // ============================================================
 var palmData=null;
 function onPalmPick(e){
@@ -1425,27 +1425,16 @@ function onPalmPick(e){
       var ratio=Math.min(s/img.width,s/img.height);
       c.width=img.width*ratio;c.height=img.height*ratio;
       var ctx=c.getContext('2d');ctx.drawImage(img,0,0,c.width,c.height);
-      var d=ctx.getImageData(0,0,c.width,c.height);
-      var cls=classifyPalm(d);
+      palmData=ctx.getImageData(0,0,c.width,c.height);
       var p=document.getElementById('palmPreview');
       var b=document.getElementById('palmBox');
       var t=document.getElementById('palmTag');
       p.src=ev.target.result;p.style.display='block';b.classList.add('has-img');
-      if(cls==='ok'){palmData=d;t.className='palm-tag ok';t.style.display='block';t.textContent='✅ 手心识别成功';}
-      else{palmData=null;t.className='palm-tag fail';t.style.display='block';t.textContent='❌ '+cls;setTimeout(function(){clearPalm();},3500);}
+      t.className='palm-tag ok';t.style.display='block';t.textContent='✅ 上传成功';
     };img.src=ev.target.result;
   };r.readAsDataURL(f);
 }
 function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');p.src='';p.style.display='none';document.getElementById('palmBox').classList.remove('has-img');document.getElementById('palmTag').style.display='none';document.getElementById('palmFile').value='';}
-	// 人手检测 —— 识别手部轮廓即可
-	function classifyPalm(d){
-	  var w=d.width,h=d.height,total=w*h,skin=0,top=0;
-	  for(var i=0;i<total;i+=2){var idx=i*4,r=d[idx],g=d[idx+1],b=d[idx+2];
-	    if(r>60&&g>20&&b>5&&r>g){skin++;if(Math.floor(i/w)<h*0.4)top++;}}
-	  if(skin/total<0.04)return '未检测到人手';
-	  if(top/total<0.003)return '请将手指展开拍摄';
-	  return 'ok';
-	}
 
 // ============================================================
 // 开始测试
