@@ -1437,10 +1437,24 @@ function onPalmPick(e){
   };r.readAsDataURL(f);
 }
 function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');p.src='';p.style.display='none';document.getElementById('palmBox').classList.remove('has-img');document.getElementById('palmTag').style.display='none';document.getElementById('palmFile').value='';}
+// 手心识别（宽松版）—— 只判断是否人体皮肤，不纠结手心/手背
 function classifyPalm(d){
-  var w=d.width,h=d.height,total=w*h,skin=0;
-  for(var i=0;i<total;i++){var idx=i*4;var r=d[idx],g=d[idx+1],b=d[idx+2];if(r>60&&g>25&&b>10&&r>g&&r>b)skin++;}
-  if(skin/total<0.12)return '未识别到人体手掌';
+  var w=d.width,h=d.height,total=w*h,skin=0,edge=0,tex=0;
+  for(var i=0;i<total;i++){
+    var idx=i*4,r=d[idx],g=d[idx+1],b=d[idx+2];
+    // 肤色判定：放宽RGB范围，适应不同光线
+    var isSkin=(r>50&&g>20&&b>5&&r>g&&r>b);
+    if(isSkin){skin++;}
+    // 边缘/骨骼粗略采样（仅用于区分非手物体）
+    if(i>0&&i<total-1){var nr=d[idx+4],ng=d[idx+5],nb=d[idx+6];if(Math.abs(r-nr)+Math.abs(g-ng)+Math.abs(b-nb)>80)edge++;}
+    // 纹理采样
+    if(i%8===0&&i+24<d.length){tex+=Math.abs(d[idx]-d[idx+24])+Math.abs(d[idx+1]-d[idx+25]);}
+  }
+  var skinRatio=skin/total;
+  var edgeRatio=edge/total;
+  var texAvg=tex/(total/8);
+  // 判定：肤色占比>8%即认定为人体手掌（极度宽松）
+  if(skinRatio<0.08)return '未识别到人体手掌，请重新拍摄';
   return 'ok';
 }
 
