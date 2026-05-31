@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="超准性格测试！输入姓名和生日，揭开你的隐藏人格！">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>✨ 双面人格测试 — 揭开你的隐藏性格</title>
+<style>
+/* ============================================================
+   全局变量 / CSS Variables — 修改配色在这里
+   ============================================================ */
+:root {
+  --bg-deep: #0a0a1a;
+  --bg-card: rgba(255,255,255,0.06);
+  --border-card: rgba(255,255,255,0.12);
+  --text-primary: #f0e6ff;
+  --text-secondary: #b8b8d0;
+  --text-muted: #7a7a99;
+  --gradient-1: #a855f7;
+  --gradient-2: #ec4899;
+  --gradient-3: #6366f1;
+  --gradient-4: #06b6d4;
+  --accent-glow: rgba(168,85,247,0.4);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --font-serif: "Noto Serif SC", "STSong", "SimSun", "Songti SC", serif;
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+}
+
+/* ============================================================
+   基础重置 & 全局样式
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  position: relative;
+}
+
+/* ============================================================
+   动态粒子背景 Canvas
+   ============================================================ */
+#particles-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================================================
+   主容器
+   ============================================================ */
+.app-container {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   首页 — 输入页面
+   ============================================================ */
+.screen { display: none; flex-direction: column; align-items: center; flex: 1; }
+.screen.active { display: flex; }
+
+/* 顶部Logo/图标 */
+.hero-icon {
+  font-size: 56px;
+  margin-top: 32px;
+  animation: floatUpDown 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px var(--accent-glow));
+}
+
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+/* 主标题 */
+.main-title {
+  font-size: 2rem;
+  font-weight: 900;
+  text-align: center;
+  margin-top: 10px;
+  background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2), var(--gradient-3), var(--gradient-4));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 5s ease-in-out infinite;
+  line-height: 1.3;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.sub-title {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 6px;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+/* 输入卡片 */
+.input-card {
+  width: 100%;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 28px 22px;
+  margin-top: 28px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-card);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: var(--gradient-1);
+  box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+  background: rgba(255,255,255,0.07);
+}
+
+.input-group input::placeholder {
+  color: var(--text-muted);
+}
+
+/* CTA 按钮 */
+.cta-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2), var(--gradient-3));
+  background-size: 200% 200%;
+  cursor: pointer;
+  animation: gradientShift 4s ease-in-out infinite, pulseBtn 2.5s ease-in-out infinite;
+  margin-top: 8px;
+  transition: transform 0.2s;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 25px rgba(168,85,247,0.35);
+}
+
+.cta-btn:active {
+  transform: scale(0.97);
+}
+
+@keyframes pulseBtn {
+  0%, 100% { box-shadow: 0 4px 25px rgba(168,85,247,0.35); }
+  50% { box-shadow: 0 4px 45px rgba(236,72,153,0.55); }
+}
+
+/* 浮动装饰emoji */
+.floating-emojis {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  font-size: 22px;
+}
+
+.floating-emojis span {
+  animation: floatEmoji 4s ease-in-out infinite;
+}
+
+.floating-emojis span:nth-child(1) { animation-delay: 0s; }
+.floating-emojis span:nth-child(2) { animation-delay: 0.6s; }
+.floating-emojis span:nth-child(3) { animation-delay: 1.2s; }
+.floating-emojis span:nth-child(4) { animation-delay: 1.8s; }
+.floating-emojis span:nth-child(5) { animation-delay: 2.4s; }
+
+@keyframes floatEmoji {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-12px) scale(1.2); opacity: 1; }
+}
+
+/* 已测人数 */
+.test-count {
+  margin-top: 16px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   加载页
+   ============================================================ */
+.loading-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: conic-gradient(var(--gradient-1), var(--gradient-2), var(--gradient-3), var(--gradient-4), var(--gradient-1));
+  animation: spin 1.2s linear infinite;
+  mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+  margin-bottom: 28px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  min-height: 30px;
+  text-align: center;
+}
+
+.progress-bar {
+  width: 220px;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gradient-1), var(--gradient-2));
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* ============================================================
+   结果页 — 双面布局
+   ============================================================ */
+.result-header {
+  text-align: center;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.zodiac-badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: rgba(168,85,247,0.2);
+  color: var(--gradient-1);
+  margin: 0 6px 6px;
+  letter-spacing: 1px;
+}
+
+.user-name-display {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-top: 6px;
+  background: linear-gradient(135deg, var(--gradient-2), var(--gradient-4));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.personality-tag {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gradient-1), var(--gradient-3));
+  color: #fff;
+  letter-spacing: 2px;
+  animation: fadeInUp 0.7s ease-out;
+}
+
+/* 双面卡片容器 */
+.dual-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  width: 100%;
+  margin-top: 20px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* 通用卡片样式 */
+.result-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 20%, rgba(168,85,247,0.06), transparent 60%);
+  pointer-events: none;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title .icon { font-size: 1.3rem; }
+
+/* 免费结果卡片 */
+.free-card .card-title {
+  color: var(--success);
+}
+
+.trait-list {
+  list-style: none;
+}
+
+.trait-list li {
+  position: relative;
+  padding: 7px 0 7px 22px;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  animation: fadeInUp 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.trait-list li:nth-child(1) { animation-delay: 0.1s; }
+.trait-list li:nth-child(2) { animation-delay: 0.2s; }
+.trait-list li:nth-child(3) { animation-delay: 0.3s; }
+.trait-list li:nth-child(4) { animation-delay: 0.4s; }
+
+.trait-list li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  color: var(--gradient-1);
+  font-size: 0.7rem;
+  top: 10px;
+}
+
+/* 运势小标签 */
+.fortune-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.fortune-tag {
+  flex: 1;
+  min-width: 60px;
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.fortune-tag .ft-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.fortune-tag .ft-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* ============================================================
+   锁定内容卡片（右侧/下部）
+   ============================================================ */
+.locked-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.locked-content {
+  filter: blur(6px);
+  -webkit-filter: blur(6px);
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.locked-card .card-title {
+  color: var(--warning);
+}
+
+/* 锁定遮罩层 */
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,10,26,0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: var(--radius-lg);
+  z-index: 5;
+  text-align: center;
+  padding: 14px;
+}
+
+.lock-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+
+.lock-overlay h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--warning);
+  margin-bottom: 4px;
+}
+
+.lock-overlay p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* 微信二维码占位区 */
+.qr-placeholder {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed rgba(255,255,255,0.25);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 10px;
+  position: relative;
+}
+
+/*
+   二维码使用说明：
+   将你的微信二维码图片命名为 qrcode.png，放在同目录下，
+   然后取消下面 .qr-real 的注释，并删除 .qr-placeholder
+*/
+.qr-placeholder .qr-icon {
+  font-size: 48px;
+  opacity: 0.4;
+}
+
+.qr-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* 重新测试按钮 */
+.retry-btn {
+  width: 100%;
+  margin-top: 24px;
+  padding: 13px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-card);
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+
+.retry-btn:active {
+  background: rgba(255,255,255,0.12);
+}
+
+/* ============================================================
+   广告位 — AD SLOTS (修改广告内容在这里)
+   ============================================================ */
+.ad-slot {
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 广告标签 */
+.ad-slot::after {
+  content: 'AD';
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0;
+}
+
+/* 桌面端左右广告位 */
+.desktop-ads {
+  display: none;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+@media (min-width: 1024px) {
+  .desktop-ads { display: block; }
+}
+
+/* AD_SLOT_LEFT */
+.ad-left {
+  left: max(10px, calc((100vw - 900px) / 2 - 180px));
+  width: 160px;
+  height: 600px;
+}
+
+/* AD_SLOT_RIGHT */
+.ad-right {
+  right: max(10px, calc((100vw - 900px) / 2 - 180px));
+  width: 160px;
+  height: 600px;
+}
+
+/* 移动端广告位 */
+.mobile-ads {
+  display: block;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .mobile-ads { display: none; }
+}
+
+/* AD_SLOT_MOBILE_TOP */
+.ad-mobile-top {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 12px;
+}
+
+/* AD_SLOT_MOBILE_BOTTOM */
+.ad-mobile-bottom {
+  width: 100%;
+  height: 60px;
+  margin-top: 16px;
+}
+
+/* ============================================================
+   底部免责声明
+   ============================================================ */
+.disclaimer {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: auto;
+  padding-top: 28px;
+  opacity: 0.6;
+  letter-spacing: 0.5px;
+}
+
+.disclaimer::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 0 auto 10px;
+}
+
+/* ============================================================
+   移动端响应式：双面变上下堆叠
+   ============================================================ */
+@media (max-width: 520px) {
+  .dual-panels {
+    grid-template-columns: 1fr;
+  }
+
+  .main-title {
+    font-size: 1.6rem;
+  }
+
+  .input-card {
+    padding: 22px 16px;
+  }
+
+  .hero-icon {
+    font-size: 44px;
+    margin-top: 20px;
+  }
+
+  .result-card {
+    padding: 16px 14px;
+  }
+}
+
+/* ============================================================
+   真实二维码样式（替换占位用）
+   使用方法：将下方 .qr-real 取消注释，同时注释 .qr-placeholder
+   ============================================================ */
+/*
+.qr-real {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+*/
+
+/* ============================================================
+   入场/切换动画
+   ============================================================ */
+.fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 分享按钮 */
+.share-hint {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--gradient-4);
+  background: rgba(6,182,212,0.08);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- 粒子背景画布 -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ============================================================
+     桌面端左右广告位
+     ============================================================ -->
+<!-- AD_SLOT_LEFT: 替换为你的广告代码/图片 -->
+<div class="ad-slot ad-left desktop-ads">左侧广告位</div>
+<!-- AD_SLOT_RIGHT: 替换为你的广告代码/图片 -->
+<div class="ad-slot ad-right desktop-ads">右侧广告位</div>
+
+<!-- ============================================================
+     主容器
+     ============================================================ -->
+<div class="app-container">
+
+  <!-- ========== 移动端顶部广告位 ========== -->
+  <!-- AD_SLOT_MOBILE_TOP: 替换为你的广告代码/图片 -->
+  <div class="ad-slot ad-mobile-top mobile-ads">📢 顶部广告位</div>
+
+  <!-- ========== 屏幕1: 首页输入 ========== -->
+  <div class="screen active" id="screen-input">
+    <div class="hero-icon">🔮</div>
+    <h1 class="main-title">双面人格测试</h1>
+    <p class="sub-title">揭开你的隐藏性格面纱</p>
+
+    <div class="input-card">
+      <div class="input-group">
+        <label>✦ 你的名字</label>
+        <input type="text" id="input-name" placeholder="请输入你的名字" maxlength="20" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <label>✦ 出生日期</label>
+        <input type="date" id="input-birthday" placeholder="请选择出生日期">
+      </div>
+      <button class="cta-btn" id="btn-start" onclick="startTest()">
+        ⚡ 立即测试
+      </button>
+    </div>
+
+    <div class="floating-emojis">
+      <span>🌟</span><span>💫</span><span>✨</span><span>🔮</span><span>🎯</span>
+    </div>
+
+    <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
+  </div>
+
+  <!-- ========== 屏幕2: 加载动画 ========== -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <p class="loading-text" id="loading-text">正在解读你的性格密码...</p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 屏幕3: 结果页 ========== -->
+  <div class="screen" id="screen-result">
+    <div class="result-header">
+      <span class="zodiac-badge" id="badge-zodiac"></span>
+      <span class="zodiac-badge" id="badge-animal"></span>
+      <div class="user-name-display" id="display-name"></div>
+      <div class="personality-tag" id="personality-tag"></div>
+    </div>
+
+    <!-- 双面卡片 -->
+    <div class="dual-panels">
+      <!-- 左侧：免费结果 -->
+      <div class="result-card free-card">
+        <div class="card-title"><span class="icon">🌟</span> 你的性格画像（免费）</div>
+        <ul class="trait-list" id="free-traits"></ul>
+        <div class="fortune-tags">
+          <div class="fortune-tag">
+            <div class="ft-label">🎨 幸运色</div>
+            <div class="ft-value" id="fortune-color"></div>
+          </div>
+          <div class="fortune-tag">
+            <div class="ft-label">🔢 幸运数</div>
+            <div class="ft-value" id="fortune-number"></div>
+          </div>
+          <div class="fortune-tag">
+            <div class="ft-label">🧭 幸运方位</div>
+            <div class="ft-value" id="fortune-direction"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧：锁定内容 -->
+      <div class="result-card locked-card">
+        <div class="locked-content">
+          <div class="card-title"><span class="icon">🔐</span> 深度解读（需解锁）</div>
+          <ul class="trait-list" id="locked-traits"></ul>
+          <div class="fortune-tags">
+            <div class="fortune-tag">
+              <div class="ft-label">💝 情感运势</div>
+              <div class="ft-value" id="locked-love"></div>
+            </div>
+            <div class="fortune-tag">
+              <div class="ft-label">💼 事业运势</div>
+              <div class="ft-value" id="locked-career"></div>
+            </div>
+            <div class="fortune-tag">
+              <div class="ft-label">🧘 2026 关键词</div>
+              <div class="ft-value" id="locked-keyword"></div>
+            </div>
+          </div>
+          <p style="margin-top:12px;font-size:0.78rem;color:var(--text-muted);" id="locked-summary"></p>
+        </div>
+
+        <!-- 锁定遮罩 -->
+        <div class="lock-overlay">
+          <div class="lock-icon">🔐</div>
+          <h4>完整解读已加密</h4>
+          <p>添加微信解锁深度报告</p>
+          <!-- ★ 微信二维码区域：将你的二维码图片命名为 qrcode.png 放在同目录下即可 -->
+          <img src="qrcode.png" alt="微信二维码" class="qr-real"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               style="width:120px;height:120px;border-radius:14px;object-fit:cover;">
+          <div class="qr-placeholder" style="display:none;">
+            <span class="qr-icon">📱</span>
+          </div>
+          <span class="qr-label">扫码添加微信 → 免费解锁</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分享提示 -->
+    <div class="share-hint" onclick="shareResult()">
+      📤 分享给你的朋友，看看TA的隐藏人格
+    </div>
+
+    <button class="retry-btn" onclick="retryTest()">🔄 重新测试</button>
+
+    <!-- 底部免责声明 -->
+    <p class="disclaimer">
+      ⚠️ 本测试仅供娱乐参考，不构成任何专业心理评估建议。<br>
+      基于姓名与生日算法生成，结果仅为趣味解读。
+    </p>
+  </div>
+
+  <!-- ========== 移动端底部广告位 ========== -->
+  <!-- AD_SLOT_MOBILE_BOTTOM: 替换为你的广告代码/图片 -->
+  <div class="ad-slot ad-mobile-bottom mobile-ads">📢 底部广告位</div>
+
+</div>
+
+<!-- ============================================================
+     JavaScript — 核心逻辑
+     ============================================================ -->
+<script>
+// ============================================================
+// 粒子背景动画
+// ============================================================
+(function() {
+  var canvas = document.getElementById('particles-canvas');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var w, h;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // 创建粒子
+  for (var i = 0; i < 50; i++) {
+    particles.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 2 + 0.5,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      alpha: Math.random() * 0.5 + 0.2
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(168,85,247,' + p.alpha + ')';
+      ctx.fill();
+    }
+    // 连线（近距离粒子之间）
+    for (var i = 0; i < particles.length; i++) {
+      for (var j = i + 1; j < particles.length; j++) {
+        var dx = particles[i].x - particles[j].x;
+        var dy = particles[i].y - particles[j].y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(168,85,247,' + (0.08 * (1 - dist / 100)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ============================================================
+// 屏幕切换
+// ============================================================
+function showScreen(id) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].classList.remove('active');
+  }
+  document.getElementById(id).classList.add('active');
+  // 滚动到顶部
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// 性格数据库 — 12种人格类型 × 4种变体
+// 修改文字内容在这里！自由增删改
+// ============================================================
+var PERSONALITY_DB = [
+  {
+    name: '阳光型·冒险家',
+    free: ['充满活力，行动力爆棚，是说走就走的行动派', '乐观积极，自带光芒，总能感染周围人', '喜欢挑战新鲜事物，不惧未知与变化', '直觉敏锐，关键时刻总能做出正确选择'],
+    locked: ['你是一个天生的领袖型人格，内心深处渴望自由与掌控并行。2026年将是你突破自我的一年，新的机遇在远方等你。', '在感情中你主动热情，但有时过于急躁，需要学会聆听伴侣的声音。今年夏天将有一次重要的情感转折。', '你的天赋在于快速决策和强大的执行力，适合创业、销售、户外探险等领域。注意避免三分钟热度。'],
+    love: '热情如火', career: '上升期', keyword: '突破'
+  },
+  {
+    name: '深邃型·思想家',
+    free: ['思维缜密，善于分析问题的本质', '独处时灵感迸发，是安静的力量型人格', '不轻易表露情绪，内心世界极为丰富', '逻辑能力超群，善于规划与布局'],
+    locked: ['你是天生的哲学家与战略家，对世界有独特的洞察力。2026年适合深度学习与沉淀，积累的知识将在年底爆发。', '在感情中你慢热但专一，一旦认定便不会轻易改变。今年秋天可能会遇到灵魂共鸣的人。', '你的天赋在于深度思考和系统规划，适合研究、写作、编程、金融分析等领域。避免过度思虑导致行动迟缓。'],
+    love: '灵魂共鸣', career: '蓄力期', keyword: '沉淀'
+  },
+  {
+    name: '温柔型·治愈者',
+    free: ['心地柔软，共情能力极强', '善于倾听，是朋友们的心灵树洞', '天生具有疗愈他人的能量', '做事细致入微，注重细节与品质'],
+    locked: ['你是人群中的温柔光芒，拥有治愈人心的力量。2026年你的人际关系将迎来重要升级，贵人运旺盛。', '在感情中你细腻体贴，但需要警惕过度付出导致自我消耗。今年春天有望遇见懂你珍惜你的人。', '你的天赋在于共情能力和服务精神，适合教育、心理咨询、医疗、公益等领域。学会设立边界是你的课题。'],
+    love: '相互滋养', career: '贵人相助', keyword: '绽放'
+  },
+  {
+    name: '睿智型·策略家',
+    free: ['洞察力超群，善于看透事物本质', '做事有计划有步骤，稳扎稳打', '擅长资源整合与长远布局', '冷静果断，危机中反显从容'],
+    locked: ['你是天生的战略指挥家，拥有将复杂问题简单化的能力。2026年事业将迎来关键转折，做好准备迎接挑战。', '在感情中你理性大于感性，但内心深处渴望被理解。今年可能会有一个重要的决定需要做出。', '你的天赋在于系统思维和资源调度，适合管理、咨询、投资、战略规划等领域。避免过于理性而忽略情感需求。'],
+    love: '理性浪漫', career: '关键转折', keyword: '谋局'
+  },
+  {
+    name: '热情型·梦想家',
+    free: ['心怀热忱，永远对未来充满期待', '感染力超强，是团队中的气氛担当', '创意无限，天马行空的想象力', '行动力与感染力并存，说到做到'],
+    locked: ['你是人群中的火焰，用热情点燃一切可能。2026年你的创意才华将大放异彩，有作品被认可的机会。', '在感情中你浪漫热烈，追求心动的感觉。今年夏季桃花运旺盛，但需辨别真心与过客。', '你的天赋在于创意表达和感染力，适合艺术、表演、营销、设计等领域。注意避免理想主义脱离实际。'],
+    love: '热烈浪漫', career: '才华兑现', keyword: '闪耀'
+  },
+  {
+    name: '冷静型·观察者',
+    free: ['头脑清醒，情绪稳定如磐石', '善于在纷繁复杂中抓住关键线索', '不随波逐流，有独立判断力', '低调内敛，关键时刻一语中的'],
+    locked: ['你是团队中的定海神针，以冷静著称。2026年你的判断力将帮身边人避开重要风险，成为关键依靠。', '在感情中你理智克制，不轻易动心但一旦确定便忠诚不渝。今年冬季可能有惊喜的缘分降临。', '你的天赋在于独立思考和风险预判，适合风控、审计、科研、法务等领域。适当表达情感会让你更完整。'],
+    love: '克制深情', career: '成为关键', keyword: '洞察'
+  },
+  {
+    name: '活泼型·开心果',
+    free: ['天真烂漫，保持童心未泯', '社交达人，走到哪里都是焦点', '擅长活跃气氛，是朋友圈的快乐源泉', '适应力强，在任何环境都能自在生长'],
+    locked: ['你是大家的快乐源泉，拥有让周围人开心的超能力。2026年你的社交圈将大幅扩展，人脉带来意外惊喜。', '在感情中你风趣活泼，追求轻松愉快的相处模式。今年可能会在朋友聚会中遇到让你心动的人。', '你的天赋在于人际连接和气氛营造，适合公关、主持、销售、旅游等领域。注意不要逃避严肃的情感对话。'],
+    love: '轻松甜蜜', career: '人脉爆发', keyword: '连接'
+  },
+  {
+    name: '沉稳型·守护者',
+    free: ['可靠稳重，是大家最信赖的人', '责任感极强，承诺的事情一定做到', '默默付出，不求回报的奉献精神', '脚踏实地的务实派，一步一个脚印'],
+    locked: ['你是大家最坚实的后盾，用行动而非言语表达爱。2026年你的付出将得到回报，家庭与事业双丰收。', '在感情中你稳重长情，是值得托付终身的伴侣类型。今年家庭关系将有积极的变化。', '你的天赋在于可靠与耐心，适合工程、财务、行政、医疗等领域。记得偶尔也要为自己活一次。'],
+    love: '坚定长情', career: '厚积薄发', keyword: '收获'
+  },
+  {
+    name: '创意型·艺术家',
+    free: ['审美独特，对美好事物有天生敏感', '思维跳跃，常常有出人意料的好点子', '不愿被条条框框限制，追求自由表达', '情感丰富细腻，善于捕捉细微情绪'],
+    locked: ['你是天生的创造者，拥有将平凡变为非凡的魔力。2026年你的创作将迎来重要突破，有机会被更多人看到。', '在感情中你追求灵魂层面的连接，宁缺毋滥。今年可能会遇到让你灵感迸发的人。', '你的天赋在于审美和创新能力，适合设计、艺术、音乐、写作等领域。注意将灵感落地为现实。'],
+    love: '灵魂吸引', career: '创作爆发', keyword: '灵感'
+  },
+  {
+    name: '坚韧型·战士',
+    free: ['意志力坚强，遇到挫折越战越勇', '目标明确，为了理想可以付出一切', '骨子里有一股不服输的韧劲', '保护欲强，是身边人的守护神'],
+    locked: ['你是生活中的斗士，拥有不达目的不罢休的毅力。2026年你将克服一个长期困扰你的障碍，迎来全新阶段。', '在感情中你保护欲强，愿意为爱人披荆斩棘。今年需要学会适当示弱，让伴侣也看见你的柔软。', '你的天赋在于坚韧和领导力，适合军警、体育竞技、项目管理、创业等领域。记得休息也是一种战略。'],
+    love: '守护真爱', career: '破局重生', keyword: '无畏'
+  },
+  {
+    name: '浪漫型·诗人',
+    free: ['心怀诗意，在平凡中发现不凡之美', '情感细腻，能用文字或画面打动人心', '理想主义者，相信世界可以更美好', '温柔而坚定，骨子里有不妥协的浪漫'],
+    locked: ['你是现实世界中的诗人，用浪漫主义温暖了身边的人。2026年你将有重要的灵感时刻，可能会开启新的副业或爱好。', '在感情中你追求完美的爱情，有时会因现实落差而失落。今年学会接纳不完美，反而能收获真正的幸福。', '你的天赋在于情感表达和对美的感知，适合文学、影视、婚礼策划、花艺等领域。注意平衡理想与现实。'],
+    love: '命中注定', career: '灵感降临', keyword: '诗意'
+  },
+  {
+    name: '自由型·旅行者',
+    free: ['热爱自由，不愿被世俗规则束缚', '好奇心旺盛，永远在探索的路上', '格局开阔，拥有国际化视野', '随性洒脱，活在当下的生活态度'],
+    locked: ['你是永远在路上的探索者，灵魂自由不羁。2026年你将有一次重要的出行或迁移，这将成为人生的转折点。', '在感情中你追求势均力敌的伙伴关系，不愿被传统关系定义。今年远方的缘分正在向你走来。', '你的天赋在于跨文化理解和适应能力，适合外贸、翻译、旅游、自由职业等领域。找到自由与责任的平衡点很重要。'],
+    love: '远方之约', career: '跨界突破', keyword: '启程'
+  }
+];
+
+// 幸运色库
+var LUCKY_COLORS = [
+  '珊瑚橙', '薰衣草紫', '薄荷绿', '日落金',
+  '星空蓝', '玫瑰粉', '琥珀黄', '海洋蓝',
+  '火焰红', '月光银', '森林绿', '珊瑚蓝'
+];
+
+// 幸运方位
+var LUCKY_DIRECTIONS = ['东', '南', '西', '北', '东南', '西南', '东北', '西北'];
+
+// 加载文案轮播
+var LOADING_TEXTS = [
+  '正在解读你的性格密码...',
+  '分析姓名能量场中...',
+  '计算星座与命理参数...',
+  '匹配48种人格模型中...',
+  '生成专属性格画像...',
+  '即将揭晓你的隐藏人格...'
+];
+
+// ============================================================
+// 工具函数
+// ============================================================
+function getCharSum(str) {
+  var sum = 0;
+  for (var i = 0; i < str.length; i++) {
+    sum += str.charCodeAt(i);
+  }
+  return sum;
+}
+
+function getZodiac(month, day) {
+  var zodiacs = ['摩羯座','水瓶座','双鱼座','白羊座','金牛座','双子座',
+                 '巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座'];
+  var cutoffs = [20,19,21,20,21,22,23,23,23,24,23,22];
+  var idx = month - 1;
+  if (day > cutoffs[idx]) idx = (idx + 1) % 12;
+  return zodiacs[idx];
+}
+
+function getChineseZodiac(year) {
+  var animals = ['🐭 鼠','🐮 牛','🐯 虎','🐰 兔','🐲 龙','🐍 蛇',
+                 '🐴 马','🐏 羊','🐵 猴','🐔 鸡','🐶 狗','🐷 猪'];
+  return animals[(year - 4) % 12];
+}
+
+function getPersonalityIndex(name, month, day) {
+  var nameSum = getCharSum(name);
+  var seed = (nameSum * 7 + month * 13 + day * 3) % PERSONALITY_DB.length;
+  return seed;
+}
+
+function getVariant(seed, month, day, mod) {
+  return (seed + month * day + day * 3) % mod;
+}
+
+function getLuckyColor(seed) {
+  return LUCKY_COLORS[seed % LUCKY_COLORS.length];
+}
+
+function getLuckyNumber(name, month, day) {
+  return (getCharSum(name) + month * 11 + day * 7) % 9 + 1;
+}
+
+function getLuckyDirection(seed) {
+  return LUCKY_DIRECTIONS[seed % LUCKY_DIRECTIONS.length];
+}
+
+// ============================================================
+// 开始测试
+// ============================================================
+function startTest() {
+  var nameInput = document.getElementById('input-name');
+  var birthdayInput = document.getElementById('input-birthday');
+
+  var name = nameInput.value.trim();
+  if (!name) {
+    shakeElement(nameInput);
+    nameInput.focus();
+    return;
+  }
+
+  if (!birthdayInput.value) {
+    shakeElement(birthdayInput);
+    birthdayInput.focus();
+    return;
+  }
+
+  // 显示加载页
+  showScreen('screen-loading');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 模拟加载动画
+  var progressFill = document.getElementById('progress-fill');
+  var loadingText = document.getElementById('loading-text');
+  var progress = 0;
+  var textIdx = 0;
+
+  var loadInterval = setInterval(function() {
+    progress += Math.random() * 18 + 5;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(loadInterval);
+      progressFill.style.width = '100%';
+      loadingText.textContent = '✨ 分析完成！';
+
+      // 跳转结果页
+      setTimeout(function() {
+        showResult(name, birthdayInput.value);
+      }, 500);
+    } else {
+      progressFill.style.width = progress + '%';
+      // 轮换文字
+      if (progress > textIdx * (100 / LOADING_TEXTS.length)) {
+        textIdx = Math.min(textIdx + 1, LOADING_TEXTS.length - 1);
+        loadingText.textContent = LOADING_TEXTS[textIdx];
+      }
+    }
+  }, 200);
+}
+
+// 输入抖动提示
+function shakeElement(el) {
+  el.style.animation = 'none';
+  el.offsetHeight; // reflow
+  el.style.animation = 'shake 0.5s ease';
+  el.style.borderColor = '#ef4444';
+  setTimeout(function() {
+    el.style.borderColor = '';
+    el.style.animation = '';
+  }, 600);
+}
+
+// CSS 抖动动画（动态注入）
+var shakeStyle = document.createElement('style');
+shakeStyle.textContent = '@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}';
+document.head.appendChild(shakeStyle);
+
+// ============================================================
+// 显示结果
+// ============================================================
+function showResult(name, birthdayStr) {
+  var parts = birthdayStr.split('-');
+  var year = parseInt(parts[0], 10);
+  var month = parseInt(parts[1], 10);
+  var day = parseInt(parts[2], 10);
+
+  var pIdx = getPersonalityIndex(name, month, day);
+  var personality = PERSONALITY_DB[pIdx];
+
+  var colorIdx = getVariant(pIdx, month, day, LUCKY_COLORS.length);
+  var dirIdx = getVariant(pIdx, month + day, day, LUCKY_DIRECTIONS.length);
+  var loveIdx = getVariant(pIdx, month, day + 3, 3);
+  var careerIdx = getVariant(pIdx, day, month + 5, 3);
+  var keywordIdx = getVariant(pIdx, month + day, day + 7, 3);
+
+  // 星座 & 生肖
+  var zodiac = getZodiac(month, day);
+  var animal = getChineseZodiac(year);
+
+  // 填充数据
+  document.getElementById('badge-zodiac').textContent = '♈ ' + zodiac;
+  document.getElementById('badge-animal').textContent = animal;
+  document.getElementById('display-name').textContent = name;
+  document.getElementById('personality-tag').textContent = personality.name;
+
+  // 免费性格描述
+  var freeList = document.getElementById('free-traits');
+  freeList.innerHTML = '';
+  for (var i = 0; i < personality.free.length; i++) {
+    var li = document.createElement('li');
+    li.textContent = personality.free[i];
+    freeList.appendChild(li);
+  }
+
+  // 幸运数据
+  document.getElementById('fortune-color').textContent = getLuckyColor(colorIdx);
+  document.getElementById('fortune-number').textContent = getLuckyNumber(name, month, day);
+  document.getElementById('fortune-direction').textContent = getLuckyDirection(dirIdx);
+
+  // 锁定内容（会在遮罩下显示）
+  var lockedList = document.getElementById('locked-traits');
+  lockedList.innerHTML = '';
+  for (var i = 0; i < personality.locked.length; i++) {
+    var li = document.createElement('li');
+    li.textContent = personality.locked[i];
+    lockedList.appendChild(li);
+  }
+
+  // 锁定区更多数据
+  var loveOpts = ['💕 ' + personality.love, '💞 灵魂伴侣近在眼前', '💗 旧情复燃的可能'];
+  var careerOpts = ['📈 ' + personality.career, '🎯 贵人即将出现', '🚀 跳槽最佳时机已到'];
+  var keywordOpts = ['✨ ' + personality.keyword, '🧲 吸引力法则', '🌱 蜕变'];
+
+  document.getElementById('locked-love').textContent = loveOpts[loveIdx];
+  document.getElementById('locked-career').textContent = careerOpts[careerIdx];
+  document.getElementById('locked-keyword').textContent = keywordOpts[keywordIdx];
+  document.getElementById('locked-summary').textContent =
+    '以上为' + name + '的深度性格报告摘要。完整版包含情感分析、事业规划、人际关系、2026年运势等8大板块详细解读。';
+
+  // 切换屏幕
+  showScreen('screen-result');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// 重新测试
+// ============================================================
+function retryTest() {
+  document.getElementById('input-name').value = '';
+  document.getElementById('input-birthday').value = '';
+  showScreen('screen-input');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// 分享功能
+// ============================================================
+function shareResult() {
+  if (navigator.share) {
+    navigator.share({
+      title: '✨ 双面人格测试',
+      text: '我刚测了我的隐藏人格，你也来试试！超准的！',
+      url: window.location.href
+    }).catch(function() {});
+  } else {
+    // 回退：复制链接
+    var tempInput = document.createElement('input');
+    tempInput.value = window.location.href;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    showToast('链接已复制，快去分享给朋友吧！');
+  }
+}
+
+// 简易Toast
+function showToast(msg) {
+  var toast = document.createElement('div');
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:12px 24px;border-radius:30px;font-size:0.85rem;z-index:999;animation:fadeIn 0.3s ease;pointer-events:none;white-space:nowrap;';
+  document.body.appendChild(toast);
+  setTimeout(function() {
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.5s';
+    setTimeout(function() { document.body.removeChild(toast); }, 500);
+  }, 2000);
+}
+
+// ============================================================
+// 模拟已测人数动态增长
+// ============================================================
+(function() {
+  var base = 128900 + Math.floor(Math.random() * 200);
+  var countEl = document.getElementById('test-count');
+  setInterval(function() {
+    base += Math.floor(Math.random() * 7) + 1;
+    countEl.textContent = '已有 ' + base.toLocaleString() + ' 人完成测试';
+  }, 8000 + Math.random() * 5000);
+})();
+</script>
+
+</body>
+</html>
