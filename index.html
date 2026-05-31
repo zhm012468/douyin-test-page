@@ -550,80 +550,84 @@ body {
 /* ============================================================
    广告位 — AD SLOTS (修改广告内容在这里)
    ============================================================ */
-.ad-slot {
-  background: rgba(255,255,255,0.03);
-  border: 1px dashed rgba(255,255,255,0.12);
-  border-radius: var(--radius-sm);
+/* ============================================================
+   个签装饰条 — 醉后不知天在水，满船清梦压星河
+   ============================================================ */
+.signature-bar {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  letter-spacing: 1px;
   overflow: hidden;
   position: relative;
+  font-family: var(--font-serif);
+  color: transparent;
+  background: linear-gradient(135deg, #c4b5fd, #f9a8d4, #a5b4fc, #67e8f9);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: gradientShift 6s ease-in-out infinite;
+  letter-spacing: 3px;
+  white-space: nowrap;
 }
 
-/* 广告标签 */
-.ad-slot::after {
-  content: 'AD';
-  position: absolute;
-  top: 5px;
-  right: 8px;
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.2);
-  letter-spacing: 0;
+/* 装饰线 */
+.signature-bar::before,
+.signature-bar::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
 }
 
-/* 桌面端左右广告位 */
-.desktop-ads {
+.signature-bar::before { margin-right: 12px; }
+.signature-bar::after  { margin-left: 12px; }
+
+/* 桌面端左右竖排个签 */
+.desktop-sig {
   display: none;
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
+  writing-mode: vertical-rl;
+  font-size: 1.15rem;
+  letter-spacing: 6px;
+  padding: 40px 12px;
 }
 
 @media (min-width: 1024px) {
-  .desktop-ads { display: block; }
+  .desktop-sig { display: flex; }
+  .desktop-sig::before,
+  .desktop-sig::after {
+    flex: unset;
+    width: 1px;
+    height: 50px;
+    margin: 0;
+    background: linear-gradient(0deg, transparent, rgba(255,255,255,0.2), transparent);
+  }
+  .desktop-sig::before { margin-bottom: 16px; }
+  .desktop-sig::after  { margin-top: 16px; }
 }
 
-/* AD_SLOT_LEFT */
-.ad-left {
-  left: max(10px, calc((100vw - 900px) / 2 - 180px));
-  width: 160px;
-  height: 600px;
+.sig-left {
+  left: max(8px, calc((100vw - 940px) / 2 - 60px));
 }
 
-/* AD_SLOT_RIGHT */
-.ad-right {
-  right: max(10px, calc((100vw - 900px) / 2 - 180px));
-  width: 160px;
-  height: 600px;
+.sig-right {
+  right: max(8px, calc((100vw - 940px) / 2 - 60px));
 }
 
-/* 移动端广告位 */
-.mobile-ads {
+/* 移动端横排个签 */
+.mobile-sig {
   display: block;
   width: 100%;
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 14px 0;
 }
 
 @media (min-width: 768px) {
-  .mobile-ads { display: none; }
-}
-
-/* AD_SLOT_MOBILE_TOP */
-.ad-mobile-top {
-  width: 100%;
-  height: 60px;
-  margin-bottom: 12px;
-}
-
-/* AD_SLOT_MOBILE_BOTTOM */
-.ad-mobile-bottom {
-  width: 100%;
-  height: 60px;
-  margin-top: 16px;
+  .mobile-sig { display: none; }
 }
 
 /* ============================================================
@@ -721,21 +725,18 @@ body {
 <canvas id="particles-canvas"></canvas>
 
 <!-- ============================================================
-     桌面端左右广告位
+     桌面端左右个签装饰
      ============================================================ -->
-<!-- AD_SLOT_LEFT: 替换为你的广告代码/图片 -->
-<div class="ad-slot ad-left desktop-ads">左侧广告位</div>
-<!-- AD_SLOT_RIGHT: 替换为你的广告代码/图片 -->
-<div class="ad-slot ad-right desktop-ads">右侧广告位</div>
+<div class="signature-bar desktop-sig sig-left">醉后不知天在水，满船清梦压星河。</div>
+<div class="signature-bar desktop-sig sig-right">欲买桂花同载酒，终不似，少年游。</div>
 
 <!-- ============================================================
      主容器
      ============================================================ -->
 <div class="app-container">
 
-  <!-- ========== 移动端顶部广告位 ========== -->
-  <!-- AD_SLOT_MOBILE_TOP: 替换为你的广告代码/图片 -->
-  <div class="ad-slot ad-mobile-top mobile-ads">📢 顶部广告位</div>
+  <!-- ========== 移动端顶部个签装饰 ========== -->
+  <div class="signature-bar mobile-sig sig-top">— 醉后不知天在水，满船清梦压星河 —</div>
 
   <!-- ========== 屏幕1: 首页输入 ========== -->
   <div class="screen active" id="screen-input">
@@ -859,9 +860,8 @@ body {
     </p>
   </div>
 
-  <!-- ========== 移动端底部广告位 ========== -->
-  <!-- AD_SLOT_MOBILE_BOTTOM: 替换为你的广告代码/图片 -->
-  <div class="ad-slot ad-mobile-bottom mobile-ads">📢 底部广告位</div>
+  <!-- ========== 移动端底部个签装饰 ========== -->
+  <div class="signature-bar mobile-sig sig-bottom">— 醉后不知天在水，满船清梦压星河 —</div>
 
 </div>
 
