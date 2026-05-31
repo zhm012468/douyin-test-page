@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>💔 恋爱人格测试｜v2</title>
+<title>💔 恋爱人格测试｜v3</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding:20px 16px}
@@ -102,17 +105,15 @@ function showQ(){
   document.getElementById('qn').textContent='第 '+(C+1)+'/10 题';
   document.getElementById('qq').textContent=q.q;
   var o=document.getElementById('qo');o.innerHTML='';
-  for(var i=0;i<q.o.length;i++){
-    (function(idx){
-      var b=document.createElement('button');b.className='opt';b.textContent=q.o[idx];
-      b.onclick=function(){
-        S[idx]++;C++;
-        document.getElementById('d'+(C-1)).classList.add('done');
-        if(C<10){showQ()}else{finish()}
-      };
-      o.appendChild(b);
-    })(i);
-  }
+  q.o.forEach(function(opt,idx){
+    var b=document.createElement('button');b.className='opt';b.textContent=opt;
+    b.addEventListener('click',function(){
+      S[idx]++;C++;
+      var dot=document.getElementById('d'+(C-1));if(dot)dot.classList.add('done');
+      if(C>=10){finish()}else{showQ()}
+    });
+    o.appendChild(b);
+  });
 }
 function finish(){
   document.getElementById('quiz').style.display='none';
