@@ -828,7 +828,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v4.9</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v5.0</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1437,16 +1437,25 @@ function onPalmPick(e){
   };r.readAsDataURL(f);
 }
 function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');p.src='';p.style.display='none';document.getElementById('palmBox').classList.remove('has-img');document.getElementById('palmTag').style.display='none';document.getElementById('palmFile').value='';}
-// 手心识别——只拦截纯色平面(地板/天花板)
+// 手心识别（均衡版）
 function classifyPalm(d){
-  var total=d.width*d.height,sum=0;
-  for(var i=0;i<total;i+=16){
+  var w=d.width,h=d.height,total=w*h,skin=0,variety=0,samples=0;
+  for(var i=0;i<total;i+=4){
     var idx=i*4,r=d[idx],g=d[idx+1],b=d[idx+2];
-    sum+=Math.abs(r-g)+Math.abs(g-b)+Math.abs(b-r);
+    // 肤色：偏暖色调，R高于G和B
+    var isSkin=(r>80&&g>35&&b>12&&r>g&&r>b&&(r-g)>10);
+    if(isSkin)skin++;
+    // 色彩丰富度采样
+    if(i%64===0&&idx+256<d.length){
+      variety+=Math.abs(r-d[idx+64])+Math.abs(g-d[idx+65])+Math.abs(b-d[idx+66]);
+      samples++;
+    }
   }
-  var avg=sum/(total/16);
-  // 纯色平面(地板/天花板/纯黑纯白)方差极低，有物体则方差高
-  if(avg<8)return '未识别到有效图像，请拍摄手掌';
+  var skinRatio=skin/total;
+  var varietyAvg=samples>0?variety/samples:0;
+  // 需同时满足：肤色占比>10% + 画面有层次感
+  if(skinRatio<0.10)return '未检测到手掌肤色';
+  if(varietyAvg<12)return '画面过于单一，请拍摄真实手掌';
   return 'ok';
 }
 
