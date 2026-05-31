@@ -229,17 +229,22 @@ function showReport(record){
 }
 
 function downloadReport(){
+  var header = document.getElementById('report-header');
   var body = document.getElementById('report-body');
   if(!body || document.getElementById('report').style.display==='none'){alert('请先查询用户再下载报告');return;}
   var btn = event.target;
   btn.textContent='⏳ 生成中...';
   btn.disabled=true;
-  var clone = body.cloneNode(true);
+  // 克隆 header + body 完整内容
+  var clone = document.createElement('div');
+  if(header) clone.appendChild(header.cloneNode(true));
+  clone.appendChild(body.cloneNode(true));
   clone.style.padding = '20px';
   clone.style.background = '#0a0a1a';
   clone.style.position = 'absolute';
   clone.style.left = '-9999px';
   clone.style.width = '440px';
+  clone.style.textAlign = 'center';
   document.body.appendChild(clone);
   html2canvas(clone,{backgroundColor:'#0a0a1a',scale:2,useCORS:true,logging:false}).then(function(canvas){
     document.body.removeChild(clone);
