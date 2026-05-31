@@ -879,7 +879,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v3.0</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v3.1</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1634,12 +1634,9 @@ function validatePalmStrict(imageData) {
   }
   edgeComplexity/=Math.max(edgeSamples,1);
 
-  // 五指展开：边缘锯齿多(>1.5)；手指侧面/握拳：边缘平滑(<1.2)
-  if (edgeComplexity < 1.2) {
-    return {valid:false, msg:'请将五指自然展开，不要并拢或握拳'};
-  }
-  if (edgeComplexity < 1.6 && fillRatio > 0.7) {
-    return {valid:false, msg:'请拍摄手心，不要拍摄手指侧面'};
+  // 五指展开：边缘锯齿多(>0.8)
+  if (edgeComplexity < 0.8) {
+    return {valid:false, msg:'请将五指自然展开，不要握拳'};
   }
 
   // ===== 第5关：掌心纹路验证 =====
@@ -1663,12 +1660,9 @@ function validatePalmStrict(imageData) {
   var lineDensity = linePeaks/Math.max(texN,1);
 
   // 手背/无纹路：纹理值极低
-  if (centerTexture < 3.0) {
-    return {valid:false, msg:'未检测到掌纹，请确保掌心朝上并清晰可见生命线、智慧线、感情线'};
-  }
-  // 纹路峰值密度不够（无明显主线）
-  if (lineDensity < 0.008 && centerTexture < 5.5) {
-    return {valid:false, msg:'三大主线不清晰，请在充足光线下重新拍摄掌心'};
+  // 手背纹理值通常 < 1.5，手心纹理值通常 > 2.5
+  if (centerTexture < 2.0) {
+    return {valid:false, msg:'未检测到掌纹，请掌心朝上、在自然光下重新拍摄'};
   }
 
   // ===== 全部通过 =====
