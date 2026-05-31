@@ -828,7 +828,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.5</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.6</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1425,12 +1425,13 @@ function onPalmPick(e){
       var ratio=Math.min(s/img.width,s/img.height);
       c.width=img.width*ratio;c.height=img.height*ratio;
       var ctx=c.getContext('2d');ctx.drawImage(img,0,0,c.width,c.height);
-      palmData=ctx.getImageData(0,0,c.width,c.height);
-      var p=document.getElementById('palmPreview');
-      var b=document.getElementById('palmBox');
-      var t=document.getElementById('palmTag');
+      var d=ctx.getImageData(0,0,c.width,c.height).data;
+      // 极简检测：抽样10个点，排除纯黑/纯白/纯灰废图
+      var ok=0;for(var i=0;i<10;i++){var idx=Math.floor(Math.random()*d.length/4)*4;if(d[idx]+d[idx+1]+d[idx+2]>30&&d[idx]+d[idx+1]+d[idx+2]<740)ok++;}
+      var p=document.getElementById('palmPreview'),b=document.getElementById('palmBox'),t=document.getElementById('palmTag');
       p.src=ev.target.result;p.style.display='block';b.classList.add('has-img');
-      t.className='palm-tag ok';t.style.display='block';t.textContent='✅ 上传成功';
+      if(ok>=3){palmData=ctx.getImageData(0,0,c.width,c.height);t.className='palm-tag ok';t.style.display='block';t.textContent='✅ 上传成功';}
+      else{palmData=null;t.className='palm-tag fail';t.style.display='block';t.textContent='❌ 图片无效，请重新拍摄';setTimeout(function(){clearPalm();},3000);}
     };img.src=ev.target.result;
   };r.readAsDataURL(f);
 }
