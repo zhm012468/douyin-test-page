@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>💰 2026财运测试 Hm1</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding:20px 16px}
+.container{max-width:460px;margin:0 auto}
+.hero{text-align:center;margin:30px 0 20px}
+.hero .icon{font-size:56px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,#f59e0b,#fbbf24,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:10px}
+.hero p{color:#888;font-size:0.85rem;margin-top:6px}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:24px 18px;margin-bottom:16px}
+.progress{display:flex;gap:4px;margin-bottom:20px}
+.progress .dot{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.1)}
+.progress .dot.done{background:linear-gradient(90deg,#f59e0b,#06b6d4)}
+.qn{font-size:0.75rem;color:#f59e0b;margin-bottom:6px;font-weight:600}
+.qq{font-size:1.1rem;font-weight:700;margin-bottom:16px;line-height:1.4}
+.opt{display:block;width:100%;padding:14px 16px;margin-bottom:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);color:#e0e0e0;font-size:0.95rem;text-align:left;cursor:pointer;transition:all 0.2s}
+.opt:active{border-color:#f59e0b;background:rgba(245,158,11,0.12)}
+.hidden{display:none}
+.re{font-size:60px;text-align:center;margin-bottom:10px}
+.rt{display:block;text-align:center;padding:10px 24px;border-radius:25px;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#1a1a00;margin:10px auto;width:fit-content}
+.rs{text-align:center;font-size:0.85rem;color:#f59e0b;margin:8px 0}
+.rd{line-height:1.8;color:#b8b8d0}
+.lock{margin-top:16px;padding:20px;border-radius:14px;background:rgba(245,158,11,0.05);border:1px dashed rgba(245,158,11,0.2);text-align:center}
+.li{font-size:44px;margin-bottom:8px}
+.lock h4{color:#f59e0b;margin-bottom:4px}
+.lock p{font-size:0.8rem;color:#888;margin-bottom:12px}
+.ba{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#1a1a00;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:1px;animation:pulse 2.5s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(245,158,11,0.3)}50%{box-shadow:0 0 40px rgba(251,191,36,0.5)}}
+.bs{width:100%;margin-top:14px;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:#aaa;font-size:0.9rem;cursor:pointer}
+.br{width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:50px;color:#666;font-size:0.85rem;cursor:pointer}
+.foot{text-align:center;font-size:0.7rem;color:#555;margin:20px 0}
+</style>
+</head>
+<body>
+<div class="container">
+<div id="p1">
+  <div class="hero"><div class="icon">💰</div><h1>2026财运测试</h1><p>10题测出你的财富走势</p></div>
+  <div class="card" style="text-align:center">
+    <p style="color:#aaa;font-size:0.9rem;margin-bottom:16px">已有 <b style="color:#f59e0b" id="ct">156,832</b> 人完成</p>
+    <button onclick="go()" style="width:100%;padding:16px;font-size:1.1rem;font-weight:700;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#1a1a00;border:none;border-radius:50px;cursor:pointer;letter-spacing:2px">💰 测我2026财运</button>
+  </div>
+  <p class="foot">⚠️ 仅供娱乐参考</p>
+</div>
+<div id="p2" class="hidden">
+  <div class="progress" id="pb"></div>
+  <div class="card">
+    <div class="qn" id="qn"></div>
+    <div class="qq" id="qq"></div>
+    <div id="qo"></div>
+  </div>
+</div>
+<div id="p3" class="hidden">
+  <div class="re" id="re"></div>
+  <div class="rt" id="rt"></div>
+  <div class="rs" id="rs"></div>
+  <div class="card"><div class="rd" id="rd"></div></div>
+  <div class="lock" id="lk">
+    <div class="li">🔒</div><h4>完整财运报告已加密</h4><p>观看15秒广告解锁详细分析</p>
+    <button class="ba" onclick="un()">🔓 观看广告解锁</button>
+  </div>
+  <div id="fr" class="hidden"><div class="card" style="border-color:rgba(245,158,11,0.2)"><div id="fc"></div></div></div>
+  <button class="bs" onclick="sh()">📤 分享给朋友一起测</button>
+  <button class="br" onclick="re()">🔄 重新测试</button>
+  <p class="foot">⚠️ 仅供娱乐参考</p>
+</div>
+</div>
+<script>
+var Q=[
+  {q:"你对金钱的态度？",o:["拼命赚钱享受生活","够用就行随遇而安","精打细算努力存钱","钱是工具不是目的"]},
+  {q:"如果有10万闲钱你会？",o:["创业投资搏一把","存银行吃利息","买理财学习投资","旅行享受体验"]},
+  {q:"你觉得财富主要靠？",o:["个人能力和努力","运气和机遇","人脉和资源","节俭和积累"]},
+  {q:"看到别人赚钱你会？",o:["立刻研究跟进去","羡慕但不行动","冷静分析再决定","无所谓不关心"]},
+  {q:"工作中遇到加薪机会？",o:["主动争取不怕被拒","等领导自己提","做出成绩再谈","跳槽直接涨薪"]},
+  {q:"花钱时你的状态？",o:["大手大脚不心疼","纠结半天选便宜的","该花就花该省就省","从不记账不知道"]},
+  {q:"你对2026年经济的看法？",o:["机会很多准备大干","谨慎观望稳字当头","危机中藏着机遇","做好最坏打算"]},
+  {q:"你的理财习惯？",o:["炒股基金数字货币","银行存款最安全","房产黄金实物投资","月光族从不理财"]},
+  {q:"朋友借钱你会？",o:["爽快借出不打借条","婉拒说自己也紧","看情况小额帮助","让朋友找正规渠道"]},
+  {q:"如果中500万你会？",o:["辞职环游世界","买房买车先享受","投资理财滚雪球","分一半给家人"]}
+];
+var A=[0,0,0,0,0],N=0;
+function d(id){return document.getElementById(id)}
+function go(){A=[0,0,0,0,0];N=0;d('p1').className='hidden';d('p3').className='hidden';d('p2').className='';var p=d('pb');p.innerHTML='';for(var i=0;i<10;i++){var e=document.createElement('div');e.className='dot';e.id='d'+i;p.appendChild(e)}nxt();}
+function pick(i){A[i]++;N++;if(d('d'+(N-1)))d('d'+(N-1)).classList.add('done');if(N>=10){fin()}else{nxt()}}
+function nxt(){
+  var q=Q[N];d('qn').textContent='第 '+(N+1)+'/10 题';d('qq').textContent=q.q;
+  var o=d('qo');o.innerHTML='';
+  for(var i=0;i<4;i++){o.innerHTML+='<button class="opt" onclick="pick('+i+')">'+q.o[i]+'</button>'}
+}
+function fin(){
+  d('p2').className='hidden';d('p3').className='';d('fr').className='hidden';d('lk').className='lock';
+  var m=0,idx=0;for(var i=0;i<5;i++){if(A[i]>m){m=A[i];idx=i}}
+  var T=[
+    {e:'🚀',n:'财运爆棚型',s:'暴富指数 '+Math.round(m/10*100)+'%',t:'2026年你财运旺盛，正财偏财双丰收。你的冒险精神和敏锐嗅觉让你在别人还在观望时已经抓住了机会。创业、投资、副业都有望开花结果。建议重点布局新兴行业和数字经济，收益会超预期。'},
+    {e:'💼',n:'稳中求进型',s:'稳健指数 '+Math.round(m/10*100)+'%',t:'你不追求一夜暴富，财富稳步增长是你的座右铭。2026年虽然没有暴富的运气，但有持续进账的底气。工资涨幅可观，理财收益稳定。建议关注长期价值投资，别贪快钱，稳扎稳打就是你最大的优势。'},
+    {e:'💰',n:'精打细算型',s:'储蓄指数 '+Math.round(m/10*100)+'%',t:'你是理财小能手，每一分钱都花在刀刃上。2026年你的储蓄计划将初见成效，前期的积累开始产生复利效应。你的财富秘诀不是赚得多，而是存得住。建议适当拿出一部分尝试低风险理财。'},
+    {e:'🎯',n:'机会潜伏型',s:'潜力指数 '+Math.round(m/10*100)+'%',t:'2026上半年财运平淡，但下半年将迎来转折点。你可能在9-11月遇到一个重要的赚钱机会——可能是一个新项目、一次跳槽、或者一个意外的合作邀约。现在蛰伏积累，准备迎接年底的爆发。'},
+    {e:'🌟',n:'厚积薄发型',s:'爆发指数 '+Math.round(m/10*100)+'%',t:'你的财运是长期主义的典范。前期的努力和积累在2026年开始显现成果——可能是一笔迟来的奖金、一个酝酿已久的项目终于落地。你的财富来自专业深度和行业口碑。继续深耕，回报会越来越丰厚。'}
+  ];
+  var t=T[idx];d('re').textContent=t.e;d('rt').textContent=t.n;d('rs').textContent=t.s;d('rd').textContent=t.t;
+  window.scrollTo(0,0);
+}
+function un(){
+  setTimeout(function(){
+    d('fr').className='';d('lk').className='hidden';
+    var idx=0,m=0;for(var i=0;i<5;i++){if(A[i]>m){m=A[i];idx=i}}
+    var F=[
+      '💰 2026财运深度报告\n\n🚀 财运爆棚型\n📍 正财：★★★★★\n📍 偏财：★★★★★\n📍 贵人运：★★★★☆\n\n💡 2026关键月份：3月、6月、11月\n🎯 最佳投资方向：AI科技、新能源、跨境电商\n⚠️ 注意：上半年别冲动消费，下半年适合大胆投资\n💪 行动建议：注册公司、学投资课、拓展人脉\n⭐ 综合评分：92分',
+      '💰 2026财运深度报告\n\n💼 稳中求进型\n📍 正财：★★★★☆\n📍 偏财：★★☆☆☆\n📍 贵人运：★★★★★\n\n💡 2026关键月份：4月、8月、12月\n🎯 最佳投资方向：基金定投、国债、蓝筹股\n⚠️ 注意：不要羡慕别人的暴富故事\n💪 行动建议：每月定投、考个理财证、存养老金\n⭐ 综合评分：85分',
+      '💰 2026财运深度报告\n\n💰 精打细算型\n📍 正财：★★★☆☆\n📍 偏财：★★☆☆☆\n📍 贵人运：★★★☆☆\n\n💡 2026关键月份：2月、7月、10月\n🎯 最佳投资方向：定期理财、保险、储蓄国债\n⚠️ 注意：太保守可能错过通胀\n💪 行动建议：开独立账户、学资产配置、适度冒险\n⭐ 综合评分：78分',
+      '💰 2026财运深度报告\n\n🎯 机会潜伏型\n📍 正财：★★★☆☆\n📍 偏财：★★★★★\n📍 贵人运：★★★★☆\n\n💡 2026关键月份：9月（重大转折）、11月（收获期）\n🎯 最佳投资方向：短期项目、概念股、副业创业\n⚠️ 注意：上半年忍住别辞职\n💪 行动建议：建立人脉网、追踪行业动态、年底果断出手\n⭐ 综合评分：88分',
+      '💰 2026财运深度报告\n\n🌟 厚积薄发型\n📍 正财：★★★★★\n📍 偏财：★★★☆☆\n📍 贵人运：★★★★★\n\n💡 2026关键月份：5月、9月、12月\n🎯 最佳投资方向：职业培训、专家顾问、知识付费\n⚠️ 注意：专注专业才是你的护城河\n💪 行动建议：写书开课、打造个人IP、成为领域KOL\n⭐ 综合评分：95分'
+    ];
+    d('fc').innerHTML=F[idx].replace(/\n/g,'<br>');
+  },1500);
+}
+function sh(){if(navigator.share){navigator.share({title:'💰 超准财运测试',text:'测完惊呆了！来测测你2026年财运走势！',url:location.href}).catch(function(){})}else{prompt('复制链接：',location.href)}}
+function re(){d('p3').className='hidden';d('p1').className='';window.scrollTo(0,0)}
+setInterval(function(){var e=d('ct');if(e){var n=parseInt(e.textContent.replace(/,/g,''))||156000;n+=Math.floor(Math.random()*9)+1;e.textContent=n.toLocaleString()}},6000);
+</script>
+</body>
+</html>
