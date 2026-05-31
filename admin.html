@@ -176,6 +176,15 @@ function showReport(record){
   b+='<div class="tag-item"><div class="l">💼 事业运势</div><div class="v">'+careerOpts[caI]+'</div></div>';
   b+='<div class="tag-item"><div class="l">🧘 2026关键词</div><div class="v">'+keywordOpts[kI]+'</div></div>';
   b+='</div>';
+  // 掌纹区域
+  b+='<hr class="divider">';
+  b+='<h3>🔍 AI掌纹解读</h3>';
+  b+='<div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;padding:16px;text-align:center;color:var(--text-muted);font-size:0.82rem;">';
+  b+='<div style="font-size:32px;margin-bottom:8px;">🖐️</div>';
+  b+='<p>未识别手掌 · 请稍后重新尝试</p>';
+  b+='<p style="font-size:0.7rem;margin-top:4px;">用户需在测试时上传掌心照片方可获取深度掌纹分析</p>';
+  b+='</div>';
+
   document.getElementById('report-body').innerHTML=b;
   document.getElementById('report').style.display='block';
 }
