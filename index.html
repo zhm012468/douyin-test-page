@@ -828,7 +828,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.3</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.4</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1437,17 +1437,15 @@ function onPalmPick(e){
   };r.readAsDataURL(f);
 }
 function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');p.src='';p.style.display='none';document.getElementById('palmBox').classList.remove('has-img');document.getElementById('palmTag').style.display='none';document.getElementById('palmFile').value='';}
-// 手指识别 —— 有手指就是手掌，没手指就不是
-function classifyPalm(d){
-  var w=d.width,h=d.height,skinCols=[];
-  for(var x=0;x<w;x+=3){
-    var col=0;
-    for(var y=Math.floor(h*0.05);y<Math.floor(h*0.55);y+=4){
-      var idx=(y*w+x)*4,r=d[idx],g=d[idx+1],b=d[idx+2];
-      if(r>65&&g>25&&b>8&&r>g&&r>b)col++;
-    }
-    skinCols.push(col>2?1:0); // 该列有肤色=1
-  }
+	// 人手检测 —— 识别手部轮廓即可
+	function classifyPalm(d){
+	  var w=d.width,h=d.height,total=w*h,skin=0,top=0;
+	  for(var i=0;i<total;i+=2){var idx=i*4,r=d[idx],g=d[idx+1],b=d[idx+2];
+	    if(r>60&&g>20&&b>5&&r>g){skin++;if(Math.floor(i/w)<h*0.4)top++;}}
+	  if(skin/total<0.04)return '未检测到人手';
+	  if(top/total<0.003)return '请将手指展开拍摄';
+	  return 'ok';
+	}
   // 统计独立手指：肤色列之间的间隔
   var fingers=0,last=0;
   for(var i=1;i<skinCols.length;i++){
