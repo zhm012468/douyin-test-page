@@ -1555,9 +1555,58 @@ function showResult(name, birthdayStr) {
     palmReport.style.display = 'none';
   }
 
+  // ★ 保存测试记录到数据库
+  saveRecord(name, personality.name, year, month, day);
+
   // 切换屏幕
   showScreen('screen-result');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// 保存测试记录到 GitHub 数据库
+// ============================================================
+function saveRecord(name, personality, year, month, day) {
+  var TOKEN = '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';
+  var apiUrl = 'https://api.github.com/repos/zhm012468/douyin-test-page/contents/data.json';
+  var now = new Date().toISOString();
+  var entry = {
+    name: name,
+    personality: personality,
+    year: year,
+    month: month,
+    day: day,
+    time: now
+  };
+
+  // 1. 先获取当前 data.json
+  fetch(apiUrl, { headers: { Authorization: 'Bearer ' + TOKEN } })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var records = [];
+      if (data.content) {
+        try { records = JSON.parse(atob(data.content)); } catch(e) { records = []; }
+      }
+      records.push(entry);
+
+      // 2. 更新 data.json
+      var newContent = btoa(unescape(encodeURIComponent(JSON.stringify(records, null, 2))));
+      return fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: 'Bearer ' + TOKEN,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: '记录测试: ' + name + ' (' + personality + ')',
+          content: newContent,
+          sha: data.sha
+        })
+      });
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(result) { console.log('数据保存成功', result.content ? 'OK' : ''); })
+    .catch(function(e) { console.error('保存失败（不影响使用）:', e); });
 }
 
 // ============================================================
