@@ -1026,6 +1026,27 @@ body {
      ============================================================ -->
 <script>
 // ============================================================
+// ★ 管理员模式检测（最先执行）— 访问地址加 #admin 如 xxx.com/#admin
+// ============================================================
+(function() {
+  if (window.location.hash === '#admin' || window.location.search.indexOf('admin') !== -1) {
+    // 等 DOM 就绪后立即切换
+    var checkReady = setInterval(function() {
+      var adminScreen = document.getElementById('screen-admin');
+      if (adminScreen) {
+        clearInterval(checkReady);
+        var screens = document.querySelectorAll('.screen');
+        for (var i = 0; i < screens.length; i++) { screens[i].classList.remove('active'); }
+        adminScreen.classList.add('active');
+        var sigs = document.querySelectorAll('.desktop-sig,.mobile-sig');
+        for (var i = 0; i < sigs.length; i++) { sigs[i].style.display = 'none'; }
+        document.getElementById('particles-canvas').style.display = 'none';
+      }
+    }, 30);
+  }
+})();
+
+// ============================================================
 // 粒子背景动画
 // ============================================================
 (function() {
@@ -1583,27 +1604,6 @@ function showToast(msg) {
     setTimeout(function() { document.body.removeChild(toast); }, 500);
   }, 2000);
 }
-
-// ============================================================
-// 管理员查询模式（访问 ?admin 进入）
-// ============================================================
-(function() {
-  if (window.location.search.indexOf('admin') !== -1) {
-    // 立即执行，不等DOMContentLoaded
-    setTimeout(function() {
-      var screens = document.querySelectorAll('.screen');
-      for (var i = 0; i < screens.length; i++) { screens[i].classList.remove('active'); }
-      document.getElementById('screen-admin').classList.add('active');
-      // 隐藏桌面端个签
-      var desktopSigs = document.querySelectorAll('.desktop-sig');
-      for (var i = 0; i < desktopSigs.length; i++) { desktopSigs[i].style.display = 'none'; }
-      // 隐藏移动端个签
-      var mobileSigs = document.querySelectorAll('.mobile-sig');
-      for (var i = 0; i < mobileSigs.length; i++) { mobileSigs[i].style.display = 'none'; }
-    }, 50);
-  }
-})();
-
 function adminShowResult() {
   var name = document.getElementById('admin-name').value.trim();
   var birthday = document.getElementById('admin-birthday').value;
