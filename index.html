@@ -268,6 +268,31 @@ body {
   color: var(--text-muted);
 }
 
+/* 定位城市 */
+.loc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgba(6,182,212,0.08);
+  border: 1px solid rgba(6,182,212,0.15);
+  font-size: 0.7rem;
+  color: var(--gradient-4);
+  letter-spacing: 0.5px;
+}
+.loc-badge .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gradient-4);
+  animation: pulseDot 2s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%,100% { opacity:1; }
+  50% { opacity:0.3; }
+}
+
 /* ============================================================
    加载页
    ============================================================ */
@@ -802,7 +827,8 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v3.4</p>
+    <div style="text-align:center;"><span class="loc-badge" id="loc-badge" style="display:none;"><span class="dot"></span> <span id="loc-city">定位中...</span></span></div>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v4.1</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1600,7 +1626,8 @@ function saveRecord(name, personality, year, month, day) {
     year: year,
     month: month,
     day: day,
-    time: now
+    time: now,
+    city: userCity || '未知'
   };
 
   // 1. 先获取当前 data.json
@@ -1767,6 +1794,23 @@ function copyAdminReport() {
     base += Math.floor(Math.random() * 7) + 1;
     countEl.textContent = '已有 ' + base.toLocaleString() + ' 人完成测试';
   }, 8000 + Math.random() * 5000);
+})();
+
+// GPS定位城市
+var userCity = '';
+(function(){
+  if(!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var url='https://nominatim.openstreetmap.org/reverse?format=json&lat='+pos.coords.latitude+'&lon='+pos.coords.longitude+'&zoom=10&accept-language=zh';
+    fetch(url).then(function(r){return r.json();}).then(function(d){
+      var addr=d.address||{};
+      userCity=addr.city||addr.town||addr.county||'';
+      if(userCity){
+        document.getElementById('loc-city').textContent=userCity;
+        document.getElementById('loc-badge').style.display='inline-flex';
+      }
+    }).catch(function(){});
+  },function(){},{timeout:8000,enableHighAccuracy:false});
 })();
 </script>
 
