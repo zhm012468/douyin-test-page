@@ -879,7 +879,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v2.3</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v3.0</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1532,9 +1532,9 @@ function showPalmError(title, msg) {
 }
 
 // ============================================================
-// ★ 手掌校验系统（增强版）
-// 手心特征：中心偏粉红 + 纹路密集 + 区域纹理方差大
-// 手背特征：颜色均匀偏黄 + 光滑 + 纹理方差小
+// ★★★ 严格手掌校验系统 v3.0 ★★★
+// 规则：只接受掌心向上、五指展开、三大主线清晰的手掌
+// 不符合 → 直接拦截，不进入解析
 // ============================================================
 function validatePalmStrict(imageData) {
   var data = imageData.data;
@@ -1542,89 +1542,146 @@ function validatePalmStrict(imageData) {
   var h = imageData.height;
   var total = data.length / 4;
 
+  // ===== 第1关：肤色检测 =====
+  var skinMask = new Uint8Array(w*h);
   var skinCount = 0;
-  var centerSamples = []; // 中心区域像素采样
-  var outerSamples = [];  // 外圈采样
-  var cx = Math.floor(w/2), cy = Math.floor(h/2);
-  var ir = Math.floor(Math.min(w,h)*0.18); // 内圈半径
-  var or = Math.floor(Math.min(w,h)*0.38); // 外圈半径
-
-  for (var y = 0; y < h; y++) {
-    for (var x = 0; x < w; x++) {
-      var idx = (y*w + x)*4;
-      var r = data[idx], g = data[idx+1], b = data[idx+2];
-      var isSkin = (r > 70 && g > 30 && b > 12 && r > g && (r-g) > 8 && r > b);
-      if (!isSkin) continue;
-      skinCount++;
-
-      // 计算到中心的距离
-      var dx = x - cx, dy = y - cy;
-      var dist = Math.sqrt(dx*dx + dy*dy);
-
-      if (dist < ir) {
-        // 中心区域（掌心，应有纹路）
-        centerSamples.push({r:r, g:g, b:b, x:x, y:y});
-      } else if (dist > or) {
-        // 外圈（手掌边缘，较浅）
-        outerSamples.push({r:r, g:g, b:b});
-      }
-    }
+  for (var i = 0; i < total; i++) {
+    var idx = i*4;
+    var r = data[idx], g = data[idx+1], b = data[idx+2];
+    var isSkin = (r>70 && g>28 && b>10 && r>g && (r-g)>6 && r>b && (r-b)>5);
+    if (isSkin) { skinMask[i]=1; skinCount++; }
   }
-
-  var skinRatio = skinCount / total;
-
-  // 第1关：非手图拦截
+  var skinRatio = skinCount/total;
   if (skinRatio < 0.15) {
-    return {valid:false, code:'nohand', title:'未检测到手掌', msg:'系统未能检测到人类手掌\n\n请上传真实的人类手掌照片\n确保手掌占据画面主体位置\n\n⚠️ 风景、动物、物品等非手图像无法通过'};
+    return {valid:false, msg:'这不是手掌，请上传真实的人类手掌照片'};
   }
 
-  // 第2关：手心 vs 手背分析
-  if (centerSamples.length < 200) {
-    return {valid:false, code:'angle', title:'掌心区域过小', msg:'手掌中心有效像素不足\n\n请将手掌靠近镜头或调整角度\n确保掌心完整出现在画面中央'};
+  // ===== 第2关：掌心朝向检测 =====
+  var cx=Math.floor(w/2), cy=Math.floor(h/2);
+  var ir=Math.floor(Math.min(w,h)*0.16);
+  var or=Math.floor(Math.min(w,h)*0.35);
+  var cR=0,cG=0,cB=0,cN=0, oR=0,oG=0,oB=0,oN=0;
+
+  for (var i=0;i<total;i++){
+    if (!skinMask[i]) continue;
+    var idx=i*4;
+    var r=data[idx],g=data[idx+1],b=data[idx+2];
+    var x=i%w, y=Math.floor(i/w);
+    var dist=Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy));
+    if (dist<ir){cR+=r;cG+=g;cB+=b;cN++;}
+    else if (dist>or){oR+=r;oG+=g;oB+=b;oN++;}
   }
 
-  // 计算中心 vs 外圈的颜色差异
-  var cAvgR=0,cAvgG=0,cAvgB=0, oAvgR=0,oAvgG=0,oAvgB=0;
-  for (var i=0;i<centerSamples.length;i++){ cAvgR+=centerSamples[i].r; cAvgG+=centerSamples[i].g; cAvgB+=centerSamples[i].b; }
-  cAvgR/=centerSamples.length; cAvgG/=centerSamples.length; cAvgB/=centerSamples.length;
-  for (var i=0;i<outerSamples.length;i++){ oAvgR+=outerSamples[i].r; oAvgG+=outerSamples[i].g; oAvgB+=outerSamples[i].b; }
-  if (outerSamples.length>0){ oAvgR/=outerSamples.length; oAvgG/=outerSamples.length; oAvgB/=outerSamples.length; }
-  else { oAvgR=cAvgR; oAvgG=cAvgG; oAvgB=cAvgB; }
+  if (cN<150) {
+    return {valid:false, msg:'请将手掌靠近镜头，确保掌心完整可见'};
+  }
+  cR/=cN;cG/=cN;cB/=cN;
+  if (oN>0){oR/=oN;oG/=oN;oB/=oN;}
+  else {oR=cR;oG=cG;oB=cB;}
 
-  // 手心特征：中心红度 > 外圈红度（血液集中在掌心）
-  var centerRedRatio = cAvgR / (cAvgG + cAvgB + 1);
-  var outerRedRatio = oAvgR / (oAvgG + oAvgB + 1);
-  var redDrop = centerRedRatio - outerRedRatio; // 手心为正，手背接近0
+  var centerRedRatio = cR/(cG+cB+1);
+  var outerRedRatio = oR/(oG+oB+1);
+  var redDrop = centerRedRatio-outerRedRatio;
+  var centerRG = cR/(cG+1);
 
-  // 手背特征：R/G比接近1（偏黄），手心R/G比 > 1.15（偏粉红）
-  var centerRG = cAvgR / (cAvgG + 1);
-  var outerRG = oAvgR / (oAvgG + 1);
-
-  // 综合判断
-  var isBackHand = (redDrop < 0.01 && centerRG < 1.08) || (centerRG < 1.04);
-
-  if (isBackHand) {
-    return {valid:false, code:'back', title:'识别为手背或握拳', msg:'系统检测到此图像为手背/握拳\n\n手背特征：\n• 中心与外圈颜色均匀\n• 偏黄色调，无粉红掌心\n• 皮肤光滑缺少纹路\n\n手心特征：\n• 掌心发粉红色\n• 可见掌纹纹路\n\n请将手掌摊开、掌心朝上重新拍摄'};
+  // 手背：中心外圈颜色均匀，R/G 接近1
+  if (redDrop < 0.012 || centerRG < 1.06) {
+    return {valid:false, msg:'请拍摄手心，不要拍摄手背'};
   }
 
-  // 第3关：中心纹理验证（手背光滑 vs 手心有纹路）
-  var texSum=0, texCount=0;
-  for (var i=0;i<centerSamples.length;i++){
-    var x=centerSamples[i].x, y=centerSamples[i].y;
-    if (x>0 && x<w-1 && y>0 && y<h-1){
-      var idx=(y*w + x)*4;
-      texSum += Math.abs(data[idx]-data[idx+4]) + Math.abs(data[idx]-data[idx+w*4])
-              + Math.abs(data[idx+1]-data[idx+5]) + Math.abs(data[idx+1]-data[idx+1+w*4]);
-      texCount++;
+  // 侧面手：肤色占比低 + 纹理异常
+  if (skinRatio < 0.22 && centerRG < 1.12) {
+    return {valid:false, msg:'请拍摄手心，不要拍摄侧面'};
+  }
+
+  // ===== 第3关：形状检测（五指展开 vs 握拳） =====
+  // 握拳：紧凑正方形，边缘平滑
+  // 五指展开：略宽，边缘锯齿多
+  var minX=w,maxX=0,minY=h,maxY=0;
+  for (var i=0;i<total;i++){
+    if (!skinMask[i]) continue;
+    var x=i%w, y=Math.floor(i/w);
+    if (x<minX)minX=x; if (x>maxX)maxX=x;
+    if (y<minY)minY=y; if (y>maxY)maxY=y;
+  }
+  var bw=maxX-minX, bh=maxY-minY;
+  var aspectRatio = bw/Math.max(bh,1); // 宽高比
+  var fillRatio = skinCount/(bw*bh);   // 边界框填充率
+
+  // 握拳：宽高比接近1 且 填充率极高(>0.85) = 紧凑
+  if (aspectRatio > 0.7 && aspectRatio < 1.35 && fillRatio > 0.82) {
+    return {valid:false, msg:'请将手指展开，不要握拳'};
+  }
+
+  // ===== 第4关：边缘复杂度（五指 vs 手指侧面） =====
+  var edgeComplexity = 0;
+  var edgeSamples = 0;
+  // 扫描顶部边缘（手指区域）
+  for (var x=minX+5; x<maxX-5; x+=3){
+    var found=false;
+    for (var y=minY; y<minY+bh*0.5; y+=2){
+      if (skinMask[y*w+x]) { found=true; break; }
+    }
+    if (found) edgeSamples++;
+  }
+  for (var x=minX+7; x<maxX-7; x+=3){
+    var prev=0, transitions=0;
+    for (var y=minY; y<minY+bh*0.55; y+=3){
+      var s=skinMask[y*w+x]?1:0;
+      if (s!==prev){transitions++;prev=s;}
+    }
+    edgeComplexity+=transitions;
+  }
+  edgeComplexity/=Math.max(edgeSamples,1);
+
+  // 五指展开：边缘锯齿多(>1.5)；手指侧面/握拳：边缘平滑(<1.2)
+  if (edgeComplexity < 1.2) {
+    return {valid:false, msg:'请将五指自然展开，不要并拢或握拳'};
+  }
+  if (edgeComplexity < 1.6 && fillRatio > 0.7) {
+    return {valid:false, msg:'请拍摄手心，不要拍摄手指侧面'};
+  }
+
+  // ===== 第5关：掌心纹路验证 =====
+  var texSum=0, texN=0, linePeaks=0;
+  for (var i=0;i<total;i++){
+    if (!skinMask[i]) continue;
+    var x=i%w, y=Math.floor(i/w);
+    var dx=x-cx, dy=y-cy;
+    if (Math.sqrt(dx*dx+dy*dy)>ir) continue; // 只看中心区域
+    if (x>1&&x<w-2&&y>1&&y<h-2){
+      var g1=Math.abs(data[i*4]-data[(i+2)*4]);      // 水平梯度
+      var g2=Math.abs(data[i*4]-data[(i+w*2)*4]);    // 垂直梯度
+      var g3=Math.abs(data[i*4+1]-data[(i+2)*4+1]);
+      var g4=Math.abs(data[i*4+1]-data[(i+w*2)*4+1]);
+      var mag=g1+g2+g3+g4;
+      texSum+=mag; texN++;
+      if (mag>80) linePeaks++; // 明显纹路峰
     }
   }
-  var centerTexture = texCount>0 ? texSum/texCount : 0;
+  var centerTexture = texN>0 ? texSum/texN : 0;
+  var lineDensity = linePeaks/Math.max(texN,1);
 
-  if (centerTexture < 2.2) {
-    return {valid:false, code:'smooth', title:'掌心纹路不足', msg:'中心区域纹理过于平滑\n\n手掌中心应有可见的生命线、智慧线、感情线\n手背皮肤通常无此纹路特征\n\n请确认掌心朝上、手指自然展开\n在自然光下重新拍摄'};
+  // 手背/无纹路：纹理值极低
+  if (centerTexture < 3.0) {
+    return {valid:false, msg:'未检测到掌纹，请确保掌心朝上并清晰可见生命线、智慧线、感情线'};
+  }
+  // 纹路峰值密度不够（无明显主线）
+  if (lineDensity < 0.008 && centerTexture < 5.5) {
+    return {valid:false, msg:'三大主线不清晰，请在充足光线下重新拍摄掌心'};
   }
 
+  // ===== 全部通过 =====
   return {valid:true};
+}
+
+function isHumanPalm(imageData) {
+  var result = validatePalmStrict(imageData);
+  if (!result.valid) {
+    showPalmError('手掌验证未通过', result.msg);
+    return false;
+  }
+  return true;
 }
 
 // 替换原有的简单检测
