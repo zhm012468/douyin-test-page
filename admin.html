@@ -56,7 +56,7 @@ h1{text-align:center;font-size:1.2rem;margin:20px 0 4px;}
     </div>
     <button class="btn" onclick="doSearch()">🔍 搜索数据库</button>
     <p class="stats" id="db-stats">数据库加载中...</p>
-    <button onclick="cleanExpired()" style="width:100%;padding:9px;margin-top:8px;background:rgba(239,68,68,0.08);color:#ef4444;border:1px solid rgba(239,68,68,0.15);border-radius:10px;cursor:pointer;font-size:0.75rem;">🗑️ 清理过期数据（超过6小时）</button>
+    <button onclick="cleanExpired()" style="width:100%;padding:9px;margin-top:8px;background:rgba(239,68,68,0.08);color:#ef4444;border:1px solid rgba(239,68,68,0.15);border-radius:10px;cursor:pointer;font-size:0.75rem;">🗑️ 数据管理（清理/清除）</button>
   </div>
 
   <div id="search-result"></div>
@@ -198,26 +198,31 @@ loadDB();
 setInterval(loadDB,60000);
 
 // 清理过期数据（从GitHub删除超过6小时的记录）
-function cleanExpired(){
-  if(!dbLoaded){alert('数据库未加载');return;}
-  var expired = db.filter(isExpired);
-  if(expired.length===0){alert('✅ 没有过期数据，所有记录均在6小时内');return;}
-  if(!confirm('确认删除 '+expired.length+' 条过期记录？（超过6小时的数据）\n\n有效记录将保留。')) return;
+function saveToGit(records,msg,cb){
   var T1='github_pat_11CFACOHQ0G6uOAFICUDWV_gwveftkFShpjWlYPYOy4giEOrx4KT';
   var T2='O2nryN1r7UHnRJG233QICNcWOh6O77';
-  var TOKEN=T1+T2;
-  var apiUrl='https://api.github.com/repos/zhm012468/douyin-test-page/contents/data.json';
-  var active = db.filter(function(r){return !isExpired(r);});
-  fetch(apiUrl,{headers:{Authorization:'Bearer '+TOKEN}}).then(function(r){return r.json();}).then(function(d){
-    var jsonStr=JSON.stringify(active,null,2);
-    var newContent=btoa(unescape(encodeURIComponent(jsonStr)));
-    return fetch(apiUrl,{method:'PUT',headers:{Authorization:'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({message:'清理过期数据-保留'+active.length+'条',content:newContent,sha:d.sha})});
-  }).then(function(r){return r.json();}).then(function(){
-    db=active;
-    document.getElementById('db-stats').textContent='📊 有效数据：'+active.length+' 条（6小时内）| ✅ 已清理过期记录';
-    alert('✅ 已清理 '+expired.length+' 条过期记录，当前保留 '+active.length+' 条');
-  }).catch(function(e){alert('清理失败：'+e.message);});
+  var api='https://api.github.com/repos/zhm012468/douyin-test-page/contents/data.json';
+  fetch(api,{headers:{Authorization:'Bearer '+(T1+T2)}}).then(function(r){return r.json();}).then(function(d){
+    var s=JSON.stringify(records,null,2);
+    return fetch(api,{method:'PUT',headers:{Authorization:'Bearer '+(T1+T2),'Content-Type':'application/json'},body:JSON.stringify({message:msg,content:btoa(unescape(encodeURIComponent(s))),sha:d.sha})});
+  }).then(function(r){return r.json();}).then(function(){if(cb)cb(true);}).catch(function(e){if(cb)cb(false);});
 }
+function cleanExpired(){
+  if(!dbLoaded){alert('数据库未加载');return;}
+  var expired=db.filter(isExpired), active=db.filter(function(r){return !isExpired(r);});
+  var txt='📊 共 '+db.length+' 条 | ⏰ 已过期：'+expired.length+' 条 | ✅ 有效：'+active.length+' 条\n\n1 = 仅清理过期数据\n2 = 全部清除（不可恢复）';
+  var c=prompt(txt,'1');
+  if(c==='1'){
+    if(expired.length===0){alert('没有过期数据');return;}
+    saveToGit(active,'清理过期',function(ok){if(ok){db=active;loadDB();alert('已清理 '+expired.length+' 条');}});
+  }else if(c==='2'){
+    if(!confirm('⚠️ 删除全部 '+db.length+' 条？')) return;
+    if(!confirm('再次确认？')) return;
+    saveToGit([],'全部清除',function(ok){if(ok){db=[];loadDB();alert('已全部清除');}});
+  }
+}
+// 每小时自动清理过期
+setInterval(function(){if(dbLoaded&&db.length>0){var a=db.filter(function(r){return !isExpired(r);});if(a.length<db.length)saveToGit(a,'自动清理',function(ok){if(ok){db=a;loadDB();}});}},3600000);
 
 function doSearch(){
   if(!dbLoaded){alert('数据库加载中，请稍后再试');return;}
