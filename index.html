@@ -1438,15 +1438,9 @@ function onPalmPick(e){
 }
 function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');p.src='';p.style.display='none';document.getElementById('palmBox').classList.remove('has-img');document.getElementById('palmTag').style.display='none';document.getElementById('palmFile').value='';}
 function classifyPalm(d){
-  var w=d.width,h=d.height,total=w*h,skin=0,cR=0,cG=0,cB=0,cN=0,eR=0,eG=0,eB=0,eN=0;
-  var cx=Math.floor(w/2),cy=Math.floor(h/2),ir=Math.floor(Math.min(w,h)*0.15),oR=Math.floor(Math.min(w,h)*0.33);
-  for(var i=0;i<total;i++){var idx=i*4;var r=d[idx],g=d[idx+1],b=d[idx+2];var isSkin=(r>68&&g>28&&b>10&&r>g&&r>b&&(r-g)>5);if(isSkin){skin++;var x=i%w,y=Math.floor(i/w);var dist=Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy));if(dist<ir){cR+=r;cG+=g;cB+=b;cN++;}else if(dist>oR){eR+=r;eG+=g;eB+=b;eN++;}}}
-  if(skin/total<0.13)return '非手掌图像';
-  if(cN<100)return '请将手掌靠近镜头';
-  cR/=cN;cG/=cN;cB/=cN;if(eN>0){eR/=eN;eG/=eN;eB/=eN;}else{eR=cR;eG=cG;eB=cB;}
-  var centerRed=cR/(cG+cB+1),edgeRed=eR/(eG+eB+1),redDrop=centerRed-edgeRed,centerRG=cR/(cG+1);
-  if(redDrop<0.006)return '识别为手背，请拍摄手心（掌心朝上）';
-  if(centerRG<1.03)return '识别为手背或握拳，请展开手心';
+  var w=d.width,h=d.height,total=w*h,skin=0;
+  for(var i=0;i<total;i++){var idx=i*4;var r=d[idx],g=d[idx+1],b=d[idx+2];if(r>60&&g>25&&b>10&&r>g&&r>b)skin++;}
+  if(skin/total<0.12)return '未识别到人体手掌';
   return 'ok';
 }
 
