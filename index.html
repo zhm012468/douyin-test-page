@@ -1797,24 +1797,26 @@ function copyAdminReport() {
   }, 8000 + Math.random() * 5000);
 })();
 
-// GPS定位城市
+// GPS定位城市（GPS失败则用IP定位兜底）
 var userCity = '';
 (function(){
   var cityEl=document.getElementById('loc-city');
-  if(!navigator.geolocation){cityEl.textContent='📍 定位不可用';return;}
+  function setCity(name){userCity=name;cityEl.textContent='📍 '+name;}
+  function ipFallback(){
+    fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){
+      if(d.city){setCity(d.city);}else{cityEl.textContent='📍 定位失败';userCity='未知';}
+    }).catch(function(){cityEl.textContent='📍 定位失败';userCity='未知';});
+  }
+  if(!navigator.geolocation){ipFallback();return;}
+  var timeout=setTimeout(function(){ipFallback();},5000);
   navigator.geolocation.getCurrentPosition(function(pos){
-    var url='https://nominatim.openstreetmap.org/reverse?format=json&lat='+pos.coords.latitude+'&lon='+pos.coords.longitude+'&zoom=10&accept-language=zh';
-    fetch(url).then(function(r){return r.json();}).then(function(d){
-      var addr=d.address||{};
-      userCity=addr.city||addr.town||addr.county||addr.state||'';
-      if(userCity){cityEl.textContent='📍 '+userCity;}
-      else{cityEl.textContent='📍 定位成功';userCity='未知';}
-    }).catch(function(){cityEl.textContent='📍 网络异常';});
-  },function(err){
-    if(err.code===1){cityEl.textContent='📍 请授权定位';}
-    else if(err.code===2){cityEl.textContent='📍 定位信号弱';}
-    else{cityEl.textContent='📍 定位超时';}
-  },{timeout:10000,enableHighAccuracy:false});
+    clearTimeout(timeout);
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+pos.coords.latitude+'&lon='+pos.coords.longitude+'&zoom=10&accept-language=zh')
+    .then(function(r){return r.json();}).then(function(d){
+      var addr=d.address||{};var c=addr.city||addr.town||addr.county||addr.state||'';
+      if(c){setCity(c);}else{ipFallback();}
+    }).catch(function(){ipFallback();});
+  },function(){clearTimeout(timeout);ipFallback();},{timeout:5000,enableHighAccuracy:false});
 })();
 </script>
 
