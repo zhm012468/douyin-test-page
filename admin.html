@@ -110,8 +110,9 @@ function isExpired(record){
   return (Date.now() - new Date(record.time).getTime()) > DATA_TTL;
 }
 
-// 掌纹数据库（与H5同步）
-var PALM_DB=[
+// 掌纹功能已移除
+var PALM_REMOVED=true; // placeholder
+var PALM_DB_OLD=[
   {cat:'life',name:'生命线深长饱满',prob:'22%',feature:'手掌拇指侧生命线弧度宽大，线条深邃连贯，纹路清晰完整无断裂',personality:'外表性格温和沉稳，待人宽厚包容；内心骨子里极度要强，野心潜藏很深，占有与控制欲望强烈',advice:'适当降低自身的执念，不要凡事强行逞强，学会接纳自身短板，放平心态能够减少精神内耗'},
   {cat:'life',name:'生命线短浅细弱',prob:'18%',feature:'生命线整体长度偏短，纹路颜色浅淡，线条纤细单薄，气场纹路微弱',personality:'外在看上去胆小柔弱，依赖性较强处事被动；内心心思多疑敏感，防备心很重很难真正信任他人',advice:'多多建立自信心，不要过度揣测他人想法，减少胡思乱想，主动拥抱身边的人际关系'},
   {cat:'life',name:'生命线双条护线',prob:'13%',feature:'主生命线旁伴随一条平行辅助细纹，双线并行生长，纹路层次分明',personality:'平时待人憨厚随和属于老好人形象；遭遇大事头脑冷静行事狠决，天生自带贵人运势',advice:'善良需要自带锋芒，不要一味迁就别人，保留自己的底线才能够长久护住自身福气'},
@@ -239,7 +240,7 @@ function doSearch(){
   var html='<div class="msg info">🔍 找到 <b>'+matches.length+'</b> 条匹配记录，请选择：</div><ul class="match-list">';
   matches.forEach(function(r,i){
     var t=r.time?r.time.substring(0,10):'未知';
-    html+='<li onclick="showReport(db['+db.indexOf(r)+'])"><span class="match-name">'+r.name+'</span><span class="match-info">📅 '+t+' | '+r.personality+'</span></li>';
+    html+='<li onclick="showReport(db['+db.indexOf(r)+'])"><span class="match-name">'+r.name+'</span><span class="match-info">📍 '+(r.city||'未知')+' | 📅 '+t+' | '+r.personality+'</span></li>';
   });
   html+='</ul>';
   container.innerHTML=html;
@@ -258,6 +259,7 @@ function showReport(record){
 
   var h='';
   h+='<span class="badge">♈ '+zodiac+'</span> <span class="badge">'+animal+'</span>';
+  if(record.city&&record.city!=='未知') h+=' <span class="badge">📍 '+record.city+'</span>';
   h+='<div class="name-display">'+name+'</div>';
   h+='<span class="tag">'+p.name+'</span>';
   document.getElementById('report-header').innerHTML=h;
