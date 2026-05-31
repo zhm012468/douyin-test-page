@@ -229,23 +229,32 @@ function showReport(record){
 }
 
 function downloadReport(){
-  var card = document.getElementById('report');
-  if(!card || card.style.display==='none'){alert('请先查询用户再下载报告');return;}
+  var body = document.getElementById('report-body');
+  if(!body || document.getElementById('report').style.display==='none'){alert('请先查询用户再下载报告');return;}
   var btn = event.target;
   btn.textContent='⏳ 生成中...';
   btn.disabled=true;
-  html2canvas(card,{backgroundColor:'#0a0a1a',scale:2,useCORS:true,logging:false}).then(function(canvas){
+  // 创建临时截图层
+  var clone = body.cloneNode(true);
+  clone.style.padding = '20px';
+  clone.style.background = '#0a0a1a';
+  clone.style.position = 'absolute';
+  clone.style.left = '-9999px';
+  clone.style.width = '440px';
+  document.body.appendChild(clone);
+  html2canvas(clone,{backgroundColor:'#0a0a1a',scale:2,useCORS:true,logging:false}).then(function(canvas){
+    document.body.removeChild(clone);
     var link=document.createElement('a');
     link.download='personality-report-'+Date.now()+'.png';
     link.href=canvas.toDataURL('image/png');
     link.click();
     btn.textContent='📥 一键下载报告';
     btn.disabled=false;
-    alert('✅ 报告已下载为PNG图片，可直接发给客户！');
   }).catch(function(e){
+    document.body.removeChild(clone);
     btn.textContent='📥 一键下载报告';
     btn.disabled=false;
-    alert('下载失败：'+e.message+'，请使用截图工具手动截图');
+    alert('下载失败，请用截图工具手动截图');
   });
 }
 
