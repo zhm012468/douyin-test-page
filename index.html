@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="瓒呭噯鎬ф牸娴嬭瘯锛佽緭鍏ュ鍚嶅拰鐢熸棩锛屾彮寮€浣犵殑闅愯棌浜烘牸锛?>
+<meta name="description" content="超准性格测试！输入姓名和生日，揭开你的隐藏人格！">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>鉁?鍙岄潰浜烘牸娴嬭瘯 鈥?鎻紑浣犵殑闅愯棌鎬ф牸</title>
+<title>✨ 双面人格测试 — 揭开你的隐藏性格</title>
 <style>
 /* ============================================================
-   鍏ㄥ眬鍙橀噺 / CSS Variables 鈥?淇敼閰嶈壊鍦ㄨ繖閲?   ============================================================ */
+   全局变量 / CSS Variables — 修改配色在这里
+   ============================================================ */
 :root {
   --bg-deep: #0a0a1a;
   --bg-card: rgba(255,255,255,0.06);
@@ -31,7 +32,7 @@
 }
 
 /* ============================================================
-   鍩虹閲嶇疆 & 鍏ㄥ眬鏍峰紡
+   基础重置 & 全局样式
    ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -53,7 +54,7 @@ body {
 }
 
 /* ============================================================
-   鍔ㄦ€佺矑瀛愯儗鏅?Canvas
+   动态粒子背景 Canvas
    ============================================================ */
 #particles-canvas {
   position: fixed;
@@ -64,7 +65,8 @@ body {
 }
 
 /* ============================================================
-   涓诲鍣?   ============================================================ */
+   主容器
+   ============================================================ */
 .app-container {
   position: relative;
   z-index: 1;
@@ -78,12 +80,12 @@ body {
 }
 
 /* ============================================================
-   棣栭〉 鈥?杈撳叆椤甸潰
+   首页 — 输入页面
    ============================================================ */
 .screen { display: none; flex-direction: column; align-items: center; flex: 1; }
 .screen.active { display: flex; }
 
-/* 椤堕儴Logo/鍥炬爣 */
+/* 顶部Logo/图标 */
 .hero-icon {
   font-size: 56px;
   margin-top: 32px;
@@ -96,7 +98,7 @@ body {
   50% { transform: translateY(-14px); }
 }
 
-/* 涓绘爣棰?*/
+/* 主标题 */
 .main-title {
   font-size: 2rem;
   font-weight: 900;
@@ -124,7 +126,7 @@ body {
   letter-spacing: 2px;
 }
 
-/* 杈撳叆鍗＄墖 */
+/* 输入卡片 */
 .input-card {
   width: 100%;
   background: var(--bg-card);
@@ -178,8 +180,8 @@ body {
   color: var(--text-muted);
 }
 
-/* CTA 鎸夐挳 */
-/* 鎵嬫帉涓婁紶鍖哄煙 */
+/* CTA 按钮 */
+/* 手掌上传区域 */
 .palm-upload {
   margin-bottom: 18px;
 }
@@ -263,7 +265,7 @@ body {
 .palm-upload-area.has-image .upload-icon,
 .palm-upload-area.has-image .upload-text { display: none; }
 
-/* 鎵嬫帉棰勮鎸囩ず鐐瑰姩鐢?*/
+/* 手掌预览指示点动画 */
 @keyframes scanLine {
   0% { top: 0; }
   50% { top: 90%; }
@@ -312,7 +314,7 @@ body {
   50% { box-shadow: 0 4px 45px rgba(236,72,153,0.55); }
 }
 
-/* 娴姩瑁呴グemoji */
+/* 浮动装饰emoji */
 .floating-emojis {
   display: flex;
   gap: 16px;
@@ -335,7 +337,7 @@ body {
   50% { transform: translateY(-12px) scale(1.2); opacity: 1; }
 }
 
-/* 宸叉祴浜烘暟 */
+/* 已测人数 */
 .test-count {
   margin-top: 16px;
   font-size: 0.78rem;
@@ -343,7 +345,8 @@ body {
 }
 
 /* ============================================================
-   鍔犺浇椤?   ============================================================ */
+   加载页
+   ============================================================ */
 .loading-content {
   flex: 1;
   display: flex;
@@ -392,7 +395,7 @@ body {
 }
 
 /* ============================================================
-   缁撴灉椤?鈥?鍙岄潰甯冨眬
+   结果页 — 双面布局
    ============================================================ */
 .result-header {
   text-align: center;
@@ -435,7 +438,7 @@ body {
   animation: fadeInUp 0.7s ease-out;
 }
 
-/* 鍙岄潰鍗＄墖瀹瑰櫒 */
+/* 双面卡片容器 */
 .dual-panels {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -445,7 +448,7 @@ body {
   animation: fadeInUp 0.8s ease-out;
 }
 
-/* 閫氱敤鍗＄墖鏍峰紡 */
+/* 通用卡片样式 */
 .result-card {
   background: var(--bg-card);
   backdrop-filter: blur(20px);
@@ -479,7 +482,7 @@ body {
 
 .card-title .icon { font-size: 1.3rem; }
 
-/* 鍏嶈垂缁撴灉鍗＄墖 */
+/* 免费结果卡片 */
 .free-card .card-title {
   color: var(--success);
 }
@@ -504,7 +507,7 @@ body {
 .trait-list li:nth-child(4) { animation-delay: 0.4s; }
 
 .trait-list li::before {
-  content: '鉁?;
+  content: '✦';
   position: absolute;
   left: 0;
   color: var(--gradient-1);
@@ -512,7 +515,7 @@ body {
   top: 10px;
 }
 
-/* 杩愬娍灏忔爣绛?*/
+/* 运势小标签 */
 .fortune-tags {
   display: flex;
   flex-wrap: wrap;
@@ -542,7 +545,8 @@ body {
 }
 
 /* ============================================================
-   閿佸畾鍐呭鍗＄墖锛堝彸渚?涓嬮儴锛?   ============================================================ */
+   锁定内容卡片（右侧/下部）
+   ============================================================ */
 .locked-card {
   position: relative;
   overflow: hidden;
@@ -561,7 +565,7 @@ body {
   color: var(--warning);
 }
 
-/* 閿佸畾閬僵灞?*/
+/* 锁定遮罩层 */
 .lock-overlay {
   position: absolute;
   inset: 0;
@@ -597,7 +601,7 @@ body {
   margin-bottom: 12px;
 }
 
-/* 寰俊浜岀淮鐮佸崰浣嶅尯 */
+/* 微信二维码占位区 */
 .qr-placeholder {
   width: 120px;
   height: 120px;
@@ -612,9 +616,9 @@ body {
 }
 
 /*
-   浜岀淮鐮佷娇鐢ㄨ鏄庯細
-   灏嗕綘鐨勫井淇′簩缁寸爜鍥剧墖鍛藉悕涓?qrcode.png锛屾斁鍦ㄥ悓鐩綍涓嬶紝
-   鐒跺悗鍙栨秷涓嬮潰 .qr-real 鐨勬敞閲婏紝骞跺垹闄?.qr-placeholder
+   二维码使用说明：
+   将你的微信二维码图片命名为 qrcode.png，放在同目录下，
+   然后取消下面 .qr-real 的注释，并删除 .qr-placeholder
 */
 .qr-placeholder .qr-icon {
   font-size: 48px;
@@ -627,7 +631,7 @@ body {
   letter-spacing: 1px;
 }
 
-/* 閲嶆柊娴嬭瘯鎸夐挳 */
+/* 重新测试按钮 */
 .retry-btn {
   width: 100%;
   margin-top: 24px;
@@ -648,10 +652,11 @@ body {
 }
 
 /* ============================================================
-   骞垮憡浣?鈥?AD SLOTS (淇敼骞垮憡鍐呭鍦ㄨ繖閲?
+   广告位 — AD SLOTS (修改广告内容在这里)
    ============================================================ */
 /* ============================================================
-   涓瑁呴グ鏉?鈥?閱夊悗涓嶇煡澶╁湪姘达紝婊¤埞娓呮ⅵ鍘嬫槦娌?   ============================================================ */
+   个签装饰条 — 醉后不知天在水，满船清梦压星河
+   ============================================================ */
 .signature-bar {
   display: flex;
   align-items: center;
@@ -669,7 +674,7 @@ body {
   white-space: nowrap;
 }
 
-/* 瑁呴グ绾?*/
+/* 装饰线 */
 .signature-bar::before,
 .signature-bar::after {
   content: '';
@@ -681,7 +686,7 @@ body {
 .signature-bar::before { margin-right: 12px; }
 .signature-bar::after  { margin-left: 12px; }
 
-/* 妗岄潰绔乏鍙崇珫鎺掍釜绛?*/
+/* 桌面端左右竖排个签 */
 .desktop-sig {
   display: none;
   position: fixed;
@@ -716,7 +721,7 @@ body {
   right: max(8px, calc((100vw - 940px) / 2 - 60px));
 }
 
-/* 绉诲姩绔í鎺掍釜绛?*/
+/* 移动端横排个签 */
 .mobile-sig {
   display: block;
   width: 100%;
@@ -730,7 +735,7 @@ body {
 }
 
 /* ============================================================
-   搴曢儴鍏嶈矗澹版槑
+   底部免责声明
    ============================================================ */
 .disclaimer {
   text-align: center;
@@ -752,7 +757,7 @@ body {
 }
 
 /* ============================================================
-   绉诲姩绔搷搴斿紡锛氬弻闈㈠彉涓婁笅鍫嗗彔
+   移动端响应式：双面变上下堆叠
    ============================================================ */
 @media (max-width: 520px) {
   .dual-panels {
@@ -778,8 +783,8 @@ body {
 }
 
 /* ============================================================
-   鐪熷疄浜岀淮鐮佹牱寮忥紙鏇挎崲鍗犱綅鐢級
-   浣跨敤鏂规硶锛氬皢涓嬫柟 .qr-real 鍙栨秷娉ㄩ噴锛屽悓鏃舵敞閲?.qr-placeholder
+   真实二维码样式（替换占位用）
+   使用方法：将下方 .qr-real 取消注释，同时注释 .qr-placeholder
    ============================================================ */
 /*
 .qr-real {
@@ -791,7 +796,7 @@ body {
 */
 
 /* ============================================================
-   鍏ュ満/鍒囨崲鍔ㄧ敾
+   入场/切换动画
    ============================================================ */
 .fade-in {
   animation: fadeIn 0.5s ease-out both;
@@ -802,7 +807,7 @@ body {
   to { opacity: 1; }
 }
 
-/* 鍒嗕韩鎸夐挳 */
+/* 分享按钮 */
 .share-hint {
   width: 100%;
   margin-top: 16px;
@@ -820,72 +825,74 @@ body {
 </head>
 <body>
 
-<!-- 绮掑瓙鑳屾櫙鐢诲竷 -->
+<!-- 粒子背景画布 -->
 <canvas id="particles-canvas"></canvas>
 
 <!-- ============================================================
-     妗岄潰绔乏鍙充釜绛捐楗?     ============================================================ -->
-<div class="signature-bar desktop-sig sig-left">閱夊悗涓嶇煡澶╁湪姘达紝婊¤埞娓呮ⅵ鍘嬫槦娌炽€?/div>
-<div class="signature-bar desktop-sig sig-right">娆蹭拱妗傝姳鍚岃浇閰掞紝缁堜笉浼硷紝灏戝勾娓搞€?/div>
+     桌面端左右个签装饰
+     ============================================================ -->
+<div class="signature-bar desktop-sig sig-left">醉后不知天在水，满船清梦压星河。</div>
+<div class="signature-bar desktop-sig sig-right">欲买桂花同载酒，终不似，少年游。</div>
 
 <!-- ============================================================
-     涓诲鍣?     ============================================================ -->
+     主容器
+     ============================================================ -->
 <div class="app-container">
 
-  <!-- ========== 绉诲姩绔《閮ㄤ釜绛捐楗?========== -->
-  <div class="signature-bar mobile-sig sig-top">鈥?閱夊悗涓嶇煡澶╁湪姘达紝婊¤埞娓呮ⅵ鍘嬫槦娌?鈥?/div>
+  <!-- ========== 移动端顶部个签装饰 ========== -->
+  <div class="signature-bar mobile-sig sig-top">— 醉后不知天在水，满船清梦压星河 —</div>
 
-  <!-- ========== 灞忓箷1: 棣栭〉杈撳叆 ========== -->
+  <!-- ========== 屏幕1: 首页输入 ========== -->
   <div class="screen active" id="screen-input">
-    <div class="hero-icon">馃敭</div>
-    <h1 class="main-title">鍙岄潰浜烘牸娴嬭瘯</h1>
-    <p class="sub-title">鎻紑浣犵殑闅愯棌鎬ф牸闈㈢罕</p>
+    <div class="hero-icon">🔮</div>
+    <h1 class="main-title">双面人格测试</h1>
+    <p class="sub-title">揭开你的隐藏性格面纱</p>
 
     <div class="input-card">
       <div class="input-group">
-        <label>鉁?浣犵殑鍚嶅瓧</label>
-        <input type="text" id="input-name" placeholder="璇疯緭鍏ヤ綘鐨勫悕瀛? maxlength="20" autocomplete="off">
+        <label>✦ 你的名字</label>
+        <input type="text" id="input-name" placeholder="请输入你的名字" maxlength="20" autocomplete="off">
       </div>
       <div class="input-group">
-        <label>鉁?鍑虹敓鏃ユ湡</label>
-        <input type="date" id="input-birthday" placeholder="璇烽€夋嫨鍑虹敓鏃ユ湡">
+        <label>✦ 出生日期</label>
+        <input type="date" id="input-birthday" placeholder="请选择出生日期">
       </div>
-      <!-- 鈽?鎵嬫帉鐓х墖涓婁紶锛堝彲閫夛級 -->
+      <!-- ★ 手掌照片上传（可选） -->
       <div class="input-group palm-upload">
-        <label>鉁?涓婁紶鎵嬫帉鐓х墖 <span style="font-weight:400;color:var(--text-muted);font-size:0.75rem;">锛堝彲閫夛紝鏇村噯锛?/span></label>
+        <label>✋ 上传手掌照片 <span style="font-weight:400;color:var(--text-muted);font-size:0.75rem;">（可选，更准）</span></label>
         <div class="palm-upload-area" id="palm-upload-area" onclick="document.getElementById('palm-file-input').click()">
-          <span class="upload-icon">馃摳</span>
-          <span class="upload-text">鐐瑰嚮鎷嶇収鎴栭€夋嫨鐓х墖</span>
+          <span class="upload-icon">📸</span>
+          <span class="upload-text">点击拍照或选择照片</span>
           <div class="scan-line"></div>
-          <button class="remove-btn" onclick="event.stopPropagation();removePalmImage()">鉁?/button>
+          <button class="remove-btn" onclick="event.stopPropagation();removePalmImage()">✕</button>
           <img id="palm-preview" alt="" style="display:none;">
         </div>
         <input type="file" id="palm-file-input" accept="image/*" style="display:none;" onchange="handlePalmUpload(event)">
       </div>
       <button class="cta-btn" id="btn-start" onclick="startTest()">
-        鈿?绔嬪嵆娴嬭瘯
+        ⚡ 立即测试
       </button>
     </div>
 
     <div class="floating-emojis">
-      <span>馃専</span><span>馃挮</span><span>鉁?/span><span>馃敭</span><span>馃幆</span>
+      <span>🌟</span><span>💫</span><span>✨</span><span>🔮</span><span>🎯</span>
     </div>
 
-    <p class="test-count" id="test-count">宸叉湁 128,936 浜哄畬鎴愭祴璇?/p>
+    <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
   </div>
 
-  <!-- ========== 灞忓箷2: 鍔犺浇鍔ㄧ敾 ========== -->
+  <!-- ========== 屏幕2: 加载动画 ========== -->
   <div class="screen" id="screen-loading">
     <div class="loading-content">
       <div class="loading-spinner"></div>
-      <p class="loading-text" id="loading-text">姝ｅ湪瑙ｈ浣犵殑鎬ф牸瀵嗙爜...</p>
+      <p class="loading-text" id="loading-text">正在解读你的性格密码...</p>
       <div class="progress-bar">
         <div class="progress-fill" id="progress-fill"></div>
       </div>
     </div>
   </div>
 
-  <!-- ========== 灞忓箷3: 缁撴灉椤?========== -->
+  <!-- ========== 屏幕3: 结果页 ========== -->
   <div class="screen" id="screen-result">
     <div class="result-header">
       <span class="zodiac-badge" id="badge-zodiac"></span>
@@ -894,134 +901,137 @@ body {
       <div class="personality-tag" id="personality-tag"></div>
     </div>
 
-    <!-- 鍙岄潰鍗＄墖 -->
+    <!-- 双面卡片 -->
     <div class="dual-panels">
-      <!-- 宸︿晶锛氬厤璐圭粨鏋?-->
+      <!-- 左侧：免费结果 -->
       <div class="result-card free-card">
-        <div class="card-title"><span class="icon">馃専</span> 浣犵殑鎬ф牸鐢诲儚锛堝厤璐癸級</div>
+        <div class="card-title"><span class="icon">🌟</span> 你的性格画像（免费）</div>
         <ul class="trait-list" id="free-traits"></ul>
         <div class="fortune-tags">
           <div class="fortune-tag">
-            <div class="ft-label">馃帹 骞歌繍鑹?/div>
+            <div class="ft-label">🎨 幸运色</div>
             <div class="ft-value" id="fortune-color"></div>
           </div>
           <div class="fortune-tag">
-            <div class="ft-label">馃敘 骞歌繍鏁?/div>
+            <div class="ft-label">🔢 幸运数</div>
             <div class="ft-value" id="fortune-number"></div>
           </div>
           <div class="fortune-tag">
-            <div class="ft-label">馃Л 骞歌繍鏂逛綅</div>
+            <div class="ft-label">🧭 幸运方位</div>
             <div class="ft-value" id="fortune-direction"></div>
           </div>
         </div>
       </div>
 
-      <!-- 鍙充晶锛氶攣瀹氬唴瀹?-->
+      <!-- 右侧：锁定内容 -->
       <div class="result-card locked-card">
         <div class="locked-content">
-          <div class="card-title"><span class="icon">馃攼</span> 娣卞害瑙ｈ锛堥渶瑙ｉ攣锛?/div>
+          <div class="card-title"><span class="icon">🔐</span> 深度解读（需解锁）</div>
           <ul class="trait-list" id="locked-traits"></ul>
           <div class="fortune-tags">
             <div class="fortune-tag">
-              <div class="ft-label">馃挐 鎯呮劅杩愬娍</div>
+              <div class="ft-label">💝 情感运势</div>
               <div class="ft-value" id="locked-love"></div>
             </div>
             <div class="fortune-tag">
-              <div class="ft-label">馃捈 浜嬩笟杩愬娍</div>
+              <div class="ft-label">💼 事业运势</div>
               <div class="ft-value" id="locked-career"></div>
             </div>
             <div class="fortune-tag">
-              <div class="ft-label">馃 2026 鍏抽敭璇?/div>
+              <div class="ft-label">🧘 2026 关键词</div>
               <div class="ft-value" id="locked-keyword"></div>
             </div>
           </div>
           <p style="margin-top:12px;font-size:0.78rem;color:var(--text-muted);" id="locked-summary"></p>
-          <!-- 鈽?鎺岀汗鎶ュ憡锛堜笂浼犳墜鎺屽悗鏄剧ず锛?-->
+          <!-- ★ 掌纹报告（上传手掌后显示） -->
           <div id="palm-report" style="display:none;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-              <img id="palm-thumb" src="" alt="鎵嬫帉" style="width:60px;height:60px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,0.15);">
+              <img id="palm-thumb" src="" alt="手掌" style="width:60px;height:60px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,0.15);">
               <div>
-                <div style="font-size:0.9rem;font-weight:700;color:#f59e0b;">馃攳 AI鎺岀汗鎶ュ憡</div>
-                <div style="font-size:0.7rem;color:var(--text-muted);">鍩轰簬娣卞害瀛︿範鍥惧儚鍒嗘瀽</div>
+                <div style="font-size:0.9rem;font-weight:700;color:#f59e0b;">🔍 AI掌纹报告</div>
+                <div style="font-size:0.7rem;color:var(--text-muted);">基于深度学习图像分析</div>
               </div>
             </div>
             <div id="palm-readings" style="font-size:0.78rem;color:var(--text-secondary);line-height:1.7;"></div>
           </div>
         </div>
 
-        <!-- 閿佸畾閬僵 -->
+        <!-- 锁定遮罩 -->
         <div class="lock-overlay">
-          <div class="lock-icon">馃攼</div>
-          <h4>瀹屾暣瑙ｈ宸插姞瀵?/h4>
-          <p>娣诲姞寰俊瑙ｉ攣娣卞害鎶ュ憡</p>
-          <!-- 鈽?寰俊浜岀淮鐮佸尯鍩燂細灏嗕綘鐨勪簩缁寸爜鍥剧墖鍛藉悕涓?qrcode.png 鏀惧湪鍚岀洰褰曚笅鍗冲彲 -->
-          <img src="qrcode.png" alt="寰俊浜岀淮鐮? class="qr-real"
+          <div class="lock-icon">🔐</div>
+          <h4>完整解读已加密</h4>
+          <p>添加微信解锁深度报告</p>
+          <!-- ★ 微信二维码区域：将你的二维码图片命名为 qrcode.png 放在同目录下即可 -->
+          <img src="qrcode.png" alt="微信二维码" class="qr-real"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
                style="width:120px;height:120px;border-radius:14px;object-fit:cover;">
           <div class="qr-placeholder" style="display:none;">
-            <span class="qr-icon">馃摫</span>
+            <span class="qr-icon">📱</span>
           </div>
-          <span class="qr-label">鎵爜娣诲姞寰俊 鈫?鍏嶈垂瑙ｉ攣</span>
+          <span class="qr-label">扫码添加微信 → 免费解锁</span>
         </div>
       </div>
     </div>
 
-    <!-- 鍒嗕韩鎻愮ず -->
+    <!-- 分享提示 -->
     <div class="share-hint" onclick="shareResult()">
-      馃摛 鍒嗕韩缁欎綘鐨勬湅鍙嬶紝鐪嬬湅TA鐨勯殣钘忎汉鏍?    </div>
+      📤 分享给你的朋友，看看TA的隐藏人格
+    </div>
 
-    <button class="retry-btn" onclick="retryTest()">馃攧 閲嶆柊娴嬭瘯</button>
+    <button class="retry-btn" onclick="retryTest()">🔄 重新测试</button>
 
-    <!-- 搴曢儴鍏嶈矗澹版槑 -->
+    <!-- 底部免责声明 -->
     <p class="disclaimer">
-      鈿狅笍 鏈祴璇曚粎渚涘ū涔愬弬鑰冿紝涓嶆瀯鎴愪换浣曚笓涓氬績鐞嗚瘎浼板缓璁€?br>
-      鍩轰簬濮撳悕涓庣敓鏃ョ畻娉曠敓鎴愶紝缁撴灉浠呬负瓒ｅ懗瑙ｈ銆?    </p>
+      ⚠️ 本测试仅供娱乐参考，不构成任何专业心理评估建议。<br>
+      基于姓名与生日算法生成，结果仅为趣味解读。
+    </p>
   </div>
 
-  <!-- ========== 绉诲姩绔簳閮ㄤ釜绛捐楗?========== -->
-  <div class="signature-bar mobile-sig sig-bottom">鈥?娆蹭拱妗傝姳鍚岃浇閰掞紝缁堜笉浼硷紝灏戝勾娓?鈥?/div>
+  <!-- ========== 移动端底部个签装饰 ========== -->
+  <div class="signature-bar mobile-sig sig-bottom">— 欲买桂花同载酒，终不似，少年游 —</div>
 
-  <!-- ========== 灞忓箷4: 绠＄悊鍛樻煡璇㈠伐鍏凤紙?admin 璁块棶锛?========== -->
+  <!-- ========== 屏幕4: 管理员查询工具（?admin 访问） ========== -->
   <div class="screen" id="screen-admin">
     <div style="text-align:center;margin-top:40px;">
-      <div style="font-size:2rem;">馃敁</div>
-      <h2 style="font-size:1.2rem;font-weight:700;margin:8px 0;color:#f59e0b;">绠＄悊鍛樻煡璇㈠伐鍏?/h2>
-      <p style="font-size:0.75rem;color:var(--text-muted);">杈撳叆鐢ㄦ埛淇℃伅锛屾煡鐪嬪畬鏁存湭鍔犲瘑鎶ュ憡</p>
+      <div style="font-size:2rem;">🔓</div>
+      <h2 style="font-size:1.2rem;font-weight:700;margin:8px 0;color:#f59e0b;">管理员查询工具</h2>
+      <p style="font-size:0.75rem;color:var(--text-muted);">输入用户信息，查看完整未加密报告</p>
     </div>
     <div class="input-card" style="margin-top:16px;">
       <div class="input-group">
-        <label>鉁?瀵规柟濮撳悕</label>
-        <input type="text" id="admin-name" placeholder="杈撳叆濮撳悕" maxlength="20" autocomplete="off">
+        <label>✦ 对方姓名</label>
+        <input type="text" id="admin-name" placeholder="输入姓名" maxlength="20" autocomplete="off">
       </div>
       <div class="input-group">
-        <label>鉁?鍑虹敓鏃ユ湡</label>
+        <label>✦ 出生日期</label>
         <input type="date" id="admin-birthday">
       </div>
-      <button class="cta-btn" onclick="adminShowResult()" style="margin-top:4px;">馃攳 鏌ヨ瀹屾暣鎶ュ憡</button>
+      <button class="cta-btn" onclick="adminShowResult()" style="margin-top:4px;">🔍 查询完整报告</button>
     </div>
-    <!-- 鈽?瀹屾暣鎶ュ憡缁撴灉鍖哄煙 -->
+    <!-- ★ 完整报告结果区域 -->
     <div id="admin-result" style="display:none;width:100%;margin-top:16px;">
       <div class="result-card" style="border-color:rgba(245,158,11,0.3);">
-        <div class="card-title" style="color:#f59e0b;"><span class="icon">馃敁</span> 瀹屾暣鎬ф牸鎶ュ憡锛堟湭鍔犲瘑锛?/div>
+        <div class="card-title" style="color:#f59e0b;"><span class="icon">🔓</span> 完整性格报告（未加密）</div>
         <div id="admin-report-content"></div>
-        <button class="cta-btn" onclick="copyAdminReport()" style="margin-top:14px;font-size:0.9rem;animation:none;">馃搵 涓€閿鍒舵姤鍛婃枃瀛?/button>
+        <button class="cta-btn" onclick="copyAdminReport()" style="margin-top:14px;font-size:0.9rem;animation:none;">📋 一键复制报告文字</button>
       </div>
     </div>
-    <button class="retry-btn" onclick="location.href='/'">馃彔 杩斿洖棣栭〉</button>
+    <button class="retry-btn" onclick="location.href='/'">🏠 返回首页</button>
   </div>
 
 </div>
 
 <!-- ============================================================
-     JavaScript 鈥?鏍稿績閫昏緫
+     JavaScript — 核心逻辑
      ============================================================ -->
 <script>
 // ============================================================
-// 鈽?绠＄悊鍛樻ā寮忔娴嬶紙鏈€鍏堟墽琛岋級鈥?璁块棶鍦板潃鍔?#admin 濡?xxx.com/#admin
+// ★ 管理员模式检测（最先执行）— 访问地址加 #admin 如 xxx.com/#admin
 // ============================================================
 (function() {
   if (window.location.hash === '#admin' || window.location.search.indexOf('admin') !== -1) {
-    // 绛?DOM 灏辩华鍚庣珛鍗冲垏鎹?    var checkReady = setInterval(function() {
+    // 等 DOM 就绪后立即切换
+    var checkReady = setInterval(function() {
       var adminScreen = document.getElementById('screen-admin');
       if (adminScreen) {
         clearInterval(checkReady);
@@ -1037,7 +1047,7 @@ body {
 })();
 
 // ============================================================
-// 绮掑瓙鑳屾櫙鍔ㄧ敾
+// 粒子背景动画
 // ============================================================
 (function() {
   var canvas = document.getElementById('particles-canvas');
@@ -1052,7 +1062,7 @@ body {
   window.addEventListener('resize', resize);
   resize();
 
-  // 鍒涘缓绮掑瓙
+  // 创建粒子
   for (var i = 0; i < 50; i++) {
     particles.push({
       x: Math.random() * w,
@@ -1079,7 +1089,8 @@ body {
       ctx.fillStyle = 'rgba(168,85,247,' + p.alpha + ')';
       ctx.fill();
     }
-    // 杩炵嚎锛堣繎璺濈绮掑瓙涔嬮棿锛?    for (var i = 0; i < particles.length; i++) {
+    // 连线（近距离粒子之间）
+    for (var i = 0; i < particles.length; i++) {
       for (var j = i + 1; j < particles.length; j++) {
         var dx = particles[i].x - particles[j].x;
         var dy = particles[i].y - particles[j].y;
@@ -1100,7 +1111,7 @@ body {
 })();
 
 // ============================================================
-// 灞忓箷鍒囨崲
+// 屏幕切换
 // ============================================================
 function showScreen(id) {
   var screens = document.querySelectorAll('.screen');
@@ -1108,108 +1119,111 @@ function showScreen(id) {
     screens[i].classList.remove('active');
   }
   document.getElementById(id).classList.add('active');
-  // 婊氬姩鍒伴《閮?  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 滚动到顶部
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ============================================================
-// 鎬ф牸鏁版嵁搴?鈥?12绉嶄汉鏍肩被鍨?脳 4绉嶅彉浣?// 淇敼鏂囧瓧鍐呭鍦ㄨ繖閲岋紒鑷敱澧炲垹鏀?// ============================================================
+// 性格数据库 — 12种人格类型 × 4种变体
+// 修改文字内容在这里！自由增删改
+// ============================================================
 var PERSONALITY_DB = [
   {
-    name: '闃冲厜鍨嬄峰啋闄╁',
-    free: ['鍏呮弧娲诲姏锛岃鍔ㄥ姏鐖嗘锛屾槸璇磋蛋灏辫蛋鐨勮鍔ㄦ淳', '涔愯绉瀬锛岃嚜甯﹀厜鑺掞紝鎬昏兘鎰熸煋鍛ㄥ洿浜?, '鍠滄鎸戞垬鏂伴矞浜嬬墿锛屼笉鎯ф湭鐭ヤ笌鍙樺寲', '鐩磋鏁忛攼锛屽叧閿椂鍒绘€昏兘鍋氬嚭姝ｇ‘閫夋嫨'],
-    locked: ['浣犳槸涓€涓ぉ鐢熺殑棰嗚鍨嬩汉鏍硷紝鍐呭績娣卞娓存湜鑷敱涓庢帉鎺у苟琛屻€?026骞村皢鏄綘绐佺牬鑷垜鐨勪竴骞达紝鏂扮殑鏈洪亣鍦ㄨ繙鏂圭瓑浣犮€?, '鍦ㄦ劅鎯呬腑浣犱富鍔ㄧ儹鎯咃紝浣嗘湁鏃惰繃浜庢€ヨ簛锛岄渶瑕佸浼氳亞鍚即渚ｇ殑澹伴煶銆備粖骞村澶╁皢鏈変竴娆￠噸瑕佺殑鎯呮劅杞姌銆?, '浣犵殑澶╄祴鍦ㄤ簬蹇€熷喅绛栧拰寮哄ぇ鐨勬墽琛屽姏锛岄€傚悎鍒涗笟銆侀攢鍞€佹埛澶栨帰闄╃瓑棰嗗煙銆傛敞鎰忛伩鍏嶄笁鍒嗛挓鐑害銆?],
-    love: '鐑儏濡傜伀', career: '涓婂崌鏈?, keyword: '绐佺牬'
+    name: '阳光型·冒险家',
+    free: ['充满活力，行动力爆棚，是说走就走的行动派', '乐观积极，自带光芒，总能感染周围人', '喜欢挑战新鲜事物，不惧未知与变化', '直觉敏锐，关键时刻总能做出正确选择'],
+    locked: ['你是一个天生的领袖型人格，内心深处渴望自由与掌控并行。2026年将是你突破自我的一年，新的机遇在远方等你。', '在感情中你主动热情，但有时过于急躁，需要学会聆听伴侣的声音。今年夏天将有一次重要的情感转折。', '你的天赋在于快速决策和强大的执行力，适合创业、销售、户外探险等领域。注意避免三分钟热度。'],
+    love: '热情如火', career: '上升期', keyword: '突破'
   },
   {
-    name: '娣遍們鍨嬄锋€濇兂瀹?,
-    free: ['鎬濈淮缂滃瘑锛屽杽浜庡垎鏋愰棶棰樼殑鏈川', '鐙鏃剁伒鎰熻扛鍙戯紝鏄畨闈欑殑鍔涢噺鍨嬩汉鏍?, '涓嶈交鏄撹〃闇叉儏缁紝鍐呭績涓栫晫鏋佷负涓板瘜', '閫昏緫鑳藉姏瓒呯兢锛屽杽浜庤鍒掍笌甯冨眬'],
-    locked: ['浣犳槸澶╃敓鐨勫摬瀛﹀涓庢垬鐣ュ锛屽涓栫晫鏈夌嫭鐗圭殑娲炲療鍔涖€?026骞撮€傚悎娣卞害瀛︿範涓庢矇娣€锛岀Н绱殑鐭ヨ瘑灏嗗湪骞村簳鐖嗗彂銆?, '鍦ㄦ劅鎯呬腑浣犳參鐑絾涓撲竴锛屼竴鏃﹁瀹氫究涓嶄細杞绘槗鏀瑰彉銆備粖骞寸澶╁彲鑳戒細閬囧埌鐏甸瓊鍏遍福鐨勪汉銆?, '浣犵殑澶╄祴鍦ㄤ簬娣卞害鎬濊€冨拰绯荤粺瑙勫垝锛岄€傚悎鐮旂┒銆佸啓浣溿€佺紪绋嬨€侀噾铻嶅垎鏋愮瓑棰嗗煙銆傞伩鍏嶈繃搴︽€濊檻瀵艰嚧琛屽姩杩熺紦銆?],
-    love: '鐏甸瓊鍏遍福', career: '钃勫姏鏈?, keyword: '娌夋穩'
+    name: '深邃型·思想家',
+    free: ['思维缜密，善于分析问题的本质', '独处时灵感迸发，是安静的力量型人格', '不轻易表露情绪，内心世界极为丰富', '逻辑能力超群，善于规划与布局'],
+    locked: ['你是天生的哲学家与战略家，对世界有独特的洞察力。2026年适合深度学习与沉淀，积累的知识将在年底爆发。', '在感情中你慢热但专一，一旦认定便不会轻易改变。今年秋天可能会遇到灵魂共鸣的人。', '你的天赋在于深度思考和系统规划，适合研究、写作、编程、金融分析等领域。避免过度思虑导致行动迟缓。'],
+    love: '灵魂共鸣', career: '蓄力期', keyword: '沉淀'
   },
   {
-    name: '娓╂煍鍨嬄锋不鎰堣€?,
-    free: ['蹇冨湴鏌旇蒋锛屽叡鎯呰兘鍔涙瀬寮?, '鍠勪簬鍊惧惉锛屾槸鏈嬪弸浠殑蹇冪伒鏍戞礊', '澶╃敓鍏锋湁鐤楁剤浠栦汉鐨勮兘閲?, '鍋氫簨缁嗚嚧鍏ュ井锛屾敞閲嶇粏鑺備笌鍝佽川'],
-    locked: ['浣犳槸浜虹兢涓殑娓╂煍鍏夎姃锛屾嫢鏈夋不鎰堜汉蹇冪殑鍔涢噺銆?026骞翠綘鐨勪汉闄呭叧绯诲皢杩庢潵閲嶈鍗囩骇锛岃吹浜鸿繍鏃虹洓銆?, '鍦ㄦ劅鎯呬腑浣犵粏鑵讳綋璐达紝浣嗛渶瑕佽鎯曡繃搴︿粯鍑哄鑷磋嚜鎴戞秷鑰椼€備粖骞存槬澶╂湁鏈涢亣瑙佹噦浣犵弽鎯滀綘鐨勪汉銆?, '浣犵殑澶╄祴鍦ㄤ簬鍏辨儏鑳藉姏鍜屾湇鍔＄簿绁烇紝閫傚悎鏁欒偛銆佸績鐞嗗挩璇€佸尰鐤椼€佸叕鐩婄瓑棰嗗煙銆傚浼氳绔嬭竟鐣屾槸浣犵殑璇鹃銆?],
-    love: '鐩镐簰婊嬪吇', career: '璐典汉鐩稿姪', keyword: '缁芥斁'
+    name: '温柔型·治愈者',
+    free: ['心地柔软，共情能力极强', '善于倾听，是朋友们的心灵树洞', '天生具有疗愈他人的能量', '做事细致入微，注重细节与品质'],
+    locked: ['你是人群中的温柔光芒，拥有治愈人心的力量。2026年你的人际关系将迎来重要升级，贵人运旺盛。', '在感情中你细腻体贴，但需要警惕过度付出导致自我消耗。今年春天有望遇见懂你珍惜你的人。', '你的天赋在于共情能力和服务精神，适合教育、心理咨询、医疗、公益等领域。学会设立边界是你的课题。'],
+    love: '相互滋养', career: '贵人相助', keyword: '绽放'
   },
   {
-    name: '鐫挎櫤鍨嬄风瓥鐣ュ',
-    free: ['娲炲療鍔涜秴缇わ紝鍠勪簬鐪嬮€忎簨鐗╂湰璐?, '鍋氫簨鏈夎鍒掓湁姝ラ锛岀ǔ鎵庣ǔ鎵?, '鎿呴暱璧勬簮鏁村悎涓庨暱杩滃竷灞€', '鍐烽潤鏋滄柇锛屽嵄鏈轰腑鍙嶆樉浠庡'],
-    locked: ['浣犳槸澶╃敓鐨勬垬鐣ユ寚鎸ュ锛屾嫢鏈夊皢澶嶆潅闂绠€鍗曞寲鐨勮兘鍔涖€?026骞翠簨涓氬皢杩庢潵鍏抽敭杞姌锛屽仛濂藉噯澶囪繋鎺ユ寫鎴樸€?, '鍦ㄦ劅鎯呬腑浣犵悊鎬уぇ浜庢劅鎬э紝浣嗗唴蹇冩繁澶勬复鏈涜鐞嗚В銆備粖骞村彲鑳戒細鏈変竴涓噸瑕佺殑鍐冲畾闇€瑕佸仛鍑恒€?, '浣犵殑澶╄祴鍦ㄤ簬绯荤粺鎬濈淮鍜岃祫婧愯皟搴︼紝閫傚悎绠＄悊銆佸挩璇€佹姇璧勩€佹垬鐣ヨ鍒掔瓑棰嗗煙銆傞伩鍏嶈繃浜庣悊鎬ц€屽拷鐣ユ儏鎰熼渶姹傘€?],
-    love: '鐞嗘€ф氮婕?, career: '鍏抽敭杞姌', keyword: '璋嬪眬'
+    name: '睿智型·策略家',
+    free: ['洞察力超群，善于看透事物本质', '做事有计划有步骤，稳扎稳打', '擅长资源整合与长远布局', '冷静果断，危机中反显从容'],
+    locked: ['你是天生的战略指挥家，拥有将复杂问题简单化的能力。2026年事业将迎来关键转折，做好准备迎接挑战。', '在感情中你理性大于感性，但内心深处渴望被理解。今年可能会有一个重要的决定需要做出。', '你的天赋在于系统思维和资源调度，适合管理、咨询、投资、战略规划等领域。避免过于理性而忽略情感需求。'],
+    love: '理性浪漫', career: '关键转折', keyword: '谋局'
   },
   {
-    name: '鐑儏鍨嬄锋ⅵ鎯冲',
-    free: ['蹇冩€€鐑勘锛屾案杩滃鏈潵鍏呮弧鏈熷緟', '鎰熸煋鍔涜秴寮猴紝鏄洟闃熶腑鐨勬皵姘涙媴褰?, '鍒涙剰鏃犻檺锛屽ぉ椹绌虹殑鎯宠薄鍔?, '琛屽姩鍔涗笌鎰熸煋鍔涘苟瀛橈紝璇村埌鍋氬埌'],
-    locked: ['浣犳槸浜虹兢涓殑鐏劙锛岀敤鐑儏鐐圭噧涓€鍒囧彲鑳姐€?026骞翠綘鐨勫垱鎰忔墠鍗庡皢澶ф斁寮傚僵锛屾湁浣滃搧琚鍙殑鏈轰細銆?, '鍦ㄦ劅鎯呬腑浣犳氮婕儹鐑堬紝杩芥眰蹇冨姩鐨勬劅瑙夈€備粖骞村瀛ｆ鑺辫繍鏃虹洓锛屼絾闇€杈ㄥ埆鐪熷績涓庤繃瀹€?, '浣犵殑澶╄祴鍦ㄤ簬鍒涙剰琛ㄨ揪鍜屾劅鏌撳姏锛岄€傚悎鑹烘湳銆佽〃婕斻€佽惀閿€銆佽璁＄瓑棰嗗煙銆傛敞鎰忛伩鍏嶇悊鎯充富涔夎劚绂诲疄闄呫€?],
-    love: '鐑儓娴极', career: '鎵嶅崕鍏戠幇', keyword: '闂€€'
+    name: '热情型·梦想家',
+    free: ['心怀热忱，永远对未来充满期待', '感染力超强，是团队中的气氛担当', '创意无限，天马行空的想象力', '行动力与感染力并存，说到做到'],
+    locked: ['你是人群中的火焰，用热情点燃一切可能。2026年你的创意才华将大放异彩，有作品被认可的机会。', '在感情中你浪漫热烈，追求心动的感觉。今年夏季桃花运旺盛，但需辨别真心与过客。', '你的天赋在于创意表达和感染力，适合艺术、表演、营销、设计等领域。注意避免理想主义脱离实际。'],
+    love: '热烈浪漫', career: '才华兑现', keyword: '闪耀'
   },
   {
-    name: '鍐烽潤鍨嬄疯瀵熻€?,
-    free: ['澶磋剳娓呴啋锛屾儏缁ǔ瀹氬纾愮煶', '鍠勪簬鍦ㄧ悍绻佸鏉備腑鎶撲綇鍏抽敭绾跨储', '涓嶉殢娉㈤€愭祦锛屾湁鐙珛鍒ゆ柇鍔?, '浣庤皟鍐呮暃锛屽叧閿椂鍒讳竴璇腑鐨?],
-    locked: ['浣犳槸鍥㈤槦涓殑瀹氭捣绁為拡锛屼互鍐烽潤钁楃О銆?026骞翠綘鐨勫垽鏂姏灏嗗府韬竟浜洪伩寮€閲嶈椋庨櫓锛屾垚涓哄叧閿緷闈犮€?, '鍦ㄦ劅鎯呬腑浣犵悊鏅哄厠鍒讹紝涓嶈交鏄撳姩蹇冧絾涓€鏃︾‘瀹氫究蹇犺瘹涓嶆笣銆備粖骞村啲瀛ｅ彲鑳芥湁鎯婂枩鐨勭紭鍒嗛檷涓淬€?, '浣犵殑澶╄祴鍦ㄤ簬鐙珛鎬濊€冨拰椋庨櫓棰勫垽锛岄€傚悎椋庢帶銆佸璁°€佺鐮斻€佹硶鍔＄瓑棰嗗煙銆傞€傚綋琛ㄨ揪鎯呮劅浼氳浣犳洿瀹屾暣銆?],
-    love: '鍏嬪埗娣辨儏', career: '鎴愪负鍏抽敭', keyword: '娲炲療'
+    name: '冷静型·观察者',
+    free: ['头脑清醒，情绪稳定如磐石', '善于在纷繁复杂中抓住关键线索', '不随波逐流，有独立判断力', '低调内敛，关键时刻一语中的'],
+    locked: ['你是团队中的定海神针，以冷静著称。2026年你的判断力将帮身边人避开重要风险，成为关键依靠。', '在感情中你理智克制，不轻易动心但一旦确定便忠诚不渝。今年冬季可能有惊喜的缘分降临。', '你的天赋在于独立思考和风险预判，适合风控、审计、科研、法务等领域。适当表达情感会让你更完整。'],
+    love: '克制深情', career: '成为关键', keyword: '洞察'
   },
   {
-    name: '娲绘臣鍨嬄峰紑蹇冩灉',
-    free: ['澶╃湡鐑傛极锛屼繚鎸佺蹇冩湭娉?, '绀句氦杈句汉锛岃蛋鍒板摢閲岄兘鏄劍鐐?, '鎿呴暱娲昏穬姘旀皼锛屾槸鏈嬪弸鍦堢殑蹇箰婧愭硥', '閫傚簲鍔涘己锛屽湪浠讳綍鐜閮借兘鑷湪鐢熼暱'],
-    locked: ['浣犳槸澶у鐨勫揩涔愭簮娉夛紝鎷ユ湁璁╁懆鍥翠汉寮€蹇冪殑瓒呰兘鍔涖€?026骞翠綘鐨勭ぞ浜ゅ湀灏嗗ぇ骞呮墿灞曪紝浜鸿剦甯︽潵鎰忓鎯婂枩銆?, '鍦ㄦ劅鎯呬腑浣犻瓒ｆ椿娉硷紝杩芥眰杞绘澗鎰夊揩鐨勭浉澶勬ā寮忋€備粖骞村彲鑳戒細鍦ㄦ湅鍙嬭仛浼氫腑閬囧埌璁╀綘蹇冨姩鐨勪汉銆?, '浣犵殑澶╄祴鍦ㄤ簬浜洪檯杩炴帴鍜屾皵姘涜惀閫狅紝閫傚悎鍏叧銆佷富鎸併€侀攢鍞€佹梾娓哥瓑棰嗗煙銆傛敞鎰忎笉瑕侀€冮伩涓ヨ們鐨勬儏鎰熷璇濄€?],
-    love: '杞绘澗鐢滆湝', career: '浜鸿剦鐖嗗彂', keyword: '杩炴帴'
+    name: '活泼型·开心果',
+    free: ['天真烂漫，保持童心未泯', '社交达人，走到哪里都是焦点', '擅长活跃气氛，是朋友圈的快乐源泉', '适应力强，在任何环境都能自在生长'],
+    locked: ['你是大家的快乐源泉，拥有让周围人开心的超能力。2026年你的社交圈将大幅扩展，人脉带来意外惊喜。', '在感情中你风趣活泼，追求轻松愉快的相处模式。今年可能会在朋友聚会中遇到让你心动的人。', '你的天赋在于人际连接和气氛营造，适合公关、主持、销售、旅游等领域。注意不要逃避严肃的情感对话。'],
+    love: '轻松甜蜜', career: '人脉爆发', keyword: '连接'
   },
   {
-    name: '娌夌ǔ鍨嬄峰畧鎶よ€?,
-    free: ['鍙潬绋抽噸锛屾槸澶у鏈€淇¤禆鐨勪汉', '璐ｄ换鎰熸瀬寮猴紝鎵胯鐨勪簨鎯呬竴瀹氬仛鍒?, '榛橀粯浠樺嚭锛屼笉姹傚洖鎶ョ殑濂夌尞绮剧', '鑴氳笍瀹炲湴鐨勫姟瀹炴淳锛屼竴姝ヤ竴涓剼鍗?],
-    locked: ['浣犳槸澶у鏈€鍧氬疄鐨勫悗鐩撅紝鐢ㄨ鍔ㄨ€岄潪瑷€璇〃杈剧埍銆?026骞翠綘鐨勪粯鍑哄皢寰楀埌鍥炴姤锛屽搴笌浜嬩笟鍙屼赴鏀躲€?, '鍦ㄦ劅鎯呬腑浣犵ǔ閲嶉暱鎯咃紝鏄€煎緱鎵樹粯缁堣韩鐨勪即渚ｇ被鍨嬨€備粖骞村搴叧绯诲皢鏈夌Н鏋佺殑鍙樺寲銆?, '浣犵殑澶╄祴鍦ㄤ簬鍙潬涓庤€愬績锛岄€傚悎宸ョ▼銆佽储鍔°€佽鏀裤€佸尰鐤楃瓑棰嗗煙銆傝寰楀伓灏斾篃瑕佷负鑷繁娲讳竴娆°€?],
-    love: '鍧氬畾闀挎儏', career: '鍘氱Н钖勫彂', keyword: '鏀惰幏'
+    name: '沉稳型·守护者',
+    free: ['可靠稳重，是大家最信赖的人', '责任感极强，承诺的事情一定做到', '默默付出，不求回报的奉献精神', '脚踏实地的务实派，一步一个脚印'],
+    locked: ['你是大家最坚实的后盾，用行动而非言语表达爱。2026年你的付出将得到回报，家庭与事业双丰收。', '在感情中你稳重长情，是值得托付终身的伴侣类型。今年家庭关系将有积极的变化。', '你的天赋在于可靠与耐心，适合工程、财务、行政、医疗等领域。记得偶尔也要为自己活一次。'],
+    love: '坚定长情', career: '厚积薄发', keyword: '收获'
   },
   {
-    name: '鍒涙剰鍨嬄疯壓鏈',
-    free: ['瀹＄編鐙壒锛屽缇庡ソ浜嬬墿鏈夊ぉ鐢熸晱鎰?, '鎬濈淮璺宠穬锛屽父甯告湁鍑轰汉鎰忔枡鐨勫ソ鐐瑰瓙', '涓嶆効琚潯鏉℃妗嗛檺鍒讹紝杩芥眰鑷敱琛ㄨ揪', '鎯呮劅涓板瘜缁嗚吇锛屽杽浜庢崟鎹夌粏寰儏缁?],
-    locked: ['浣犳槸澶╃敓鐨勫垱閫犺€咃紝鎷ユ湁灏嗗钩鍑″彉涓洪潪鍑＄殑榄斿姏銆?026骞翠綘鐨勫垱浣滃皢杩庢潵閲嶈绐佺牬锛屾湁鏈轰細琚洿澶氫汉鐪嬪埌銆?, '鍦ㄦ劅鎯呬腑浣犺拷姹傜伒榄傚眰闈㈢殑杩炴帴锛屽畞缂烘瘚婊ャ€備粖骞村彲鑳戒細閬囧埌璁╀綘鐏垫劅杩稿彂鐨勪汉銆?, '浣犵殑澶╄祴鍦ㄤ簬瀹＄編鍜屽垱鏂拌兘鍔涳紝閫傚悎璁捐銆佽壓鏈€侀煶涔愩€佸啓浣滅瓑棰嗗煙銆傛敞鎰忓皢鐏垫劅钀藉湴涓虹幇瀹炪€?],
-    love: '鐏甸瓊鍚稿紩', career: '鍒涗綔鐖嗗彂', keyword: '鐏垫劅'
+    name: '创意型·艺术家',
+    free: ['审美独特，对美好事物有天生敏感', '思维跳跃，常常有出人意料的好点子', '不愿被条条框框限制，追求自由表达', '情感丰富细腻，善于捕捉细微情绪'],
+    locked: ['你是天生的创造者，拥有将平凡变为非凡的魔力。2026年你的创作将迎来重要突破，有机会被更多人看到。', '在感情中你追求灵魂层面的连接，宁缺毋滥。今年可能会遇到让你灵感迸发的人。', '你的天赋在于审美和创新能力，适合设计、艺术、音乐、写作等领域。注意将灵感落地为现实。'],
+    love: '灵魂吸引', career: '创作爆发', keyword: '灵感'
   },
   {
-    name: '鍧氶煣鍨嬄锋垬澹?,
-    free: ['鎰忓織鍔涘潥寮猴紝閬囧埌鎸姌瓒婃垬瓒婂媷', '鐩爣鏄庣‘锛屼负浜嗙悊鎯冲彲浠ヤ粯鍑轰竴鍒?, '楠ㄥ瓙閲屾湁涓€鑲′笉鏈嶈緭鐨勯煣鍔?, '淇濇姢娆插己锛屾槸韬竟浜虹殑瀹堟姢绁?],
-    locked: ['浣犳槸鐢熸椿涓殑鏂楀＋锛屾嫢鏈変笉杈剧洰鐨勪笉缃紤鐨勬瘏鍔涖€?026骞翠綘灏嗗厠鏈嶄竴涓暱鏈熷洶鎵颁綘鐨勯殰纰嶏紝杩庢潵鍏ㄦ柊闃舵銆?, '鍦ㄦ劅鎯呬腑浣犱繚鎶ゆ寮猴紝鎰挎剰涓虹埍浜烘姭鑽嗘柀妫樸€備粖骞撮渶瑕佸浼氶€傚綋绀哄急锛岃浼翠荆涔熺湅瑙佷綘鐨勬煍杞€?, '浣犵殑澶╄祴鍦ㄤ簬鍧氶煣鍜岄瀵煎姏锛岄€傚悎鍐涜銆佷綋鑲茬珵鎶€銆侀」鐩鐞嗐€佸垱涓氱瓑棰嗗煙銆傝寰椾紤鎭篃鏄竴绉嶆垬鐣ャ€?],
-    love: '瀹堟姢鐪熺埍', career: '鐮村眬閲嶇敓', keyword: '鏃犵晱'
+    name: '坚韧型·战士',
+    free: ['意志力坚强，遇到挫折越战越勇', '目标明确，为了理想可以付出一切', '骨子里有一股不服输的韧劲', '保护欲强，是身边人的守护神'],
+    locked: ['你是生活中的斗士，拥有不达目的不罢休的毅力。2026年你将克服一个长期困扰你的障碍，迎来全新阶段。', '在感情中你保护欲强，愿意为爱人披荆斩棘。今年需要学会适当示弱，让伴侣也看见你的柔软。', '你的天赋在于坚韧和领导力，适合军警、体育竞技、项目管理、创业等领域。记得休息也是一种战略。'],
+    love: '守护真爱', career: '破局重生', keyword: '无畏'
   },
   {
-    name: '娴极鍨嬄疯瘲浜?,
-    free: ['蹇冩€€璇楁剰锛屽湪骞冲嚒涓彂鐜颁笉鍑′箣缇?, '鎯呮劅缁嗚吇锛岃兘鐢ㄦ枃瀛楁垨鐢婚潰鎵撳姩浜哄績', '鐞嗘兂涓讳箟鑰咃紝鐩镐俊涓栫晫鍙互鏇寸編濂?, '娓╂煍鑰屽潥瀹氾紝楠ㄥ瓙閲屾湁涓嶅Ε鍗忕殑娴极'],
-    locked: ['浣犳槸鐜板疄涓栫晫涓殑璇椾汉锛岀敤娴极涓讳箟娓╂殩浜嗚韩杈圭殑浜恒€?026骞翠綘灏嗘湁閲嶈鐨勭伒鎰熸椂鍒伙紝鍙兘浼氬紑鍚柊鐨勫壇涓氭垨鐖卞ソ銆?, '鍦ㄦ劅鎯呬腑浣犺拷姹傚畬缇庣殑鐖辨儏锛屾湁鏃朵細鍥犵幇瀹炶惤宸€屽け钀姐€備粖骞村浼氭帴绾充笉瀹岀編锛屽弽鑰岃兘鏀惰幏鐪熸鐨勫垢绂忋€?, '浣犵殑澶╄祴鍦ㄤ簬鎯呮劅琛ㄨ揪鍜屽缇庣殑鎰熺煡锛岄€傚悎鏂囧銆佸奖瑙嗐€佸绀肩瓥鍒掋€佽姳鑹虹瓑棰嗗煙銆傛敞鎰忓钩琛＄悊鎯充笌鐜板疄銆?],
-    love: '鍛戒腑娉ㄥ畾', career: '鐏垫劅闄嶄复', keyword: '璇楁剰'
+    name: '浪漫型·诗人',
+    free: ['心怀诗意，在平凡中发现不凡之美', '情感细腻，能用文字或画面打动人心', '理想主义者，相信世界可以更美好', '温柔而坚定，骨子里有不妥协的浪漫'],
+    locked: ['你是现实世界中的诗人，用浪漫主义温暖了身边的人。2026年你将有重要的灵感时刻，可能会开启新的副业或爱好。', '在感情中你追求完美的爱情，有时会因现实落差而失落。今年学会接纳不完美，反而能收获真正的幸福。', '你的天赋在于情感表达和对美的感知，适合文学、影视、婚礼策划、花艺等领域。注意平衡理想与现实。'],
+    love: '命中注定', career: '灵感降临', keyword: '诗意'
   },
   {
-    name: '鑷敱鍨嬄锋梾琛岃€?,
-    free: ['鐑埍鑷敱锛屼笉鎰胯涓栦織瑙勫垯鏉熺細', '濂藉蹇冩椇鐩涳紝姘歌繙鍦ㄦ帰绱㈢殑璺笂', '鏍煎眬寮€闃旓紝鎷ユ湁鍥介檯鍖栬閲?, '闅忔€ф磼鑴憋紝娲诲湪褰撲笅鐨勭敓娲绘€佸害'],
-    locked: ['浣犳槸姘歌繙鍦ㄨ矾涓婄殑鎺㈢储鑰咃紝鐏甸瓊鑷敱涓嶇緛銆?026骞翠綘灏嗘湁涓€娆￠噸瑕佺殑鍑鸿鎴栬縼绉伙紝杩欏皢鎴愪负浜虹敓鐨勮浆鎶樼偣銆?, '鍦ㄦ劅鎯呬腑浣犺拷姹傚娍鍧囧姏鏁岀殑浼欎即鍏崇郴锛屼笉鎰胯浼犵粺鍏崇郴瀹氫箟銆備粖骞磋繙鏂圭殑缂樺垎姝ｅ湪鍚戜綘璧版潵銆?, '浣犵殑澶╄祴鍦ㄤ簬璺ㄦ枃鍖栫悊瑙ｅ拰閫傚簲鑳藉姏锛岄€傚悎澶栬锤銆佺炕璇戙€佹梾娓搞€佽嚜鐢辫亴涓氱瓑棰嗗煙銆傛壘鍒拌嚜鐢变笌璐ｄ换鐨勫钩琛＄偣寰堥噸瑕併€?],
-    love: '杩滄柟涔嬬害', career: '璺ㄧ晫绐佺牬', keyword: '鍚▼'
+    name: '自由型·旅行者',
+    free: ['热爱自由，不愿被世俗规则束缚', '好奇心旺盛，永远在探索的路上', '格局开阔，拥有国际化视野', '随性洒脱，活在当下的生活态度'],
+    locked: ['你是永远在路上的探索者，灵魂自由不羁。2026年你将有一次重要的出行或迁移，这将成为人生的转折点。', '在感情中你追求势均力敌的伙伴关系，不愿被传统关系定义。今年远方的缘分正在向你走来。', '你的天赋在于跨文化理解和适应能力，适合外贸、翻译、旅游、自由职业等领域。找到自由与责任的平衡点很重要。'],
+    love: '远方之约', career: '跨界突破', keyword: '启程'
   }
 ];
 
-// 骞歌繍鑹插簱
+// 幸运色库
 var LUCKY_COLORS = [
-  '鐝婄憵姗?, '钖拌。鑽夌传', '钖勮嵎缁?, '鏃ヨ惤閲?,
-  '鏄熺┖钃?, '鐜懓绮?, '鐞ョ弨榛?, '娴锋磱钃?,
-  '鐏劙绾?, '鏈堝厜閾?, '妫灄缁?, '鐝婄憵钃?
+  '珊瑚橙', '薰衣草紫', '薄荷绿', '日落金',
+  '星空蓝', '玫瑰粉', '琥珀黄', '海洋蓝',
+  '火焰红', '月光银', '森林绿', '珊瑚蓝'
 ];
 
-// 骞歌繍鏂逛綅
-var LUCKY_DIRECTIONS = ['涓?, '鍗?, '瑗?, '鍖?, '涓滃崡', '瑗垮崡', '涓滃寳', '瑗垮寳'];
+// 幸运方位
+var LUCKY_DIRECTIONS = ['东', '南', '西', '北', '东南', '西南', '东北', '西北'];
 
-// 鍔犺浇鏂囨杞挱
+// 加载文案轮播
 var LOADING_TEXTS = [
-  '姝ｅ湪瑙ｈ浣犵殑鎬ф牸瀵嗙爜...',
-  '鍒嗘瀽濮撳悕鑳介噺鍦轰腑...',
-  '璁＄畻鏄熷骇涓庡懡鐞嗗弬鏁?..',
-  '鍖归厤48绉嶄汉鏍兼ā鍨嬩腑...',
-  '鐢熸垚涓撳睘鎬ф牸鐢诲儚...',
-  '鍗冲皢鎻檽浣犵殑闅愯棌浜烘牸...'
+  '正在解读你的性格密码...',
+  '分析姓名能量场中...',
+  '计算星座与命理参数...',
+  '匹配48种人格模型中...',
+  '生成专属性格画像...',
+  '即将揭晓你的隐藏人格...'
 ];
 
 // ============================================================
-// 宸ュ叿鍑芥暟
+// 工具函数
 // ============================================================
 function getCharSum(str) {
   var sum = 0;
@@ -1220,8 +1234,8 @@ function getCharSum(str) {
 }
 
 function getZodiac(month, day) {
-  var zodiacs = ['鎽╃警搴?,'姘寸摱搴?,'鍙岄奔搴?,'鐧界緤搴?,'閲戠墰搴?,'鍙屽瓙搴?,
-                 '宸ㄨ煿搴?,'鐙瓙搴?,'澶勫コ搴?,'澶╃Г搴?,'澶╄潕搴?,'灏勬墜搴?];
+  var zodiacs = ['摩羯座','水瓶座','双鱼座','白羊座','金牛座','双子座',
+                 '巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座'];
   var cutoffs = [20,19,21,20,21,22,23,23,23,24,23,22];
   var idx = month - 1;
   if (day > cutoffs[idx]) idx = (idx + 1) % 12;
@@ -1229,8 +1243,8 @@ function getZodiac(month, day) {
 }
 
 function getChineseZodiac(year) {
-  var animals = ['馃惌 榧?,'馃惍 鐗?,'馃惎 铏?,'馃惏 鍏?,'馃惒 榫?,'馃悕 铔?,
-                 '馃惔 椹?,'馃悘 缇?,'馃惖 鐚?,'馃悢 楦?,'馃惗 鐙?,'馃惙 鐚?];
+  var animals = ['🐭 鼠','🐮 牛','🐯 虎','🐰 兔','🐲 龙','🐍 蛇',
+                 '🐴 马','🐏 羊','🐵 猴','🐔 鸡','🐶 狗','🐷 猪'];
   return animals[(year - 4) % 12];
 }
 
@@ -1257,9 +1271,10 @@ function getLuckyDirection(seed) {
 }
 
 // ============================================================
-// 鎵嬫帉鍥剧墖澶勭悊锛堢函鍓嶇锛屼笉涓婁紶鏈嶅姟鍣級
+// 手掌图片处理（纯前端，不上传服务器）
 // ============================================================
-var palmImageData = null; // 瀛樺偍鐢ㄦ埛涓婁紶鐨勬墜鎺屽浘鐗囨暟鎹?
+var palmImageData = null; // 存储用户上传的手掌图片数据
+
 function handlePalmUpload(event) {
   var file = event.target.files[0];
   if (!file) return;
@@ -1267,7 +1282,8 @@ function handlePalmUpload(event) {
   reader.onload = function(e) {
     var img = new Image();
     img.onload = function() {
-      // 缂╂斁鍒板垎鏋愬昂瀵?      var canvas = document.createElement('canvas');
+      // 缩放到分析尺寸
+      var canvas = document.createElement('canvas');
       var maxSize = 200;
       var ratio = Math.min(maxSize / img.width, maxSize / img.height);
       canvas.width = img.width * ratio;
@@ -1276,7 +1292,7 @@ function handlePalmUpload(event) {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       palmImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-      // 鏄剧ず棰勮
+      // 显示预览
       var preview = document.getElementById('palm-preview');
       var area = document.getElementById('palm-upload-area');
       preview.src = e.target.result;
@@ -1298,7 +1314,8 @@ function removePalmImage() {
   document.getElementById('palm-file-input').value = '';
 }
 
-// 鎺岀汗鍒嗘瀽绠楁硶锛堜粎渚涘ū涔愶紝鍩轰簬鍍忕礌缁熻锛?function analyzePalm(imageData) {
+// 掌纹分析算法（仅供娱乐，基于像素统计）
+function analyzePalm(imageData) {
   var data = imageData.data;
   var total = data.length / 4;
   var sumR = 0, sumG = 0, sumB = 0;
@@ -1315,7 +1332,8 @@ function removePalmImage() {
   var avgR = sumR / total, avgG = sumG / total, avgB = sumB / total;
   var avgBrightness = (0.299 * avgR + 0.587 * avgG + 0.114 * avgB);
   var contrast = maxLum - minLum;
-  var warmRatio = ((avgR + avgG) / 2) / ((avgB) || 1); // 鏆栬壊/鍐疯壊姣?  var hash = Math.floor((avgR * 1000 + avgG * 100 + avgB * 10 + contrast * 7) % 10000);
+  var warmRatio = ((avgR + avgG) / 2) / ((avgB) || 1); // 暖色/冷色比
+  var hash = Math.floor((avgR * 1000 + avgG * 100 + avgB * 10 + contrast * 7) % 10000);
 
   return {
     brightness: avgBrightness,
@@ -1326,47 +1344,49 @@ function removePalmImage() {
   };
 }
 
-// 鏍规嵁鍒嗘瀽缁撴灉鐢熸垚鎺岀汗瑙ｈ
+// 根据分析结果生成掌纹解读
 function getPalmReading(analysis) {
   var b = analysis.brightness;
   var c = analysis.contrast;
   var w = analysis.warmRatio;
   var h = analysis.hash;
 
-  // 鐢熷懡绾胯В璇伙紙鍩轰簬浜害锛?  var lifeReadings = [
-    { range: [0, 80], text: '鐢熷懡绾挎繁闀挎湁鍔涳紝浣撹川寮哄仴锛岀簿鍔涘厖娌涖€傜敓娲讳腑鍏呮弧闊ф€э紝鏃犺閬囧埌浣曠鍥板閮借兘杩呴€熸仮澶嶃€? },
-    { range: [80, 140], text: '鐢熷懡绾挎煍鍜岀坏闀匡紝鍐呭績涓栫晫涓板瘜锛屽杽浜庤嚜鎴戣皟鍏汇€傛噦寰楀姵閫哥粨鍚堬紝鐢熸椿璐ㄩ噺鏋侀珮銆? },
-    { range: [140, 210], text: '鐢熷懡绾挎槑浜竻鏅帮紝澶╃敓涔愯璞佽揪锛屽仴搴疯繍鍔挎椇鐩涖€備綘鐨勬椿鍔涜兘鎰熸煋韬竟姣忎竴涓汉銆? },
-    { range: [210, 256], text: '鐢熷懡绾垮厜鑺掗棯鑰€锛屽叿鏈夐潪鍑＄殑鐢熷懡鍔涗笌棰嗗姘旇川銆傛敞瀹氭垚灏变笉鍑★紝鎷ユ湁闀垮涔嬬浉銆? }
+  // 生命线解读（基于亮度）
+  var lifeReadings = [
+    { range: [0, 80], text: '生命线深长有力，体质强健，精力充沛。生活中充满韧性，无论遇到何种困境都能迅速恢复。' },
+    { range: [80, 140], text: '生命线柔和绵长，内心世界丰富，善于自我调养。懂得劳逸结合，生活质量极高。' },
+    { range: [140, 210], text: '生命线明亮清晰，天生乐观豁达，健康运势旺盛。你的活力能感染身边每一个人。' },
+    { range: [210, 256], text: '生命线光芒闪耀，具有非凡的生命力与领导气质。注定成就不凡，拥有长寿之相。' }
   ];
   var lifeIdx = lifeReadings.findIndex(function(r) { return b >= r.range[0] && b < r.range[1]; });
   if (lifeIdx < 0) lifeIdx = 2;
 
-  // 鏅烘収绾胯В璇伙紙鍩轰簬瀵规瘮搴︼級
+  // 智慧线解读（基于对比度）
   var wisdomReadings = [
-    { range: [0, 60], text: '鏅烘収绾跨粏鑵荤紲瀵嗭紝鎬濈淮鏁忔嵎锛屾嫢鏈夎繃浜虹殑娲炲療鍔涖€傛搮闀垮湪澶嶆潅灞€鍔夸腑鎵惧埌鏈€浼樿В銆? },
-    { range: [60, 120], text: '鏅烘収绾挎竻鏅板垎鏄庯紝閫昏緫涓ヨ皑锛屽涔犺兘鍔涜秴缇ゃ€傚鐭ヨ瘑鏈夊ぉ鐒剁殑娓存湜锛屾槸缁堣韩瀛︿範鑰呫€? },
-    { range: [120, 200], text: '鏅烘収绾挎繁閭冩湁鍔涳紝鎷ユ湁澶ф櫤鎱э紝涓嶆嫎娉ヤ簬灏忚妭銆傜溂鍏夐暱杩滐紝鍠勪簬璋嬬瘒甯冨眬銆? },
-    { range: [200, 256], text: '鏅烘収绾跨嫭鏍戜竴甯滐紝鍒涢€犳€ф€濈淮鍗撹秺锛屾槸闅惧緱鐨勫ぉ鎵嶅瀷浜烘牸銆備綘鐨勬兂娉曞父甯搁鍏堟椂浠ｃ€? }
+    { range: [0, 60], text: '智慧线细腻缜密，思维敏捷，拥有过人的洞察力。擅长在复杂局势中找到最优解。' },
+    { range: [60, 120], text: '智慧线清晰分明，逻辑严谨，学习能力超群。对知识有天然的渴望，是终身学习者。' },
+    { range: [120, 200], text: '智慧线深邃有力，拥有大智慧，不拘泥于小节。眼光长远，善于谋篇布局。' },
+    { range: [200, 256], text: '智慧线独树一帜，创造性思维卓越，是难得的天才型人格。你的想法常常领先时代。' }
   ];
   var wisdomIdx = wisdomReadings.findIndex(function(r) { return c >= r.range[0] && c < r.range[1]; });
   if (wisdomIdx < 0) wisdomIdx = 1;
 
-  // 鎰熸儏绾胯В璇伙紙鍩轰簬鏆栬壊璋冨崰姣旓級
+  // 感情线解读（基于暖色调占比）
   var loveReadings = [
-    { range: [0, 0.9], text: '鎰熸儏绾夸紭闆呭惈钃勶紝鍐呭績娣辨儏鍗翠笉杞绘槗琛ㄩ湶銆備竴鏃﹁瀹氫竴涓汉锛屼究浼氬€惧敖鎵€鏈夊幓瀹堟姢銆? },
-    { range: [0.9, 1.15], text: '鎰熸儏绾挎俯鏆栧潎琛★紝鏄悊鎯崇殑浼翠荆绫诲瀷銆傛噦寰椾粯鍑轰篃鎳傚緱鐝嶆儨锛屾劅鎯呯敓娲诲垢绂忕編婊°€? },
-    { range: [1.15, 1.4], text: '鎰熸儏绾跨儹鎯呭鏀撅紝鐖辨啂鍒嗘槑锛屾槸娴极涓讳箟鑰呫€傛瘡涓€娆℃亱鐖遍兘鍏ㄥ姏浠ヨ荡锛屼护浜哄績鍔ㄤ笉宸层€? },
-    { range: [1.4, 99], text: '鎰熸儏绾跨偨鐑堝鐏紝鎷ユ湁寮哄ぇ鐨勬儏鎰熻兘閲忋€傚湪鐖辨儏涓槸涓诲姩鐨勮拷姹傝€咃紝榄呭姏涓嶅彲闃绘尅銆? }
+    { range: [0, 0.9], text: '感情线优雅含蓄，内心深情却不轻易表露。一旦认定一个人，便会倾尽所有去守护。' },
+    { range: [0.9, 1.15], text: '感情线温暖均衡，是理想的伴侣类型。懂得付出也懂得珍惜，感情生活幸福美满。' },
+    { range: [1.15, 1.4], text: '感情线热情奔放，爱憎分明，是浪漫主义者。每一次恋爱都全力以赴，令人心动不已。' },
+    { range: [1.4, 99], text: '感情线炽烈如火，拥有强大的情感能量。在爱情中是主动的追求者，魅力不可阻挡。' }
   ];
   var loveIdx = loveReadings.findIndex(function(r) { return w >= r.range[0] && w < r.range[1]; });
   if (loveIdx < 0) loveIdx = 1;
 
-  // 浜嬩笟绾胯В璇伙紙鍩轰簬RGB娣峰悎鍝堝笇锛?  var careerReadings = [
-    '浜嬩笟绾跨ǔ鍋ヤ笂鍗囷紝澶╃敓鍏峰棰嗗鎵嶈兘銆?026骞村皢杩庢潵浜嬩笟鐨勯噸瑕佽浆鎶橈紝璐典汉鐩稿姪锛屾姝ラ珮鍗囥€?,
-    '浜嬩笟绾跨伒娲诲鍙橈紝閫傚悎璺ㄧ晫鍙戝睍銆傝储杩愪酣閫氾紝姝ｈ储鍋忚储鐨嗘湁鏀惰幏锛岄€傚悎鑷富鍒涗笟銆?,
-    '浜嬩笟绾挎繁鍘氱坏闀匡紝鏄吀鍨嬬殑鍘氱Н钖勫彂涔嬬浉銆傚彧瑕佸潥鎸佹柟鍚戯紝缁堝皢鍚嶅埄鍙屾敹銆?,
-    '浜嬩笟绾垮厜鑺掑洓灏勶紝鍏锋湁鏋佸己鐨勫垱鏂板姏涓庢墽琛屽姏銆備綘鐨勬墠鍗庣粓灏嗚涓栦汉鐪嬭銆?
+  // 事业线解读（基于RGB混合哈希）
+  var careerReadings = [
+    '事业线稳健上升，天生具备领导才能。2026年将迎来事业的重要转折，贵人相助，步步高升。',
+    '事业线灵活多变，适合跨界发展。财运亨通，正财偏财皆有收获，适合自主创业。',
+    '事业线深厚绵长，是典型的厚积薄发之相。只要坚持方向，终将名利双收。',
+    '事业线光芒四射，具有极强的创新力与执行力。你的才华终将被世人看见。'
   ];
   var careerIdx = h % 4;
 
@@ -1380,7 +1400,8 @@ function getPalmReading(analysis) {
 }
 
 // ============================================================
-// 寮€濮嬫祴璇?// ============================================================
+// 开始测试
+// ============================================================
 function startTest() {
   var nameInput = document.getElementById('input-name');
   var birthdayInput = document.getElementById('input-birthday');
@@ -1398,10 +1419,11 @@ function startTest() {
     return;
   }
 
-  // 鏄剧ず鍔犺浇椤?  showScreen('screen-loading');
+  // 显示加载页
+  showScreen('screen-loading');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // 妯℃嫙鍔犺浇鍔ㄧ敾
+  // 模拟加载动画
   var progressFill = document.getElementById('progress-fill');
   var loadingText = document.getElementById('loading-text');
   var progress = 0;
@@ -1413,14 +1435,15 @@ function startTest() {
       progress = 100;
       clearInterval(loadInterval);
       progressFill.style.width = '100%';
-      loadingText.textContent = '鉁?鍒嗘瀽瀹屾垚锛?;
+      loadingText.textContent = '✨ 分析完成！';
 
-      // 璺宠浆缁撴灉椤?      setTimeout(function() {
+      // 跳转结果页
+      setTimeout(function() {
         showResult(name, birthdayInput.value);
       }, 500);
     } else {
       progressFill.style.width = progress + '%';
-      // 杞崲鏂囧瓧
+      // 轮换文字
       if (progress > textIdx * (100 / LOADING_TEXTS.length)) {
         textIdx = Math.min(textIdx + 1, LOADING_TEXTS.length - 1);
         loadingText.textContent = LOADING_TEXTS[textIdx];
@@ -1429,7 +1452,7 @@ function startTest() {
   }, 200);
 }
 
-// 杈撳叆鎶栧姩鎻愮ず
+// 输入抖动提示
 function shakeElement(el) {
   el.style.animation = 'none';
   el.offsetHeight; // reflow
@@ -1441,13 +1464,13 @@ function shakeElement(el) {
   }, 600);
 }
 
-// CSS 鎶栧姩鍔ㄧ敾锛堝姩鎬佹敞鍏ワ級
+// CSS 抖动动画（动态注入）
 var shakeStyle = document.createElement('style');
 shakeStyle.textContent = '@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}';
 document.head.appendChild(shakeStyle);
 
 // ============================================================
-// 鏄剧ず缁撴灉
+// 显示结果
 // ============================================================
 function showResult(name, birthdayStr) {
   var parts = birthdayStr.split('-');
@@ -1464,17 +1487,17 @@ function showResult(name, birthdayStr) {
   var careerIdx = getVariant(pIdx, day, month + 5, 3);
   var keywordIdx = getVariant(pIdx, month + day, day + 7, 3);
 
-  // 鏄熷骇 & 鐢熻倴
+  // 星座 & 生肖
   var zodiac = getZodiac(month, day);
   var animal = getChineseZodiac(year);
 
-  // 濉厖鏁版嵁
-  document.getElementById('badge-zodiac').textContent = '鈾?' + zodiac;
+  // 填充数据
+  document.getElementById('badge-zodiac').textContent = '♈ ' + zodiac;
   document.getElementById('badge-animal').textContent = animal;
   document.getElementById('display-name').textContent = name;
   document.getElementById('personality-tag').textContent = personality.name;
 
-  // 鍏嶈垂鎬ф牸鎻忚堪
+  // 免费性格描述
   var freeList = document.getElementById('free-traits');
   freeList.innerHTML = '';
   for (var i = 0; i < personality.free.length; i++) {
@@ -1483,12 +1506,13 @@ function showResult(name, birthdayStr) {
     freeList.appendChild(li);
   }
 
-  // 骞歌繍鏁版嵁
+  // 幸运数据
   document.getElementById('fortune-color').textContent = getLuckyColor(colorIdx);
   document.getElementById('fortune-number').textContent = getLuckyNumber(name, month, day);
   document.getElementById('fortune-direction').textContent = getLuckyDirection(dirIdx);
 
-  // 閿佸畾鍐呭锛堜細鍦ㄩ伄缃╀笅鏄剧ず锛?  var lockedList = document.getElementById('locked-traits');
+  // 锁定内容（会在遮罩下显示）
+  var lockedList = document.getElementById('locked-traits');
   lockedList.innerHTML = '';
   for (var i = 0; i < personality.locked.length; i++) {
     var li = document.createElement('li');
@@ -1496,28 +1520,30 @@ function showResult(name, birthdayStr) {
     lockedList.appendChild(li);
   }
 
-  // 閿佸畾鍖烘洿澶氭暟鎹?  var loveOpts = ['馃挄 ' + personality.love, '馃挒 鐏甸瓊浼翠荆杩戝湪鐪煎墠', '馃挆 鏃ф儏澶嶇噧鐨勫彲鑳?];
-  var careerOpts = ['馃搱 ' + personality.career, '馃幆 璐典汉鍗冲皢鍑虹幇', '馃殌 璺虫Ы鏈€浣虫椂鏈哄凡鍒?];
-  var keywordOpts = ['鉁?' + personality.keyword, '馃Р 鍚稿紩鍔涙硶鍒?, '馃尡 铚曞彉'];
+  // 锁定区更多数据
+  var loveOpts = ['💕 ' + personality.love, '💞 灵魂伴侣近在眼前', '💗 旧情复燃的可能'];
+  var careerOpts = ['📈 ' + personality.career, '🎯 贵人即将出现', '🚀 跳槽最佳时机已到'];
+  var keywordOpts = ['✨ ' + personality.keyword, '🧲 吸引力法则', '🌱 蜕变'];
 
   document.getElementById('locked-love').textContent = loveOpts[loveIdx];
   document.getElementById('locked-career').textContent = careerOpts[careerIdx];
   document.getElementById('locked-keyword').textContent = keywordOpts[keywordIdx];
   document.getElementById('locked-summary').textContent =
-    '浠ヤ笂涓? + name + '鐨勬繁搴︽€ф牸鎶ュ憡鎽樿銆傚畬鏁寸増鍖呭惈鎯呮劅鍒嗘瀽銆佷簨涓氳鍒掋€佷汉闄呭叧绯汇€?026骞磋繍鍔跨瓑8澶ф澘鍧楄缁嗚В璇汇€?;
+    '以上为' + name + '的深度性格报告摘要。完整版包含情感分析、事业规划、人际关系、2026年运势等8大板块详细解读。';
 
-  // 鈽?鎺岀汗鎶ュ憡锛堝鏋滄湁涓婁紶鎵嬫帉鍥剧墖锛?  var palmReport = document.getElementById('palm-report');
+  // ★ 掌纹报告（如果有上传手掌图片）
+  var palmReport = document.getElementById('palm-report');
   var palmReadings = document.getElementById('palm-readings');
   var palmThumb = document.getElementById('palm-thumb');
   if (palmImageData) {
     var analysis = analyzePalm(palmImageData);
     var reading = getPalmReading(analysis);
     var lines = [
-      '<p><strong>馃К 鐢熷懡绾?/strong>锛? + '鈽?.repeat(reading.life.level) + '锛? ' + reading.life.text + '</p>',
-      '<p><strong>馃 鏅烘収绾?/strong>锛? + '鈽?.repeat(reading.wisdom.level) + '锛? ' + reading.wisdom.text + '</p>',
-      '<p><strong>馃挅 鎰熸儏绾?/strong>锛? + '鈽?.repeat(reading.love.level) + '锛? ' + reading.love.text + '</p>',
-      '<p><strong>馃捈 浜嬩笟绾?/strong>锛? + '鈽?.repeat(reading.career.level) + '锛? ' + reading.career.text + '</p>',
-      '<p style="margin-top:8px;color:var(--gradient-1);text-align:center;font-weight:700;">缁煎悎鎺岀汗璇勫垎锛? + reading.overall + '/16 鍒?/p>'
+      '<p><strong>🧬 生命线</strong>（' + '★'.repeat(reading.life.level) + '）: ' + reading.life.text + '</p>',
+      '<p><strong>🧠 智慧线</strong>（' + '★'.repeat(reading.wisdom.level) + '）: ' + reading.wisdom.text + '</p>',
+      '<p><strong>💖 感情线</strong>（' + '★'.repeat(reading.love.level) + '）: ' + reading.love.text + '</p>',
+      '<p><strong>💼 事业线</strong>（' + '★'.repeat(reading.career.level) + '）: ' + reading.career.text + '</p>',
+      '<p style="margin-top:8px;color:var(--gradient-1);text-align:center;font-weight:700;">综合掌纹评分：' + reading.overall + '/16 分</p>'
     ];
     palmReadings.innerHTML = lines.join('');
     var previewImg = document.getElementById('palm-preview');
@@ -1529,18 +1555,19 @@ function showResult(name, birthdayStr) {
     palmReport.style.display = 'none';
   }
 
-  // 鈽?淇濆瓨娴嬭瘯璁板綍鍒版暟鎹簱
+  // ★ 保存测试记录到数据库
   saveRecord(name, personality.name, year, month, day);
 
-  // 鍒囨崲灞忓箷
+  // 切换屏幕
   showScreen('screen-result');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ============================================================
-// 淇濆瓨娴嬭瘯璁板綍鍒?GitHub 鏁版嵁搴?// ============================================================
+// 保存测试记录到 GitHub 数据库
+// ============================================================
 function saveRecord(name, personality, year, month, day) {
-  // token 鎷嗗垎瀛樺偍锛岄伩鍏?GitHub 鎵弿鎷︽埅
+  // token 拆分存储，避免 GitHub 扫描拦截
   var T1 = 'github_pat_11CFACOHQ0G6uOAFICUDWV_gwveftkFShpjWlYPYOy4giEOrx4KT';
   var T2 = 'O2nryN1r7UHnRJG233QICNcWOh6O77';
   var TOKEN = T1 + T2;
@@ -1555,7 +1582,7 @@ function saveRecord(name, personality, year, month, day) {
     time: now
   };
 
-  // 1. 鍏堣幏鍙栧綋鍓?data.json
+  // 1. 先获取当前 data.json
   fetch(apiUrl, { headers: { Authorization: 'Bearer ' + TOKEN } })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -1565,7 +1592,7 @@ function saveRecord(name, personality, year, month, day) {
       }
       records.push(entry);
 
-      // 2. 鏇存柊 data.json
+      // 2. 更新 data.json
       var newContent = btoa(unescape(encodeURIComponent(JSON.stringify(records, null, 2))));
       return fetch(apiUrl, {
         method: 'PUT',
@@ -1574,49 +1601,50 @@ function saveRecord(name, personality, year, month, day) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          message: '璁板綍娴嬭瘯: ' + name + ' (' + personality + ')',
+          message: '记录测试: ' + name + ' (' + personality + ')',
           content: newContent,
           sha: data.sha
         })
       });
     })
     .then(function(r) { return r.json(); })
-    .then(function(result) { console.log('鏁版嵁淇濆瓨鎴愬姛', result.content ? 'OK' : ''); })
-    .catch(function(e) { console.error('淇濆瓨澶辫触锛堜笉褰卞搷浣跨敤锛?', e); });
+    .then(function(result) { console.log('数据保存成功', result.content ? 'OK' : ''); })
+    .catch(function(e) { console.error('保存失败（不影响使用）:', e); });
 }
 
 // ============================================================
-// 閲嶆柊娴嬭瘯
+// 重新测试
 // ============================================================
 function retryTest() {
   document.getElementById('input-name').value = '';
   document.getElementById('input-birthday').value = '';
-  removePalmImage(); // 娓呴櫎鎵嬫帉鍥剧墖
+  removePalmImage(); // 清除手掌图片
   showScreen('screen-input');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 // ============================================================
-// 鍒嗕韩鍔熻兘
+// 分享功能
 // ============================================================
 function shareResult() {
   if (navigator.share) {
     navigator.share({
-      title: '鉁?鍙岄潰浜烘牸娴嬭瘯',
-      text: '鎴戝垰娴嬩簡鎴戠殑闅愯棌浜烘牸锛屼綘涔熸潵璇曡瘯锛佽秴鍑嗙殑锛?,
+      title: '✨ 双面人格测试',
+      text: '我刚测了我的隐藏人格，你也来试试！超准的！',
       url: window.location.href
     }).catch(function() {});
   } else {
-    // 鍥為€€锛氬鍒堕摼鎺?    var tempInput = document.createElement('input');
+    // 回退：复制链接
+    var tempInput = document.createElement('input');
     tempInput.value = window.location.href;
     document.body.appendChild(tempInput);
     tempInput.select();
     document.execCommand('copy');
     document.body.removeChild(tempInput);
-    showToast('閾炬帴宸插鍒讹紝蹇幓鍒嗕韩缁欐湅鍙嬪惂锛?);
+    showToast('链接已复制，快去分享给朋友吧！');
   }
 }
 
-// 绠€鏄揟oast
+// 简易Toast
 function showToast(msg) {
   var toast = document.createElement('div');
   toast.textContent = msg;
@@ -1631,7 +1659,7 @@ function showToast(msg) {
 function adminShowResult() {
   var name = document.getElementById('admin-name').value.trim();
   var birthday = document.getElementById('admin-birthday').value;
-  if (!name || !birthday) { alert('璇峰～鍐欏鍚嶅拰鍑虹敓鏃ユ湡'); return; }
+  if (!name || !birthday) { alert('请填写姓名和出生日期'); return; }
 
   var parts = birthday.split('-');
   var year = parseInt(parts[0], 10);
@@ -1649,19 +1677,19 @@ function adminShowResult() {
   var careerIdx = getVariant(pIdx, day, month + 5, 3);
   var keywordIdx = getVariant(pIdx, month + day, day + 7, 3);
 
-  var loveOpts = [personality.love, '鐏甸瓊浼翠荆杩戝湪鐪煎墠', '鏃ф儏澶嶇噧鐨勫彲鑳?];
-  var careerOpts = [personality.career, '璐典汉鍗冲皢鍑虹幇', '璺虫Ы鏈€浣虫椂鏈哄凡鍒?];
-  var keywordOpts = [personality.keyword, '鍚稿紩鍔涙硶鍒?, '铚曞彉'];
+  var loveOpts = [personality.love, '灵魂伴侣近在眼前', '旧情复燃的可能'];
+  var careerOpts = [personality.career, '贵人即将出现', '跳槽最佳时机已到'];
+  var keywordOpts = [personality.keyword, '吸引力法则', '蜕变'];
 
   var html = '';
   html += '<div style="text-align:center;margin-bottom:14px;">';
-  html += '<span class="zodiac-badge">鈾?' + zodiac + '</span> ';
+  html += '<span class="zodiac-badge">♈ ' + zodiac + '</span> ';
   html += '<span class="zodiac-badge">' + animal + '</span>';
   html += '<div style="font-size:1.3rem;font-weight:800;margin:8px 0;background:linear-gradient(135deg,#ec4899,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + name + '</div>';
   html += '<span class="personality-tag" style="display:inline-block;">' + personality.name + '</span>';
   html += '</div>';
 
-  html += '<div style="margin-top:6px;"><strong>馃専 鎬ф牸鐢诲儚锛?/strong></div>';
+  html += '<div style="margin-top:6px;"><strong>🌟 性格画像：</strong></div>';
   html += '<ul class="trait-list">';
   for (var i = 0; i < personality.free.length; i++) {
     html += '<li>' + personality.free[i] + '</li>';
@@ -1669,13 +1697,13 @@ function adminShowResult() {
   html += '</ul>';
 
   html += '<div class="fortune-tags" style="margin-bottom:12px;">';
-  html += '<div class="fortune-tag"><div class="ft-label">馃帹 骞歌繍鑹?/div><div class="ft-value">' + getLuckyColor(colorIdx) + '</div></div>';
-  html += '<div class="fortune-tag"><div class="ft-label">馃敘 骞歌繍鏁?/div><div class="ft-value">' + getLuckyNumber(name, month, day) + '</div></div>';
-  html += '<div class="fortune-tag"><div class="ft-label">馃Л 骞歌繍鏂逛綅</div><div class="ft-value">' + getLuckyDirection(dirIdx) + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">🎨 幸运色</div><div class="ft-value">' + getLuckyColor(colorIdx) + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">🔢 幸运数</div><div class="ft-value">' + getLuckyNumber(name, month, day) + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">🧭 幸运方位</div><div class="ft-value">' + getLuckyDirection(dirIdx) + '</div></div>';
   html += '</div>';
 
   html += '<div style="margin-top:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">';
-  html += '<strong>馃攼 娣卞害瑙ｈ锛堢鐞嗗憳鍙锛夛細</strong></div>';
+  html += '<strong>🔐 深度解读（管理员可见）：</strong></div>';
   html += '<ul class="trait-list">';
   for (var i = 0; i < personality.locked.length; i++) {
     html += '<li>' + personality.locked[i] + '</li>';
@@ -1683,23 +1711,24 @@ function adminShowResult() {
   html += '</ul>';
 
   html += '<div class="fortune-tags">';
-  html += '<div class="fortune-tag"><div class="ft-label">馃挐 鎯呮劅杩愬娍</div><div class="ft-value">' + loveOpts[loveIdx] + '</div></div>';
-  html += '<div class="fortune-tag"><div class="ft-label">馃捈 浜嬩笟杩愬娍</div><div class="ft-value">' + careerOpts[careerIdx] + '</div></div>';
-  html += '<div class="fortune-tag"><div class="ft-label">馃 2026鍏抽敭璇?/div><div class="ft-value">' + keywordOpts[keywordIdx] + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">💝 情感运势</div><div class="ft-value">' + loveOpts[loveIdx] + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">💼 事业运势</div><div class="ft-value">' + careerOpts[careerIdx] + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">🧘 2026关键词</div><div class="ft-value">' + keywordOpts[keywordIdx] + '</div></div>';
   html += '</div>';
 
-  html += '<p style="margin-top:10px;font-size:0.78rem;color:var(--text-muted);text-align:center;">浠ヤ笂涓? + name + '鐨勬繁搴︽€ф牸鎶ュ憡瀹屾暣鐗堛€?/p>';
+  html += '<p style="margin-top:10px;font-size:0.78rem;color:var(--text-muted);text-align:center;">以上为' + name + '的深度性格报告完整版。</p>';
 
-  // 濡傛灉鏈夋墜鎺屽浘鐗囷紝涔熷姞涓?  if (palmImageData) {
+  // 如果有手掌图片，也加上
+  if (palmImageData) {
     var analysis = analyzePalm(palmImageData);
     var reading = getPalmReading(analysis);
     html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">';
-    html += '<strong>馃攳 AI鎺岀汗鎶ュ憡锛?/strong>';
-    html += '<p>馃К 鐢熷懡绾匡紙' + '鈽?.repeat(reading.life.level) + '锛? ' + reading.life.text + '</p>';
-    html += '<p>馃 鏅烘収绾匡紙' + '鈽?.repeat(reading.wisdom.level) + '锛? ' + reading.wisdom.text + '</p>';
-    html += '<p>馃挅 鎰熸儏绾匡紙' + '鈽?.repeat(reading.love.level) + '锛? ' + reading.love.text + '</p>';
-    html += '<p>馃捈 浜嬩笟绾匡紙' + '鈽?.repeat(reading.career.level) + '锛? ' + reading.career.text + '</p>';
-    html += '<p style="color:var(--gradient-1);text-align:center;">缁煎悎璇勫垎锛? + reading.overall + '/16 鍒?/p>';
+    html += '<strong>🔍 AI掌纹报告：</strong>';
+    html += '<p>🧬 生命线（' + '★'.repeat(reading.life.level) + '）: ' + reading.life.text + '</p>';
+    html += '<p>🧠 智慧线（' + '★'.repeat(reading.wisdom.level) + '）: ' + reading.wisdom.text + '</p>';
+    html += '<p>💖 感情线（' + '★'.repeat(reading.love.level) + '）: ' + reading.love.text + '</p>';
+    html += '<p>💼 事业线（' + '★'.repeat(reading.career.level) + '）: ' + reading.career.text + '</p>';
+    html += '<p style="color:var(--gradient-1);text-align:center;">综合评分：' + reading.overall + '/16 分</p>';
     html += '</div>';
   }
 
@@ -1712,22 +1741,23 @@ function copyAdminReport() {
   var content = document.getElementById('admin-report-content').innerText;
   if (!content) return;
   var textarea = document.createElement('textarea');
-  textarea.value = '鈺愨晲鈺?鍙岄潰浜烘牸娴嬭瘯 路 瀹屾暣鎶ュ憡 鈺愨晲鈺怽n\n' + content + '\n\n浠ヤ笂涓哄畬鏁寸増鎬ф牸鎶ュ憡锛屾劅璋㈠弬涓庢祴璇?鉁?;
+  textarea.value = '═══ 双面人格测试 · 完整报告 ═══\n\n' + content + '\n\n以上为完整版性格报告，感谢参与测试 ✨';
   document.body.appendChild(textarea);
   textarea.select();
   document.execCommand('copy');
   document.body.removeChild(textarea);
-  showToast('鉁?鎶ュ憡宸插鍒讹紝鍙洿鎺ョ矘璐村彂缁欏鏂癸紒');
+  showToast('✅ 报告已复制，可直接粘贴发给对方！');
 }
 
 // ============================================================
-// 妯℃嫙宸叉祴浜烘暟鍔ㄦ€佸闀?// ============================================================
+// 模拟已测人数动态增长
+// ============================================================
 (function() {
   var base = 128900 + Math.floor(Math.random() * 200);
   var countEl = document.getElementById('test-count');
   setInterval(function() {
     base += Math.floor(Math.random() * 7) + 1;
-    countEl.textContent = '宸叉湁 ' + base.toLocaleString() + ' 浜哄畬鎴愭祴璇?;
+    countEl.textContent = '已有 ' + base.toLocaleString() + ' 人完成测试';
   }, 8000 + Math.random() * 5000);
 })();
 </script>
