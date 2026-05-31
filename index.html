@@ -880,7 +880,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v3.3</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v3.4</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -950,7 +950,7 @@ body {
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
               <img id="palm-thumb" src="" alt="手掌" style="width:60px;height:60px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,0.15);">
               <div>
-                <div style="font-size:0.9rem;font-weight:700;color:#f59e0b;">🔍 AI掌纹报告</div>
+                <div style="font-size:0.9rem;font-weight:700;color:#f59e0b;">🔍 掌纹报告</div>
                 <div style="font-size:0.7rem;color:var(--text-muted);">基于深度学习图像分析</div>
               </div>
             </div>
@@ -2148,7 +2148,7 @@ function adminShowResult() {
     var reading = getPalmReading(analysis);
     var stars = function(n){ return '★'.repeat(n) + '☆'.repeat(5-n); };
     html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">';
-    html += '<strong>🔍 AI掌纹深度报告（五大维度）：</strong>';
+    html += '<strong>🔍 掌纹深度报告（五大维度）：</strong>';
     html += '<p style="color:#f59e0b;margin-top:8px;">🧬 ' + reading.life.title + ' ' + stars(reading.life.level) + '</p>';
     html += '<p style="font-size:0.78rem;">' + reading.life.text + '</p>';
     html += '<p style="color:#818cf8;">🧠 ' + reading.wisdom.title + ' ' + stars(reading.wisdom.level) + '</p>';
