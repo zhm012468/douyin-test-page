@@ -810,7 +810,7 @@ body {
       <!-- ★ 手心上传 -->
       <div class="palm-up">
         <label>✋ 上传手心照片 <span style="font-weight:400;color:var(--text-muted);font-size:0.75rem;">（可选）</span></label>
-        <div class="palm-box" id="palmBox" onclick="document.getElementById('palmFile').click()">
+        <div class="palm-box" id="palmBox" onclick="if(confirm('📸 拍摄提示\n\n请光线充足、手掌平铺拍摄\n以防画面不清将识别失败。\n\n点击「确定」继续选择照片'))document.getElementById('palmFile').click()">
           <span class="icon">📸</span><span class="txt">点击拍照或选择照片</span>
           <button class="del" onclick="event.stopPropagation();clearPalm()">✕</button>
           <img id="palmPreview" alt="" style="display:none;">
@@ -828,7 +828,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v4.5</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v4.6</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
