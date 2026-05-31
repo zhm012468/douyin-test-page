@@ -1583,18 +1583,26 @@ function validatePalmStrict(imageData) {
   edgeB = edgeCount > 0 ? edgeB/edgeCount : centerB;
 
   // 手心：中心粉红(高R,中G,中B)，边缘偏浅
-  // 手背：中心边缘颜色接近，R:G比值接近1:1
+  // 手背：中心边缘颜色接近，R:G比值接近1:1，且整体偏暗
   var centerRedRatio = centerR / (centerG + centerB + 1);
   var edgeRedRatio = edgeR / (edgeG + edgeB + 1);
   var palmScore = centerRedRatio - edgeRedRatio; // 手心时中心更红
+  // 额外判定：手背通常R和G更接近（偏黄），手心R明显>G
+  var centerRGdiff = (centerR - centerG) / (centerR + 1);
 
-  if (palmScore < 0.02) {
-    return {valid:false, code:'back', title:'检测为手背或侧面', msg:'系统识别到此图像为手背/侧面/握拳姿态\n\n请将手掌完全摊开，掌心朝上\n正对镜头重新拍摄\n\n⚠️ 仅接受掌心向上的手心照片'};
+  if (palmScore < 0.04 || centerRGdiff < 0.1) {
+    return {valid:false, code:'back', title:'检测为手背或侧面', msg:'系统识别到此图像为手背/侧面/握拳姿态\n\n手背特征：中心与边缘色泽均匀\n手心特征：掌心粉红、纹路密集\n\n请将手掌完全摊开，掌心朝上正对镜头\n⚠️ 仅接受掌心向上的手心照片'};
+  }
+
+  // ---------- 第2.5关：中心纹理复杂度（手心远大于手背） ----------
+  var centerTexture = detectCenterTexture(data, w, h);
+  if (centerTexture < 6) {
+    return {valid:false, code:'smooth', title:'掌心纹路缺失', msg:'手掌中心区域过于平滑\n\n手掌中心应可见清晰的纹路交叉\n手背皮肤通常较为光滑无纹\n\n请在自然光下对准掌心重新拍摄\n确保生命线、智慧线、感情线可见'};
   }
 
   // ---------- 第3关：纹路检测（三大主线验证） ----------
   var lineScore = detectPalmLines(data, w, h);
-  if (lineScore < 0.35) {
+  if (lineScore < 0.45) {
     return {valid:false, code:'nolines', title:'掌纹纹路不清晰', msg:'未能检测到清晰的生命线/智慧线/感情线\n\n可能原因：\n• 手背皮肤纹理少（请确认掌心朝上）\n• 光线过暗导致纹路不可见\n• 照片分辨率太低\n\n请在自然光下对准掌心重新拍摄'};
   }
 
@@ -1612,6 +1620,29 @@ function validatePalmStrict(imageData) {
 
   // 全部通过
   return {valid:true, lineScore:lineScore, blurScore:blurScore, palmScore:palmScore};
+}
+
+// 中心区域纹理复杂度（区分手心纹路 vs 手背光滑皮肤）
+function detectCenterTexture(data, w, h) {
+  var gray = new Float32Array(w*h);
+  for (var i = 0; i < w*h; i++) {
+    var idx = i*4;
+    gray[i] = 0.299*data[idx] + 0.587*data[idx+1] + 0.114*data[idx+2];
+  }
+  // 只看中心25%区域（手掌三大主线交汇处）
+  var cx = Math.floor(w*0.35), ex = Math.floor(w*0.65);
+  var cy = Math.floor(h*0.35), ey = Math.floor(h*0.65);
+  var sum = 0, count = 0;
+  for (var y = cy; y < ey; y++) {
+    for (var x = cx; x < ex; x++) {
+      var idx = y*w + x;
+      var localVar = Math.abs(gray[idx] - gray[idx+1]) + Math.abs(gray[idx] - gray[idx+2])
+                   + Math.abs(gray[idx] - gray[idx+w]) + Math.abs(gray[idx] - gray[idx-1]);
+      sum += localVar;
+      count++;
+    }
+  }
+  return count > 0 ? sum/count : 0;
 }
 
 // Sobel边缘检测 → 评估纹路复杂度
