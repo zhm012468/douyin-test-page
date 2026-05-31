@@ -180,7 +180,9 @@ function shareTest(){
 }
 function retryTest(){document.getElementById('screen-result').style.display='none';document.getElementById('screen-intro').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
 // 模拟计数器
-var c=286400+Math.floor(Math.random()*200);setInterval(function(){c+=Math.floor(Math.random()*8)+1;document.getElementById('counter').textContent=c.toLocaleString()},6000+Math.random()*4000);
+(function(){var c=286400+Math.floor(Math.random()*200);setInterval(function(){var el=document.getElementById('counter');if(el){c+=Math.floor(Math.random()*8)+1;el.textContent=c.toLocaleString()}},6000+Math.random()*4000)})();
+
+// 计数器已修复为上方代码
 </script>
 </body>
 </html>
