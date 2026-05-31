@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="description" content="超准恋爱人格测试！10题测出你的恋爱类型，99%的人都说准！">
+<title>💔 恋爱人格测试｜测测你的恋爱类型</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding:20px 16px;display:flex;flex-direction:column;align-items:center}
+.container{max-width:460px;width:100%}
+.hero{text-align:center;margin:30px 0 20px}
+.hero .icon{font-size:56px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,#f472b6,#ec4899,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:10px}
+.hero p{color:#888;font-size:0.85rem;margin-top:6px}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:24px 18px;margin-bottom:16px}
+.progress{display:flex;gap:4px;margin-bottom:20px}
+.progress .dot{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.1);transition:all 0.3s}
+.progress .dot.done{background:linear-gradient(90deg,#f472b6,#ec4899)}
+.q-num{font-size:0.75rem;color:#f472b6;margin-bottom:6px;font-weight:600}
+.q-title{font-size:1.1rem;font-weight:700;margin-bottom:16px;line-height:1.4}
+.option{display:block;width:100%;padding:14px 16px;margin-bottom:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);color:#e0e0e0;font-size:0.95rem;cursor:pointer;text-align:left;transition:all 0.2s}
+.option:hover,.option:active{border-color:#f472b6;background:rgba(244,114,182,0.08)}
+.option.selected{border-color:#f472b6;background:rgba(244,114,182,0.12)}
+.result-area{display:none}
+.result-header{text-align:center;margin-bottom:20px}
+.result-type{display:inline-block;padding:10px 24px;border-radius:25px;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;margin-top:10px}
+.result-score{font-size:0.85rem;color:#f472b6;margin-top:8px}
+.result-desc{line-height:1.8;color:#b8b8d0}
+.lock-section{margin-top:16px;padding:20px;border-radius:14px;background:rgba(244,114,182,0.05);border:1px dashed rgba(244,114,182,0.2);text-align:center;position:relative}
+.lock-section .lock-icon{font-size:44px;margin-bottom:8px}
+.lock-section h4{color:#f472b6;margin-bottom:4px}
+.lock-section p{font-size:0.8rem;color:#888;margin-bottom:12px}
+.unlock-btn{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:1px;animation:pulse 2.5s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(244,114,182,0.3)}50%{box-shadow:0 0 40px rgba(236,72,153,0.5)}}
+.share-btn{width:100%;margin-top:14px;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:#aaa;cursor:pointer;font-size:0.9rem}
+.retry-btn{width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:50px;color:#666;cursor:pointer;font-size:0.85rem}
+.footer{text-align:center;font-size:0.7rem;color:#555;margin:20px 0}
+.test-count{text-align:center;font-size:0.75rem;color:#666;margin-top:16px}
+.ad-banner{text-align:center;padding:12px;margin:10px 0;background:rgba(255,255,255,0.02);border-radius:10px;border:1px dashed rgba(255,255,255,0.06);color:#555;font-size:0.7rem}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- 首页 -->
+  <div id="screen-intro">
+    <div class="hero">
+      <div class="icon">💔</div>
+      <h1>恋爱人格测试</h1>
+      <p>10题测出你真实的恋爱类型</p>
+    </div>
+    <div class="card" style="text-align:center">
+      <p style="color:#aaa;font-size:0.9rem;margin-bottom:16px;">已有 <b style="color:#f472b6;" id="counter">286,431</b> 人完成测试</p>
+      <button onclick="startQuiz()" style="width:100%;padding:16px;font-size:1.1rem;font-weight:700;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border:none;border-radius:50px;cursor:pointer;letter-spacing:2px;">💘 开始测试</button>
+    </div>
+    <div class="ad-banner">📢 广告位</div>
+    <p class="footer">⚠️ 本测试仅供娱乐参考</p>
+  </div>
+
+  <!-- 答题页 -->
+  <div id="screen-quiz" style="display:none">
+    <div class="progress" id="progress"></div>
+    <div class="card">
+      <div class="q-num" id="qNum">第 1/10 题</div>
+      <div class="q-title" id="qTitle"></div>
+      <div id="qOptions"></div>
+    </div>
+  </div>
+
+  <!-- 结果页 -->
+  <div id="screen-result" style="display:none">
+    <div class="result-area">
+      <div class="result-header">
+        <div style="font-size:60px;" id="resultEmoji"></div>
+        <div class="result-type" id="resultType"></div>
+        <div class="result-score" id="resultScore"></div>
+      </div>
+      <div class="card">
+        <div class="result-desc" id="resultDesc"></div>
+      </div>
+      <div class="lock-section">
+        <div class="lock-icon">🔒</div>
+        <h4>深度恋爱报告已加密</h4>
+        <p>观看15秒广告 · 解锁完整恋爱分析</p>
+        <button class="unlock-btn" onclick="unlockFull()">🔓 观看广告解锁</button>
+      </div>
+      <div id="fullReport" style="display:none">
+        <div class="card" style="border-color:rgba(244,114,182,0.2)">
+          <div id="fullContent"></div>
+        </div>
+      </div>
+      <button class="share-btn" onclick="shareTest()">📤 分享给朋友测一测</button>
+      <button class="retry-btn" onclick="retryTest()">🔄 重新测试</button>
+    </div>
+    <p class="footer">⚠️ 本测试仅供娱乐参考</p>
+  </div>
+</div>
+
+<script>
+var questions=[
+  {q:"约会时，你最看重对方的什么？",o:["外表颜值","谈吐和思想","经济条件","感觉对了就行"]},
+  {q:"吵架后你会怎么做？",o:["立刻道歉哄对方","冷静下来再沟通","等对方先来找你","吵完就忘，无所谓"]},
+  {q:"你理想的第一次约会地点？",o:["浪漫的高级餐厅","安静的书店/咖啡厅","游乐场/电玩城","大自然户外徒步"]},
+  {q:"发现对象跟异性聊天频繁，你？",o:["直接质问","偷偷观察","假装没看到","跟朋友吐槽"]},
+  {q:"你更重视感情中的什么？",o:["激情和新鲜感","稳定和安全感","自由和空间","忠诚和信任"]},
+  {q:"恋爱中最怕什么？",o:["被背叛欺骗","失去自由","吵架冷战","平淡无趣"]},
+  {q:"别人眼中你是什么样的恋人？",o:["热情浪漫型","温柔体贴型","独立高冷型","幽默有趣型"]},
+  {q:"你愿意为对象做出改变吗？",o:["完全愿意","看情况","不太愿意","对方改我就改"]},
+  {q:"最让你心动的表白方式？",o:["当众大声告白","私下温柔私语","写在信里","用行动表达就够了"]},
+  {q:"你认为'对的人'最重要的是？",o:["三观一致","性格互补","能一起成长","无条件包容你"]}
+];
+var scores=[0,0,0,0,0];
+var currentQ=0,answered=[];
+
+function startQuiz(){
+  scores=[0,0,0,0,0];currentQ=0;answered=[];
+  document.getElementById('screen-intro').style.display='none';
+  document.getElementById('screen-result').style.display='none';
+  document.getElementById('screen-quiz').style.display='block';
+  var p=document.getElementById('progress');p.innerHTML='';
+  for(var i=0;i<10;i++){var d=document.createElement('div');d.className='dot';d.id='dot'+i;p.appendChild(d)}
+  loadQ();
+}
+function loadQ(){
+  if(currentQ>=10){showResult();return}
+  var q=questions[currentQ];
+  document.getElementById('qNum').textContent='第 '+(currentQ+1)+'/10 题';
+  document.getElementById('qTitle').textContent=q.q;
+  var o=document.getElementById('qOptions');o.innerHTML='';
+  q.o.forEach(function(opt,i){
+    var btn=document.createElement('button');btn.className='option';btn.textContent=opt;
+    btn.onclick=function(){
+      scores[i]++;currentQ++;
+      document.getElementById('dot'+(currentQ-1)).classList.add('done');
+      // 不同类型加分
+      if(currentQ<10)loadQ();else showResult();
+    };o.appendChild(btn);
+  });
+}
+function showResult(){
+  document.getElementById('screen-quiz').style.display='none';
+  document.getElementById('screen-result').style.display='block';
+  document.getElementById('fullReport').style.display='none';
+  var m=Math.max.apply(null,scores);
+  var idx=scores.indexOf(m);
+  var types=[
+    {emoji:'🔥',name:'热情浪漫型',score:'热情指数 '+Math.round(m/10*100)+'%',desc:'你在恋爱中热烈如火，不保留不隐藏。浪漫是你与生俱来的天赋——你会在对方生日前一个月就开始准备惊喜，会把约会变成一部精心编排的电影。你的爱意从不打折，每一段感情都全力以赴。但要注意：太过炽热的爱有时会灼伤对方，适时降降温反而能长久。'},
+    {emoji:'🌊',name:'温柔细腻型',score:'温柔指数 '+Math.round(m/10*100)+'%',desc:'你的爱像山间溪流，不急不缓却始终向前。你不擅长轰轰烈烈的浪漫，但你会记得对方每一个小习惯、每一次随口提到的心愿。你是那种会在对方生病时熬粥、加班时送宵夜的类型。你需要的伴侣是能读懂你沉默的人。别担心自己不够有趣——你的温柔本身就是最稀缺的魅力。'},
+    {emoji:'🦅',name:'独立高冷型',score:'独立指数 '+Math.round(m/10*100)+'%',desc:'你在感情中保持清醒独立，从不轻易迷失自我。你不黏人、不查岗、不翻手机——不是不在意，而是你相信真正好的感情不需要监视。你的高冷外表下藏着一颗热忱的心，只有那个耐心走进去的人才能看到。继续做你自己，不将就就是对爱情最大的尊重。'},
+    {emoji:'🎭',name:'幽默风趣型',score:'幽默指数 '+Math.round(m/10*100)+'%',desc:'你是朋友圈里公认的开心果，和你在一起永远不会无聊。你的幽默不低俗不伤人，而是带着智慧的俏皮。你用笑声化解尴尬，用段子掩盖深情。但偶尔也要卸下面具——有时候对方需要的不是捧腹大笑，而是一个认真的眼神和一句真诚的\"我爱你\"。'},
+    {emoji:'💎',name:'理智稳健型',score:'理智指数 '+Math.round(m/10*100)+'%',desc:'你在感情中头脑清醒，不靠冲动做决定。你不会因为一时的荷尔蒙上头就全盘投入，而是像评估项目一样认真对待每一段感情。这不是冷漠，而是对双方负责。一旦你确认对方是对的人，你的忠诚和坚定远超常人。你的爱或许不浪漫，但绝对可靠。'}
+  ];
+  var t=types[idx];
+  document.getElementById('resultEmoji').textContent=t.emoji;
+  document.getElementById('resultType').textContent=t.name;
+  document.getElementById('resultScore').textContent=t.score;
+  document.getElementById('resultDesc').textContent=t.desc;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function unlockFull(){
+  // 模拟广告解锁（接入抖音广告时替换）
+  setTimeout(function(){
+    document.getElementById('fullReport').style.display='block';
+    var idx=scores.indexOf(Math.max.apply(null,scores));
+    var fulls=[
+      '💘 恋爱深度报告\n\n🔥 你的恋爱人格：热情浪漫型\n\n你的爱情观是"全力以赴，不留余地"。你相信真爱值得燃烧自己——每一次心动都是新的开始，每一段感情都像第一段那样投入。\n\n🎯 最佳匹配：温柔细腻型\n你们在一起，你的热情被他的温柔承接，他的含蓄被你的勇敢点燃。\n\n💡 恋爱建议：学会在激情中保持理性，不是所有的热烈都叫爱情。\n\n📅 2026感情运：夏季桃花旺盛，秋季可能遇到正缘。\n\n⭐ 综合评分：87分',
+      '💘 恋爱深度报告\n\n🌊 你的恋爱人格：温柔细腻型\n\n你相信日久生情胜过一见钟情。你的爱藏在每一个日常细节里——记得对方爱吃的菜、怕冷需要多带一件外套。你是最让人安心的另一半。\n\n🎯 最佳匹配：幽默风趣型\n对方的笑声能融化你偶尔的沉闷，你的温柔能稳定对方的活泼。\n\n💡 恋爱建议：别总把对方的需求放在第一位，学会说"我要"。\n\n📅 2026感情运：春天遇到缘分，秋天感情升温。\n\n⭐ 综合评分：91分',
+      '💘 恋爱深度报告\n\n🦅 你的恋爱人格：独立高冷型\n\n你不轻易敞开内心，但这不代表你不需要爱。你在等待一个配得上你灵魂深度的人——宁缺毋滥。\n\n🎯 最佳匹配：理智稳健型\n两个独立的人在一起，不黏不腻却默契十足。\n\n💡 恋爱建议：偶尔放下防备，给他一次走进你世界的机会。\n\n📅 2026感情运：冬季可能在工作场合遇到缘分。\n\n⭐ 综合评分：84分',
+      '💘 恋爱深度报告\n\n🎭 你的恋爱人格：幽默风趣型\n\n你用笑声装点每一段关系，让爱情像一场永不散场的喜剧。你的魅力在于让人开心，但最大的挑战是让人看到笑容背后的你。\n\n🎯 最佳匹配：温柔细腻型\n对方的细腻让你的幽默有了温暖的底色。\n\n💡 恋爱建议：偶尔卸下搞笑面具，真心话比玩笑更能打动人。\n\n📅 2026感情运：全年桃花运旺盛，5月和10月是关键月份。\n\n⭐ 综合评分：85分',
+      '💘 恋爱深度报告\n\n💎 你的恋爱人格：理智稳健型\n\n你像选股票一样选伴侣——不是势利，而是认真。一旦确定了关系，你的专一度会超乎所有人意料。\n\n🎯 最佳匹配：独立高冷型\n两个理智型在一起，感情高效又舒服。\n\n💡 恋爱建议：偶尔感性一下，不要用Excel表格来评估感情。\n\n📅 2026感情运：事业感情双丰收，秋天有重要进展。\n\n⭐ 综合评分：90分'
+    ];
+    document.getElementById('fullContent').innerHTML=fulls[idx].replace(/\n/g,'<br>');
+    document.querySelector('.lock-section').style.display='none';
+  },1500);
+}
+function shareTest(){
+  if(navigator.share){navigator.share({title:'💔 超准恋爱人格测试',text:'测完我震惊了！你也来测测你的恋爱类型！',url:location.href}).catch(function(){})}
+  else{alert('复制链接分享给朋友：'+location.href)}
+}
+function retryTest(){document.getElementById('screen-result').style.display='none';document.getElementById('screen-intro').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+// 模拟计数器
+var c=286400+Math.floor(Math.random()*200);setInterval(function(){c+=Math.floor(Math.random()*8)+1;document.getElementById('counter').textContent=c.toLocaleString()},6000+Math.random()*4000);
+</script>
+</body>
+</html>
