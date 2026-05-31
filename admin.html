@@ -110,6 +110,66 @@ function isExpired(record){
   return (Date.now() - new Date(record.time).getTime()) > DATA_TTL;
 }
 
+// 掌纹数据库（与H5同步）
+var PALM_DB=[
+  {cat:'life',name:'生命线深长饱满',prob:'22%',feature:'手掌拇指侧生命线弧度宽大，线条深邃连贯，纹路清晰完整无断裂',personality:'外表性格温和沉稳，待人宽厚包容；内心骨子里极度要强，野心潜藏很深，占有与控制欲望强烈',advice:'适当降低自身的执念，不要凡事强行逞强，学会接纳自身短板，放平心态能够减少精神内耗'},
+  {cat:'life',name:'生命线短浅细弱',prob:'18%',feature:'生命线整体长度偏短，纹路颜色浅淡，线条纤细单薄，气场纹路微弱',personality:'外在看上去胆小柔弱，依赖性较强处事被动；内心心思多疑敏感，防备心很重很难真正信任他人',advice:'多多建立自信心，不要过度揣测他人想法，减少胡思乱想，主动拥抱身边的人际关系'},
+  {cat:'life',name:'生命线双条护线',prob:'13%',feature:'主生命线旁伴随一条平行辅助细纹，双线并行生长，纹路层次分明',personality:'平时待人憨厚随和属于老好人形象；遭遇大事头脑冷静行事狠决，天生自带贵人运势',advice:'善良需要自带锋芒，不要一味迁就别人，保留自己的底线才能够长久护住自身福气'},
+  {cat:'life',name:'生命线链状纹',prob:'9%',feature:'生命线整体呈现连续环形链条状纹路，分段凹凸不平整',personality:'为人性格随和开朗，情绪起伏变化较大；内心长期焦虑多虑，习惯性深度精神内耗',advice:'规律作息调整情绪，不要反复纠结过往琐事，懂得及时放下才能缓解内心压抑'},
+  {cat:'life',name:'生命线末端分叉',prob:'15%',feature:'生命线尾部自然分化为两道至三道分支纹路，线条舒展散开',personality:'外表性格开朗向往自由，生性洒脱不羁；内心极度念旧害怕改变，一生都在渴求安全感',advice:'学会坦然接受生活的变动，不要沉溺于回忆当中，向前发展才适合你的人生走向'},
+  {cat:'life',name:'生命线岛纹',prob:'7%',feature:'生命线中途生长出圆形环状小岛纹路，轮廓清晰容易识别',personality:'日常外表乐观爱笑心态良好；阶段性容易情绪崩塌，身体素质偏弱容易积攒隐疾',advice:'注重身体养护，保持心情舒畅，远离负能量人群，避免长期处于压抑的环境当中'},
+  {cat:'life',name:'生命线切入金星丘',prob:'11%',feature:'生命线弧度过于紧凑，向内收拢贴近拇指金星丘位置',personality:'外在热情主动行动力超群，做事积极果断；内心性情急躁易怒，脾气爆发速度很快',advice:'遇事尽量放缓语速冷静思考，克制自身急躁脾气，修身养性可以提升整体运势'},
+  {cat:'life',name:'生命线向外扩张',prob:'14%',feature:'生命线弧度开阔向外延伸，远离拇指区域，手掌占据面积很大',personality:'性格大方外向擅长闯荡见识广阔；内心常年孤独落寞，渴望被理解却从不主动倾诉',advice:'不必刻意伪装坚强，可以适当向挚友倾诉心事，不要习惯性独自承受所有压力'},
+  {cat:'life',name:'生命线断续衔接',prob:'6%',feature:'生命线中间存在明显断开缺口，后续纹路重新衔接愈合',personality:'表面人生路途平稳顺遂，性格乐观豁达；内心深处受过重大创伤，心底留有无法抹平的伤疤',advice:'和过去的遗憾和解，不要被过往的伤痛束缚，放下执念才能迎来全新的人生转机'},
+  {cat:'life',name:'生命线平直无弧',prob:'5%',feature:'生命线走势近乎直线，没有正常的圆弧弯曲形态，走势生硬笔直',personality:'为人理智冷淡做事不讲情面，原则性极强；内心极度缺爱渴望温暖，但是本能害怕受伤不敢靠近',advice:'适当软化待人的态度，不要过度封闭内心，勇敢接纳温柔，你的生活会变得更加圆满'},
+  {cat:'wisdom',name:'双智慧线极品双人格',prob:'8.7%',feature:'掌心同时存在两条完整独立智慧线，长短深浅各不相同，辨识度极高',personality:'白天理智成熟冷静靠谱，属于人间清醒类型；夜晚情绪叛逆颓废，极易陷入深度精神内耗',advice:'分清现实与空想，减少深夜胡思乱想，合理管控自身双面情绪，避免自我内耗折磨'},
+  {cat:'wisdom',name:'川字纹分离纹路',prob:'6%',feature:'生命线、智慧线、感情线三者起点完全相互分离，形成标准川字形手掌纹路',personality:'平日里性格佛系随和很好相处，看起来极易被人拿捏；自身底线清晰分明，一旦被触碰便会彻底翻脸',advice:'保持自身独特的主见，不用刻意讨好任何人，坚持自我本心就是你最大的优势'},
+  {cat:'wisdom',name:'智慧线末端人字分叉',prob:'9.4%',feature:'智慧线尾部均匀分裂为人字形双分支，一横一垂走向分明',personality:'人前逻辑缜密冷静理性，做事有条不紊；私下感性泛滥情绪敏感，内心容易变得情绪化脆弱',advice:'平衡理性与感性之间的关系，不要被情绪左右判断，学会沉稳克制自身情绪波动'},
+  {cat:'wisdom',name:'智慧线超长过掌心',prob:'10%',feature:'智慧线走线绵长，横跨整个手掌掌心，长度远超常规标准',personality:'外表精明现实善于算计，心思城府很深；内心文艺细腻想象力丰富，天生多愁善感',advice:'不要过度思虑长远琐事，凡事顺其自然，想得太多反而会耽误自身的发展机遇'},
+  {cat:'wisdom',name:'智慧线短小局限',prob:'7%',feature:'智慧线生长距离很短，仅从虎口出发便提前终止，发育短小',personality:'待人单纯直白心思简单，不爱复杂思考；骨子里性格倔强执拗，认定的事情永远不会轻易改变',advice:'适当听取他人合理建议，不要过于固执己见，灵活变通才能够事半功倍'},
+  {cat:'wisdom',name:'智慧线下垂感性纹',prob:'12%',feature:'智慧线整体走势向下倾斜，末端朝向生命线方向弯曲下坠',personality:'为人温柔体贴共情能力超强，懂得体恤他人；内心悲观消极，习惯性往最坏的方向揣测事物',advice:'调整消极的思维观念，多看生活当中的美好事物，培养乐观积极的心态'},
+  {cat:'wisdom',name:'智慧线上扬理性纹',prob:'9%',feature:'智慧线尾部向上扬起，靠近上方感情线位置，整体走势挺拔',personality:'头脑冷静理智事业心强大，野心勃勃上进心足；内心性情冷漠疏离，很难真心相信感情',advice:'不要过分冰冷疏离人情世故，适当懂得温情待人，能够积攒更多贵人缘分'},
+  {cat:'wisdom',name:'智慧线锁链纹路',prob:'5%',feature:'整条智慧线全部由连环锁链状细纹构成，纹路杂乱起伏',personality:'头脑机灵聪慧反应敏捷，临场应变能力极强；内心纠结犹豫选择困难，做完决定极易心生后悔',advice:'做事果断决绝减少犹豫，遵从自己第一直觉做选择，不要反复纠结反复反悔'},
+  {cat:'wisdom',name:'智慧线岛纹印记',prob:'4%',feature:'智慧线中段存在圆形岛屿状凹陷纹路，印记清晰容易识别',personality:'平日里头脑聪慧思维灵动天资优越；特定时间段思维混乱注意力涣散，容易陷入低落抑郁情绪',advice:'减少脑力过度消耗，劳逸结合放松大脑，远离压抑阴暗的环境调养心神'},
+  {cat:'wisdom',name:'智慧线中途断裂',prob:'3%',feature:'智慧线中间出现明显断裂缺口，前后纹路无法连贯衔接',personality:'对外表现思路清晰行事果断，能力出众；内心思维容易突然断层，时常会毫无征兆的情绪崩溃',advice:'不要给自己施加过高的压力，允许自己偶尔松弛放松，防止精神长期处于紧绷状态'},
+  {cat:'wisdom',name:'智慧线生命线长粘连',prob:'11%',feature:'智慧线与生命线起始位置长时间贴合粘连，后期才缓慢分开',personality:'性格内敛谨慎思虑周全，做事小心翼翼；内心胆小缺乏主见，依赖性强害怕自主做出抉择',advice:'慢慢培养独立思考的能力，勇敢自主做出决定，不要习惯性依附别人生存'},
+  {cat:'wisdom',name:'智慧线波浪异形纹',prob:'6%',feature:'智慧线整体呈现波浪曲折形态，走线起伏弯曲并不平直',personality:'情商圆滑通透擅长社交，看人眼光精准；内心心思善变表里不一，擅长隐藏真实自我',advice:'待人保持真诚本心，减少刻意伪装，真实的性格反而更容易收获长久的人脉与福气'},
+  {cat:'love',name:'感情线深长清晰',prob:'17%',feature:'上方感情线线条粗长深邃，纹路干净整洁无杂乱分支',personality:'外在待人深情专一重情重义，十分珍惜缘分；内心占有欲强烈，感情当中极易产生吃醋猜忌心理',advice:'学会给彼此留出合适空间，不要过度捆绑束缚感情，松弛的关系才能够长久稳定'},
+  {cat:'love',name:'感情线短浅微弱',prob:'13%',feature:'感情线长度短促，纹路浅淡模糊，整体发育不够完整',personality:'外表看上去冷淡薄情看淡情爱，随性洒脱；内心极度渴望被偏爱，害怕受伤所以不敢轻易投入感情',advice:'放下内心的防备壁垒，不必全盘封闭自己，勇敢接纳缘分才能够收获温暖'},
+  {cat:'love',name:'感情线断崖分叉',prob:'11.2%',feature:'感情线末端骤然分裂成多条支线，裂口突兀明显没有过渡',personality:'对外性格温暖治愈共情满满，如同暖心的人；内心骨子里生性薄凉，一旦被伤害就会彻底斩断情愫',advice:'不要因为一次伤害就否定所有人，理性看待人情冷暖，保留温柔同时保护好自己'},
+  {cat:'love',name:'感情线锁链孽缘纹',prob:'8%',feature:'感情线全程锁链连环纹路，细碎纹路繁多杂乱交错',personality:'人缘极好温柔多情，身边从不缺少陪伴；内心感情思绪纷乱，一生情感路途坎坷容易遇见错的人',advice:'谨慎挑选身边的异性缘分，克制泛滥的同情心，避免轻易陷入短暂廉价的感情当中'},
+  {cat:'love',name:'感情线岛屿纹路',prob:'6%',feature:'感情线纹路中间镶嵌圆形岛状印记，属于情感缺陷特征纹',personality:'平日里待人温柔体贴性情和善；在感情里极易遭遇背叛辜负，容易长期陷入情感难过当中',advice:'识人多看人品不要只看表面，提早远离心怀不善的人，规避情感带来的伤害'},
+  {cat:'love',name:'感情线末端三叉纹',prob:'5%',feature:'感情线尾部分散为三道均匀分支，呈现扇形散开状态',personality:'社交能力出众异性缘分旺盛，人缘得天独厚；内心情感摇摆不定很难专一，容易三心二意',advice:'专一对待身边的缘分，收敛自身泛滥的桃花缘分，专心稳定一段人际关系最为合适'},
+  {cat:'love',name:'感情线平直无情纹',prob:'7%',feature:'感情线水平横向生长完全没有弯曲弧度，线条僵硬平整',personality:'情绪克制冷静极度理性，从不轻易表露情绪；内心生性冷漠嘴硬心软，不习惯主动表达爱意',advice:'适当学会表达内心的情感，不要总是刻意冷漠隐忍，温柔表达可以拉近人与人的距离'},
+  {cat:'love',name:'感情线下弯心软纹',prob:'9%',feature:'感情线末端大幅度向下弯曲，朝向掌心中心位置靠拢',personality:'天生心地善良极易心软，很容易被他人打动；内心玻璃心敏感脆弱，常常暗自独自难过落泪',advice:'不要过分的心软善良，懂得分辨别人的假意讨好，善良一定要带有分寸和底线'},
+  {cat:'love',name:'感情线中途断裂',prob:'4%',feature:'感情线中间存在明显断裂缺口，纹路无法连贯衔接',personality:'外表独立坚强从不依赖任何人，性格倔强要强；内心受过深刻情伤，刻意封闭心扉不愿意再动情',advice:'不要将过往的伤痛封印心底，慢慢解开内心的心结，未来依旧拥有遇见美好的机会'},
+  {cat:'career',name:'多条清晰财运线',prob:'10%',feature:'小指下方竖直生长多条深浅均匀的财运竖纹，排列整齐',personality:'对外为人慷慨大方出手阔绰，从来不吝啬钱财；内心精明擅长盘算懂得储蓄，拥有绝佳理财头脑',advice:'可以合理规划投资理财，不要盲目大肆挥霍钱财，长久储蓄能够稳固自身财运'},
+  {cat:'career',name:'单条深长财运线',prob:'8%',feature:'小指下方仅有一条笔直深邃的竖向财运主线，纹路干净有力',personality:'日常为人低调内敛从不炫耀财富；内心野心庞大赚钱欲望强烈，人生目标清晰明确',advice:'保持自身上进的野心稳步发展，切忌急于求成，循序渐进财运才可以持续暴涨'},
+  {cat:'career',name:'短杂紊乱财运线',prob:'14%',feature:'财运线条短小杂乱交错，纹路零散没有规律，整体看起来凌乱不堪',personality:'平日里花钱大手大脚贪图享受生活；内心常常产生金钱焦虑，永远会感觉自身钱财不够富足',advice:'养成存钱储蓄的习惯，克制冲动消费的欲望，规划开销能够有效缓解财运焦虑'},
+  {cat:'career',name:'弯曲断裂财运线',prob:'7%',feature:'财运线条整体弯曲扭曲，中途带有断裂缺口，纹路走势不稳定',personality:'表面看上去衣食无忧财运平稳安稳；自身财运起伏波动很大，容易意外破财流失钱财',advice:'谨慎进行高风险投资，远离赌博与投机行为，守住现有财富才是长久之道'},
+  {cat:'career',name:'无明显财运线',prob:'19%',feature:'小指下方掌心区域平整光滑，没有生长任何竖向财运纹路',personality:'对外看淡金钱物质欲望淡薄，生活随性佛系；内心缺少财富安全感，容易时常担忧经济问题',advice:'提升自身谋生技能打造收入来源，不要过度看淡物质，足够的经济基础可以安稳人心'},
+  {cat:'career',name:'分叉型财运线',prob:'5%',feature:'财运线尾部出现明显分叉裂口，双向延伸散开',personality:'天生副业机缘众多赚钱门路广泛；内心欲望贪心过重，想要获取所有利益导致精力分散',advice:'专心深耕一条发展赛道，不要贪心四处尝试，专注才可以收获最大的财富收益'},
+  {cat:'career',name:'笔直深长事业线',prob:'9%',feature:'掌心正中事业线笔直向上延伸，直达中指根部，纹路强劲有力',personality:'外在上进心十足事业心强烈，永远努力拼搏上进；内心背负巨大精神压力，常常自我施压折磨自己',advice:'学会劳逸结合适当放松，不要一直逼迫自己前行，适当休息反而会加速事业运势提升'},
+  {cat:'career',name:'事业线浅淡无形',prob:'21%',feature:'掌心中心没有成型的事业主线，纹路浅淡几乎完全消失',personality:'生活随性安逸没有远大的野心追求；内心不甘平庸暗藏抱负，时常会纠结人生发展方向',advice:'尽早找准属于自己的人生定位，确立长远目标，避免常年处于迷茫停滞的生活状态'},
+  {cat:'career',name:'事业线中途分叉',prob:'10%',feature:'事业线中段位置分出两条分支纹路，走向一左一右',personality:'工作当中情商高超适合双向发展，多才多艺可塑性强；内心容易选择迷茫，难以确定未来发展道路',advice:'结合自身优势规划职业方向，不要同时兼顾太多行业，专一发展更容易功成名就'},
+  {cat:'career',name:'倾斜偏移事业线',prob:'8%',feature:'事业线没有居中生长，整体向手掌侧面倾斜偏移生长',personality:'性格自由不羁不喜欢被职场规矩束缚管教；内心向往自由生活，厌烦枯燥一成不变的工作',advice:'适合从事自由类型的行业发展，不要强行拘束自己，顺应天性发展才会顺风顺水'},
+  {cat:'special',name:'贵人三角纹',prob:'7.3%',feature:'手掌内部纹路拼接形成标准三角形封闭纹路，形状规整',personality:'待人温和友善人缘极佳，天生容易获得长辈帮扶；内心心思通透看透人情世故，习惯性深藏心事',advice:'珍惜身边出现的贵人机缘，懂得知恩感恩，积攒人脉可以让你的人生一路顺水推舟'},
+  {cat:'special',name:'手掌十字灵异纹',prob:'2.8%',feature:'掌心交汇处形成十字交叉状纹路，纹路小巧精致辨识度高',personality:'外表性格安静沉稳心思内敛，为人低调朴素；内心感知能力异于常人，直觉精准自带通透灵性',advice:'相信自身的直觉判断，你的预感大多真实准确，不要轻易否定自己内心的感受'},
+  {cat:'special',name:'掌心凹陷聚财手型',prob:'12%',feature:'手掌自然合拢掌心向内凹陷，整体手掌厚实饱满圆润',personality:'待人忠厚老实心胸宽广，福气底蕴浓厚；内心心思缜密考虑周全，凡事都会留有后手',advice:'本身天生福运深厚，只需保持本心安稳生活，顺其自然便可一生福禄绵长'},
+  {cat:'special',name:'手掌偏薄干瘪手型',prob:'15%',feature:'手掌整体单薄扁平肉质稀少，掌心干瘪没有饱满感',personality:'为人聪明灵巧头脑反应很快，适应能力极强；内心缺少安全感容易自卑，常常羡慕他人的生活',advice:'正视自身拥有的福气不要盲目羡慕别人，每个人的命运节奏各不相同，不必盲目攀比'},
+  {cat:'special',name:'指尖修长锥形手型',prob:'11%',feature:'五根手指指尖修长纤细呈现锥形形态，手指线条优美',personality:'外表气质温柔优雅情商很高，懂得人情世故；内心想法浪漫理想化，容易脱离现实胡思乱想',advice:'适当落地回归现实生活，减少不切实际的幻想，脚踏实地才可以安稳度过一生'}
+];
+function getAdminPalmReading(a){
+  var h=a.hash;
+  return {
+    life:PALM_DB[Math.floor((h*7+3)%10)],
+    wisdom:PALM_DB[10+Math.floor((h*11+5)%12)],
+    love:PALM_DB[22+Math.floor((h*13+7)%9)],
+    career:PALM_DB[31+Math.floor((h*17+9)%10)],
+    special:PALM_DB[41+Math.floor((h*19+11)%5)]
+  };
+}
+
 function loadDB(){
   document.getElementById('db-stats').textContent='⏳ 数据库加载中...';
   var controller=new AbortController();
@@ -216,14 +276,47 @@ function showReport(record){
   b+='<div class="tag-item"><div class="l">🧘 2026关键词</div><div class="v">'+keywordOpts[kI]+'</div></div>';
   b+='</div>';
   // 掌纹区域
-  b+='<div id="palm-admin-section" data-has-palm="false">';
+  // ★ 掌纹区域 — 有数据则展示，无数据则占位
+  b+='<div id="palm-admin-section" data-has-palm="'+(record.hasPalm?'true':'false')+'">';
   b+='<hr class="divider">';
   b+='<h3>🔍 掌纹解读</h3>';
-  b+='<div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;padding:16px;text-align:center;color:var(--text-muted);font-size:0.82rem;">';
-  b+='<div style="font-size:32px;margin-bottom:8px;">🖐️</div>';
-  b+='<p>未识别手掌 · 请稍后重新尝试</p>';
-  b+='<p style="font-size:0.7rem;margin-top:4px;">用户需在测试时上传掌心照片方可获取深度掌纹分析</p>';
-  b+='</div></div>';
+  if(record.hasPalm && record.palmHash){
+    var rh = record.palmHash;
+    var fakeAnalysis = {hash:rh.h, brightness:rh.b, contrast:rh.c, warmRatio:rh.w, textureNorm:rh.t};
+    var pr = getAdminPalmReading(fakeAnalysis);
+    b+='<div style="background:rgba(245,158,11,0.06);padding:8px 10px;border-radius:10px;margin-bottom:6px;">';
+    b+='<p style="font-size:0.7rem;color:#f59e0b;margin-bottom:2px;">🧬 生命线 · '+pr.life.name+'（概率 '+pr.life.prob+'）</p>';
+    b+='<p style="font-size:0.68rem;color:var(--text-muted);">'+pr.life.feature+'</p>';
+    b+='<p style="font-size:0.75rem;color:var(--text-secondary);">'+pr.life.personality+'</p>';
+    b+='<p style="font-size:0.7rem;color:#f59e0b;">💡 '+pr.life.advice+'</p></div>';
+    b+='<div style="background:rgba(99,102,241,0.06);padding:8px 10px;border-radius:10px;margin-bottom:6px;">';
+    b+='<p style="font-size:0.7rem;color:#818cf8;margin-bottom:2px;">🧠 智慧线 · '+pr.wisdom.name+'（概率 '+pr.wisdom.prob+'）</p>';
+    b+='<p style="font-size:0.68rem;color:var(--text-muted);">'+pr.wisdom.feature+'</p>';
+    b+='<p style="font-size:0.75rem;color:var(--text-secondary);">'+pr.wisdom.personality+'</p>';
+    b+='<p style="font-size:0.7rem;color:#818cf8;">💡 '+pr.wisdom.advice+'</p></div>';
+    b+='<div style="background:rgba(236,72,153,0.06);padding:8px 10px;border-radius:10px;margin-bottom:6px;">';
+    b+='<p style="font-size:0.7rem;color:#f472b6;margin-bottom:2px;">💖 感情线 · '+pr.love.name+'（概率 '+pr.love.prob+'）</p>';
+    b+='<p style="font-size:0.68rem;color:var(--text-muted);">'+pr.love.feature+'</p>';
+    b+='<p style="font-size:0.75rem;color:var(--text-secondary);">'+pr.love.personality+'</p>';
+    b+='<p style="font-size:0.7rem;color:#f472b6;">💡 '+pr.love.advice+'</p></div>';
+    b+='<div style="background:rgba(6,182,212,0.06);padding:8px 10px;border-radius:10px;margin-bottom:6px;">';
+    b+='<p style="font-size:0.7rem;color:#06b6d4;margin-bottom:2px;">💼 事业线 · '+pr.career.name+'（概率 '+pr.career.prob+'）</p>';
+    b+='<p style="font-size:0.68rem;color:var(--text-muted);">'+pr.career.feature+'</p>';
+    b+='<p style="font-size:0.75rem;color:var(--text-secondary);">'+pr.career.personality+'</p>';
+    b+='<p style="font-size:0.7rem;color:#06b6d4;">💡 '+pr.career.advice+'</p></div>';
+    b+='<div style="background:rgba(16,185,129,0.06);padding:8px 10px;border-radius:10px;">';
+    b+='<p style="font-size:0.7rem;color:#10b981;margin-bottom:2px;">✨ 特殊印记 · '+pr.special.name+'（概率 '+pr.special.prob+'）</p>';
+    b+='<p style="font-size:0.68rem;color:var(--text-muted);">'+pr.special.feature+'</p>';
+    b+='<p style="font-size:0.75rem;color:var(--text-secondary);">'+pr.special.personality+'</p>';
+    b+='<p style="font-size:0.7rem;color:#10b981;">💡 '+pr.special.advice+'</p></div>';
+  } else {
+    b+='<div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;padding:16px;text-align:center;color:var(--text-muted);font-size:0.82rem;">';
+    b+='<div style="font-size:32px;margin-bottom:8px;">🖐️</div>';
+    b+='<p>未识别到人体手掌</p>';
+    b+='<p style="font-size:0.7rem;margin-top:4px;">用户需在测试时上传掌心照片方可获取深度掌纹分析</p>';
+    b+='</div>';
+  }
+  b+='</div>';
 
   document.getElementById('report-body').innerHTML=b;
   document.getElementById('report').style.display='block';
