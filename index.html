@@ -828,7 +828,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.2</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v1.3</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1437,23 +1437,25 @@ function onPalmPick(e){
   };r.readAsDataURL(f);
 }
 function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');p.src='';p.style.display='none';document.getElementById('palmBox').classList.remove('has-img');document.getElementById('palmTag').style.display='none';document.getElementById('palmFile').value='';}
-// 手心识别 —— 肤色 + 手指轮廓检测
+// 手指识别 —— 有手指就是手掌，没手指就不是
 function classifyPalm(d){
-  var w=d.width,h=d.height,total=w*h,skin=0;
-  var skinRow=[]; for(var y=0;y<h;y++)skinRow[y]=0;
-  for(var i=0;i<total;i+=3){
-    var idx=i*4,r=d[idx],g=d[idx+1],b=d[idx+2];
-    if(r>75&&g>30&&b>10&&r>g&&r>b){skin++;skinRow[Math.floor(i/w)]++;}
+  var w=d.width,h=d.height,skinCols=[];
+  for(var x=0;x<w;x+=3){
+    var col=0;
+    for(var y=Math.floor(h*0.05);y<Math.floor(h*0.55);y+=4){
+      var idx=(y*w+x)*4,r=d[idx],g=d[idx+1],b=d[idx+2];
+      if(r>65&&g>25&&b>8&&r>g&&r>b)col++;
+    }
+    skinCols.push(col>2?1:0); // 该列有肤色=1
   }
-  if(skin/total<0.06)return '未检测到人体手掌';
-  // 手指检测：扫描上半部分肤色行，统计独立峰数
-  var peaks=0,inPeak=false;
-  for(var y=Math.floor(h*0.1);y<Math.floor(h*0.5);y+=2){
-    var hasSkin=skinRow[y]>w*0.05;
-    if(hasSkin&&!inPeak){peaks++;inPeak=true;}
-    if(!hasSkin)inPeak=false;
+  // 统计独立手指：肤色列之间的间隔
+  var fingers=0,last=0;
+  for(var i=1;i<skinCols.length;i++){
+    if(skinCols[i]===1&&skinCols[i-1]===0)last++;
+    else if(skinCols[i]===0&&last>0){fingers++;last=0;}
   }
-  if(peaks<2)return '未检测到手指轮廓，请展开五指拍摄';
+  if(last>0)fingers++;
+  if(fingers<2)return '请将五指自然展开拍摄';
   return 'ok';
 }
 
