@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>🧠 测你的心理年龄 Hm1</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding:20px 16px}
+.container{max-width:460px;margin:0 auto}
+.hero{text-align:center;margin:30px 0 20px}
+.hero .icon{font-size:56px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,#10b981,#34d399,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:10px}
+.hero p{color:#888;font-size:0.85rem;margin-top:6px}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:24px 18px;margin-bottom:16px}
+.progress{display:flex;gap:4px;margin-bottom:20px}
+.progress .dot{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.1)}
+.progress .dot.done{background:linear-gradient(90deg,#10b981,#06b6d4)}
+.qn{font-size:0.75rem;color:#10b981;margin-bottom:6px;font-weight:600}
+.qq{font-size:1.1rem;font-weight:700;margin-bottom:16px;line-height:1.4}
+.opt{display:block;width:100%;padding:14px 16px;margin-bottom:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);color:#e0e0e0;font-size:0.95rem;text-align:left;cursor:pointer;transition:all 0.2s}
+.opt:active{border-color:#10b981;background:rgba(16,185,129,0.12)}
+.hidden{display:none}
+.re{font-size:60px;text-align:center;margin-bottom:10px}
+.rt{display:block;text-align:center;padding:10px 24px;border-radius:25px;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;margin:10px auto;width:fit-content}
+.rs{text-align:center;font-size:0.85rem;color:#10b981;margin:8px 0}
+.rd{line-height:1.8;color:#b8b8d0}
+.lock{margin-top:16px;padding:20px;border-radius:14px;background:rgba(16,185,129,0.05);border:1px dashed rgba(16,185,129,0.2);text-align:center}
+.li{font-size:44px;margin-bottom:8px}.lock h4{color:#10b981;margin-bottom:4px}.lock p{font-size:0.8rem;color:#888;margin-bottom:12px}
+.ba{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:1px;animation:pulse 2.5s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(16,185,129,0.3)}50%{box-shadow:0 0 40px rgba(6,182,212,0.5)}}
+.bs{width:100%;margin-top:14px;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:#aaa;font-size:0.9rem;cursor:pointer}
+.br{width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:50px;color:#666;font-size:0.85rem;cursor:pointer}
+.foot{text-align:center;font-size:0.7rem;color:#555;margin:20px 0}
+</style></head>
+<body><div class="container">
+<div id="p1"><div class="hero"><div class="icon">🧠</div><h1>心理年龄测试</h1><p>你的内心真实年龄是多少？</p></div>
+<div class="card" style="text-align:center"><p style="color:#aaa;font-size:0.9rem;margin-bottom:16px">已有 <b style="color:#10b981" id="ct">512,843</b> 人完成</p>
+<button onclick="go()" style="width:100%;padding:16px;font-size:1.1rem;font-weight:700;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;border:none;border-radius:50px;cursor:pointer;letter-spacing:2px">🧠 开始测试</button></div>
+<p class="foot">⚠️ 仅供娱乐参考</p></div>
+<div id="p2" class="hidden"><div class="progress" id="pb"></div><div class="card"><div class="qn" id="qn"></div><div class="qq" id="qq"></div><div id="qo"></div></div></div>
+<div id="p3" class="hidden"><div class="re" id="re"></div><div class="rt" id="rt"></div><div class="rs" id="rs"></div><div class="card"><div class="rd" id="rd"></div></div>
+<div class="lock" id="lk"><div class="li">🔒</div><h4>完整报告已加密</h4><p>观看15秒广告解锁详细分析</p><button class="ba" onclick="un()">🔓 观看广告解锁</button></div>
+<div id="fr" class="hidden"><div class="card" style="border-color:rgba(16,185,129,0.2)"><div id="fc"></div></div></div>
+<button class="bs" onclick="sh()">📤 分享给朋友</button><button class="br" onclick="re()">🔄 重新测试</button><p class="foot">⚠️ 仅供娱乐参考</p></div></div>
+<script>
+var Q=[{q:"周末你最可能做什么？",o:["去公园跑步打球","在家追剧打游戏","约朋友逛街吃饭","安静看书喝咖啡"]},{q:"你喜欢听的音乐？",o:["最新流行热歌","十年前的经典","看心情随便听","老歌更有味道"]},{q:"对新科技的态度？",o:["第一时间尝鲜","等别人用了再说","觉得够用就行","不太会用也不想学"]},{q:"你的消费习惯？",o:["月光族赚多少花多少","有计划地储蓄投资","偶尔犒劳自己","精打细算能省就省"]},{q:"看到年轻人潮流？",o:["立刻跟风一起玩","看不懂但不排斥","觉得年轻人真会玩","完全不理解"]},{q:"遇到困难时？",o:["充满干劲迎难而上","先焦虑再想办法","求助别人帮忙","顺其自然不勉强"]},{q:"你的作息时间？",o:["凌晨才睡上午才起","规律早睡早起","看情况不固定","很早睡很早醒"]},{q:"对于人生规划？",o:["走一步看一步","有5年详细计划","大概有个方向","懒得想那么多"]},{q:"看到童年动画？",o:["立刻重温满满回忆","有点怀念但不会看","早就忘了","现在看觉得好幼稚"]},{q:"你觉得自己？",o:["心态永远18岁","比同龄人成熟","有时幼稚有时稳重","早就看透一切了"]}];
+var A=[0,0,0,0,0],N=0;
+function d(id){return document.getElementById(id)}
+function go(){A=[0,0,0,0,0];N=0;d('p1').className='hidden';d('p3').className='hidden';d('p2').className='';var p=d('pb');p.innerHTML='';for(var i=0;i<10;i++){var e=document.createElement('div');e.className='dot';e.id='d'+i;p.appendChild(e)}nxt();}
+function pick(i){A[i]++;N++;if(d('d'+(N-1)))d('d'+(N-1)).classList.add('done');if(N>=10){fin()}else{nxt()}}
+function nxt(){var q=Q[N];d('qn').textContent='第 '+(N+1)+'/10 题';d('qq').textContent=q.q;var o=d('qo');o.innerHTML='';for(var i=0;i<4;i++){o.innerHTML+='<button class="opt" onclick="pick('+i+')">'+q.o[i]+'</button>'}}
+function fin(){d('p2').className='hidden';d('p3').className='';d('fr').className='hidden';d('lk').className='lock';var m=0,idx=0;for(var i=0;i<5;i++){if(A[i]>m){m=A[i];idx=i}}
+var T=[{e:'👶',n:'心理年龄：15岁',s:'青春活力型',t:'你的心理年龄停留在花季少年少女时期。你对世界充满好奇和期待，心态永远年轻。你喜欢尝试新鲜事物，从不被年龄束缚。身边人说你是"永远长不大的孩子"，这其实是最大的赞美——很多人想回都回不去了。'},{e:'🧑',n:'心理年龄：25岁',s:'年轻活力型',t:'你的心理年龄处于黄金青年期。既有年轻人的冲劲和新潮，又比青春期的懵懂多了几分成熟。你在这个年龄段找到了最好的平衡——不焦虑未来，不后悔过去，活在当下。'},{e:'👨‍💼',n:'心理年龄：35岁',s:'成熟稳重型',t:'你的心理年龄进入中年成熟期。你知道自己想要什么，有清晰的规划，不会被一时的情绪左右。你不是老了，是成长了。偶尔也要记得让自己放松一下，别太严肃——偶尔年轻一把。'},{e:'👴',n:'心理年龄：55岁',s:'老成持重型',t:'你的心理年龄远超生理年龄。你沉稳内敛、不争不抢，看透了人情冷暖。你喜欢安静独处，对浮躁的世界保持着距离。你的智慧是岁月沉淀的结果，但偶尔也要允许自己像个孩子一样开怀大笑。'},{e:'🌟',n:'心理年龄：∞',s:'超越年龄型',t:'你已经超越了年龄的概念。你的心态自由切换——工作时成熟睿智，玩乐时像个孩子。你不在意别人怎么看"你这个年纪该做什么"。你是年龄的主人而非奴隶。这才是真正的年轻——不被数字定义。'}];
+var t=T[idx];d('re').textContent=t.e;d('rt').textContent=t.n;d('rs').textContent=t.s;d('rd').textContent=t.t;window.scrollTo(0,0)}
+function un(){setTimeout(function(){d('fr').className='';d('lk').className='hidden';var idx=0,m=0;for(var i=0;i<5;i++){if(A[i]>m){m=A[i];idx=i}};var F=['🧠 心理年龄深度报告\n\n👶 15岁心态\n⭐ 青春活力指数：95%\n⭐ 成熟度：15%\n⭐ 好奇心：98%\n\n💡 建议：保持这份童心，但重要决定前多听听身边人的意见。\n🎯 2026预测：社交圈扩大，新朋友带来新机遇。\n⭐ 综合评分：88分','🧠 心理年龄深度报告\n\n🧑 25岁心态\n⭐ 活力平衡指数：90%\n⭐ 成熟度：60%\n⭐ 心态弹性：92%\n\n💡 建议：你是最理想的状态，保持住。平衡好工作与生活。\n🎯 2026预测：事业上升期，抓住机会。\n⭐ 综合评分：95分','🧠 心理年龄深度报告\n\n👨‍💼 35岁心态\n⭐ 成熟度：85%\n⭐ 活力值：50%\n⭐ 规划力：90%\n\n💡 建议：你是团队的定心丸。偶尔放松给自己放个假。\n🎯 2026预测：管理工作出色，可能晋升。\n⭐ 综合评分：87分','🧠 心理年龄深度报告\n\n👴 55岁心态\n⭐ 成熟度：98%\n⭐ 活力值：15%\n⭐ 智慧值：95%\n\n💡 建议：你的智慧是宝藏。多与年轻人交流，保持活力。\n🎯 2026预测：投资眼光精准，财务稳步增长。\n⭐ 综合评分：82分','🧠 心理年龄深度报告\n\n🌟 超越年龄\n⭐ 心理弹性：100%\n⭐ 适应性：99%\n⭐ 幸福指数：96%\n\n💡 建议：你是年龄自由的人。继续活出真我，你的状态会感染更多人。\n🎯 2026预测：人生进入新阶段，创造力爆发。\n⭐ 综合评分：99分'];d('fc').innerHTML=F[idx].replace(/\n/g,'<br>')},1500)}
+function sh(){if(navigator.share){navigator.share({title:'🧠 测你的心理年龄',text:'测完惊呆了！我的心理年龄竟然是这个！来测测你的！',url:location.href}).catch(function(){})}else{prompt('复制链接：',location.href)}}
+function re(){d('p3').className='hidden';d('p1').className='';window.scrollTo(0,0)}
+setInterval(function(){var e=d('ct');if(e){var n=parseInt(e.textContent.replace(/,/g,''))||512000;n+=Math.floor(Math.random()*9)+1;e.textContent=n.toLocaleString()}},6000);
+</script></body></html>
