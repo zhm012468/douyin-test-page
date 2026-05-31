@@ -879,7 +879,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v2.2</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v2.3</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1532,8 +1532,9 @@ function showPalmError(title, msg) {
 }
 
 // ============================================================
-// ★ 手掌校验系统（宽松版）
-// 规则：是手掌就放行、手背/握拳/非手图弹窗拦截
+// ★ 手掌校验系统（增强版）
+// 手心特征：中心偏粉红 + 纹路密集 + 区域纹理方差大
+// 手背特征：颜色均匀偏黄 + 光滑 + 纹理方差小
 // ============================================================
 function validatePalmStrict(imageData) {
   var data = imageData.data;
@@ -1541,45 +1542,86 @@ function validatePalmStrict(imageData) {
   var h = imageData.height;
   var total = data.length / 4;
 
-  // 肤色 + 纹理统计
   var skinCount = 0;
-  var centerTexSum = 0, centerTexCount = 0;
+  var centerSamples = []; // 中心区域像素采样
+  var outerSamples = [];  // 外圈采样
   var cx = Math.floor(w/2), cy = Math.floor(h/2);
-  var rw = Math.floor(w*0.3), rh = Math.floor(h*0.3);
+  var ir = Math.floor(Math.min(w,h)*0.18); // 内圈半径
+  var or = Math.floor(Math.min(w,h)*0.38); // 外圈半径
 
   for (var y = 0; y < h; y++) {
     for (var x = 0; x < w; x++) {
       var idx = (y*w + x)*4;
       var r = data[idx], g = data[idx+1], b = data[idx+2];
-      var isSkin = (r > 75 && g > 35 && b > 15 && r > g && r > b && (r-g) > 10);
-      if (isSkin) skinCount++;
-      // 中心纹理
-      if (isSkin && x > cx-rw && x < cx+rw && y > cy-rh && y < cy+rh) {
-        // 计算局部梯度
-        if (x > 0 && x < w-1 && y > 0 && y < h-1) {
-          var idx2 = (y*w + x)*4;
-          centerTexSum += Math.abs(data[idx2] - data[idx2+4]) + Math.abs(data[idx2] - data[idx2+w*4]);
-          centerTexCount++;
-        }
+      var isSkin = (r > 70 && g > 30 && b > 12 && r > g && (r-g) > 8 && r > b);
+      if (!isSkin) continue;
+      skinCount++;
+
+      // 计算到中心的距离
+      var dx = x - cx, dy = y - cy;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (dist < ir) {
+        // 中心区域（掌心，应有纹路）
+        centerSamples.push({r:r, g:g, b:b, x:x, y:y});
+      } else if (dist > or) {
+        // 外圈（手掌边缘，较浅）
+        outerSamples.push({r:r, g:g, b:b});
       }
     }
   }
+
   var skinRatio = skinCount / total;
-  var centerTexture = centerTexCount > 0 ? centerTexSum / centerTexCount : 0;
 
   // 第1关：非手图拦截
   if (skinRatio < 0.15) {
     return {valid:false, code:'nohand', title:'未检测到手掌', msg:'系统未能检测到人类手掌\n\n请上传真实的人类手掌照片\n确保手掌占据画面主体位置\n\n⚠️ 风景、动物、物品等非手图像无法通过'};
   }
 
-  // 第2关：握拳/手指蜷缩拦截（肤色占比高但中心纹理极低 = 拳头/手背）
-  if (centerTexture < 1.8) {
-    return {valid:false, code:'fist', title:'检测为手背或握拳', msg:'系统识别到肤色但中心纹路不足\n\n可能情况：\n• 手背（皮肤光滑无掌纹）\n• 握拳（手指蜷缩看不到掌心）\n• 手指侧面（非掌心正面）\n\n请将手掌完全摊开，掌心朝上重新拍摄'};
+  // 第2关：手心 vs 手背分析
+  if (centerSamples.length < 200) {
+    return {valid:false, code:'angle', title:'掌心区域过小', msg:'手掌中心有效像素不足\n\n请将手掌靠近镜头或调整角度\n确保掌心完整出现在画面中央'};
   }
 
-  // 第3关：其他图拦截（非肤色）
-  if (skinRatio < 0.25 && centerTexture < 2.5) {
-    return {valid:false, code:'other', title:'非手掌图像', msg:'请上传真实的人类手掌照片\n掌心朝上、手指自然展开\n\n支持格式：拍照或相册选择'};
+  // 计算中心 vs 外圈的颜色差异
+  var cAvgR=0,cAvgG=0,cAvgB=0, oAvgR=0,oAvgG=0,oAvgB=0;
+  for (var i=0;i<centerSamples.length;i++){ cAvgR+=centerSamples[i].r; cAvgG+=centerSamples[i].g; cAvgB+=centerSamples[i].b; }
+  cAvgR/=centerSamples.length; cAvgG/=centerSamples.length; cAvgB/=centerSamples.length;
+  for (var i=0;i<outerSamples.length;i++){ oAvgR+=outerSamples[i].r; oAvgG+=outerSamples[i].g; oAvgB+=outerSamples[i].b; }
+  if (outerSamples.length>0){ oAvgR/=outerSamples.length; oAvgG/=outerSamples.length; oAvgB/=outerSamples.length; }
+  else { oAvgR=cAvgR; oAvgG=cAvgG; oAvgB=cAvgB; }
+
+  // 手心特征：中心红度 > 外圈红度（血液集中在掌心）
+  var centerRedRatio = cAvgR / (cAvgG + cAvgB + 1);
+  var outerRedRatio = oAvgR / (oAvgG + oAvgB + 1);
+  var redDrop = centerRedRatio - outerRedRatio; // 手心为正，手背接近0
+
+  // 手背特征：R/G比接近1（偏黄），手心R/G比 > 1.15（偏粉红）
+  var centerRG = cAvgR / (cAvgG + 1);
+  var outerRG = oAvgR / (oAvgG + 1);
+
+  // 综合判断
+  var isBackHand = (redDrop < 0.01 && centerRG < 1.08) || (centerRG < 1.04);
+
+  if (isBackHand) {
+    return {valid:false, code:'back', title:'识别为手背或握拳', msg:'系统检测到此图像为手背/握拳\n\n手背特征：\n• 中心与外圈颜色均匀\n• 偏黄色调，无粉红掌心\n• 皮肤光滑缺少纹路\n\n手心特征：\n• 掌心发粉红色\n• 可见掌纹纹路\n\n请将手掌摊开、掌心朝上重新拍摄'};
+  }
+
+  // 第3关：中心纹理验证（手背光滑 vs 手心有纹路）
+  var texSum=0, texCount=0;
+  for (var i=0;i<centerSamples.length;i++){
+    var x=centerSamples[i].x, y=centerSamples[i].y;
+    if (x>0 && x<w-1 && y>0 && y<h-1){
+      var idx=(y*w + x)*4;
+      texSum += Math.abs(data[idx]-data[idx+4]) + Math.abs(data[idx]-data[idx+w*4])
+              + Math.abs(data[idx+1]-data[idx+5]) + Math.abs(data[idx+1]-data[idx+1+w*4]);
+      texCount++;
+    }
+  }
+  var centerTexture = texCount>0 ? texSum/texCount : 0;
+
+  if (centerTexture < 2.2) {
+    return {valid:false, code:'smooth', title:'掌心纹路不足', msg:'中心区域纹理过于平滑\n\n手掌中心应有可见的生命线、智慧线、感情线\n手背皮肤通常无此纹路特征\n\n请确认掌心朝上、手指自然展开\n在自然光下重新拍摄'};
   }
 
   return {valid:true};
