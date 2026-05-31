@@ -1532,12 +1532,8 @@ function showPalmError(title, msg) {
 }
 
 // ============================================================
-// ★ 严格手掌校验系统
-// 判定规则：
-//   1. 必须掌心朝上（手心面向相机）
-//   2. 严禁手背/侧手/握拳等无效画面
-//   3. 必须清晰可见三大主线（生命线、智慧线、感情线）
-//   4. 禁止模糊/遮挡/截取不全的照片
+// ★ 手掌校验系统（宽松版）
+// 规则：是手掌就放行、手背/握拳/非手图弹窗拦截
 // ============================================================
 function validatePalmStrict(imageData) {
   var data = imageData.data;
@@ -1545,158 +1541,48 @@ function validatePalmStrict(imageData) {
   var h = imageData.height;
   var total = data.length / 4;
 
-  // ---------- 第1关：肤色占比检测 ----------
+  // 肤色 + 纹理统计
   var skinCount = 0;
-  var centerR = 0, centerG = 0, centerB = 0, centerCount = 0;
-  var edgeR = 0, edgeG = 0, edgeB = 0, edgeCount = 0;
+  var centerTexSum = 0, centerTexCount = 0;
   var cx = Math.floor(w/2), cy = Math.floor(h/2);
-  var rw = Math.floor(w*0.25), rh = Math.floor(h*0.25);
+  var rw = Math.floor(w*0.3), rh = Math.floor(h*0.3);
 
   for (var y = 0; y < h; y++) {
     for (var x = 0; x < w; x++) {
       var idx = (y*w + x)*4;
       var r = data[idx], g = data[idx+1], b = data[idx+2];
-      var isSkin = (r > 80 && g > 40 && b > 18 && r > g && r > b && (r-g) > 12 && (r-b) > 15);
-      if (isSkin) {
-        skinCount++;
-        // 中心区域采样（掌心纹路区）
-        if (x > cx-rw && x < cx+rw && y > cy-rh && y < cy+rh) {
-          centerR += r; centerG += g; centerB += b; centerCount++;
+      var isSkin = (r > 75 && g > 35 && b > 15 && r > g && r > b && (r-g) > 10);
+      if (isSkin) skinCount++;
+      // 中心纹理
+      if (isSkin && x > cx-rw && x < cx+rw && y > cy-rh && y < cy+rh) {
+        // 计算局部梯度
+        if (x > 0 && x < w-1 && y > 0 && y < h-1) {
+          var idx2 = (y*w + x)*4;
+          centerTexSum += Math.abs(data[idx2] - data[idx2+4]) + Math.abs(data[idx2] - data[idx2+w*4]);
+          centerTexCount++;
         }
-      }
-      // 边缘区域采样
-      if (x < w*0.15 || x > w*0.85 || y < h*0.1 || y > h*0.9) {
-        if (isSkin) { edgeR += r; edgeG += g; edgeB += b; edgeCount++; }
       }
     }
   }
   var skinRatio = skinCount / total;
-  if (skinRatio < 0.18) return {valid:false, code:'skin', title:'非手掌图像', msg:'检测到肤色区域不足 18%\n\n请上传掌心朝上的真实手掌照片\n确保手掌占据画面主体位置'};
+  var centerTexture = centerTexCount > 0 ? centerTexSum / centerTexCount : 0;
 
-  // ---------- 第2关：掌心朝向检测（手心 vs 手背） ----------
-  // 手心特征：中心区域颜色偏粉红（血色素），边缘颜色较浅
-  // 手背特征：整体颜色均匀偏黄/偏暗，中心无特殊纹理
-  if (centerCount < 100) return {valid:false, code:'angle', title:'无法识别掌心', msg:'手掌中心区域识别失败\n\n请确保掌心正对镜头\n避免倾斜角度过大或距离过远'};
-
-  centerR /= centerCount; centerG /= centerCount; centerB /= centerCount;
-  edgeR = edgeCount > 0 ? edgeR/edgeCount : centerR;
-  edgeG = edgeCount > 0 ? edgeG/edgeCount : centerG;
-  edgeB = edgeCount > 0 ? edgeB/edgeCount : centerB;
-
-  // 手心：中心粉红(高R,中G,中B)，边缘偏浅
-  // 手背：中心边缘颜色接近，R:G比值接近1:1，且整体偏暗
-  var centerRedRatio = centerR / (centerG + centerB + 1);
-  var edgeRedRatio = edgeR / (edgeG + edgeB + 1);
-  var palmScore = centerRedRatio - edgeRedRatio; // 手心时中心更红
-  // 额外判定：手背通常R和G更接近（偏黄），手心R明显>G
-  var centerRGdiff = (centerR - centerG) / (centerR + 1);
-
-  if (palmScore < 0.02 || centerRGdiff < 0.06) {
-    return {valid:false, code:'back', title:'检测为手背或侧面', msg:'系统识别到此图像为手背/侧面/握拳姿态\n\n手背特征：中心与边缘色泽均匀\n手心特征：掌心粉红、纹路密集\n\n请将手掌完全摊开，掌心朝上正对镜头\n⚠️ 仅接受掌心向上的手心照片'};
+  // 第1关：非手图拦截
+  if (skinRatio < 0.15) {
+    return {valid:false, code:'nohand', title:'未检测到手掌', msg:'系统未能检测到人类手掌\n\n请上传真实的人类手掌照片\n确保手掌占据画面主体位置\n\n⚠️ 风景、动物、物品等非手图像无法通过'};
   }
 
-  // ---------- 第2.5关：中心纹理复杂度（手心远大于手背） ----------
-  var centerTexture = detectCenterTexture(data, w, h);
-  if (centerTexture < 3.5) {
-    return {valid:false, code:'smooth', title:'掌心纹路缺失', msg:'手掌中心区域过于平滑\n\n手掌中心应可见清晰的纹路交叉\n手背皮肤通常较为光滑无纹\n\n请在自然光下对准掌心重新拍摄\n确保生命线、智慧线、感情线可见'};
+  // 第2关：握拳/手指蜷缩拦截（肤色占比高但中心纹理极低 = 拳头/手背）
+  if (centerTexture < 1.8) {
+    return {valid:false, code:'fist', title:'检测为手背或握拳', msg:'系统识别到肤色但中心纹路不足\n\n可能情况：\n• 手背（皮肤光滑无掌纹）\n• 握拳（手指蜷缩看不到掌心）\n• 手指侧面（非掌心正面）\n\n请将手掌完全摊开，掌心朝上重新拍摄'};
   }
 
-  // ---------- 第3关：纹路检测（三大主线验证） ----------
-  var lineScore = detectPalmLines(data, w, h);
-  if (lineScore < 0.35) {
-    return {valid:false, code:'nolines', title:'掌纹纹路不清晰', msg:'未能检测到清晰的生命线/智慧线/感情线\n\n可能原因：\n• 手背皮肤纹理少（请确认掌心朝上）\n• 光线过暗导致纹路不可见\n• 照片分辨率太低\n\n请在自然光下对准掌心重新拍摄'};
+  // 第3关：其他图拦截（非肤色）
+  if (skinRatio < 0.25 && centerTexture < 2.5) {
+    return {valid:false, code:'other', title:'非手掌图像', msg:'请上传真实的人类手掌照片\n掌心朝上、手指自然展开\n\n支持格式：拍照或相册选择'};
   }
 
-  // ---------- 第4关：模糊度检测 ----------
-  var blurScore = detectBlur(data, w, h);
-  if (blurScore < 8) {
-    return {valid:false, code:'blurry', title:'照片过于模糊', msg:'图像清晰度不足，无法进行掌纹分析\n\n请擦净镜头，在充足光线下\n保持手掌稳定后重新拍摄\n\n💡 建议：将手掌放在平整桌面上拍摄'};
-  }
-
-  // ---------- 第5关：完整性检测 ----------
-  var fillRatio = skinCount / total;
-  if (fillRatio < 0.22) {
-    return {valid:false, code:'partial', title:'手掌不完整或距离过远', msg:'检测到手掌在画面中占比不足\n\n请将手掌靠近镜头\n确保完整的掌心区域在画面内\n避免手指被裁切或手掌部分出框'};
-  }
-
-  // 全部通过
-  return {valid:true, lineScore:lineScore, blurScore:blurScore, palmScore:palmScore};
-}
-
-// 中心区域纹理复杂度（区分手心纹路 vs 手背光滑皮肤）
-function detectCenterTexture(data, w, h) {
-  var gray = new Float32Array(w*h);
-  for (var i = 0; i < w*h; i++) {
-    var idx = i*4;
-    gray[i] = 0.299*data[idx] + 0.587*data[idx+1] + 0.114*data[idx+2];
-  }
-  // 只看中心25%区域（手掌三大主线交汇处）
-  var cx = Math.floor(w*0.35), ex = Math.floor(w*0.65);
-  var cy = Math.floor(h*0.35), ey = Math.floor(h*0.65);
-  var sum = 0, count = 0;
-  for (var y = cy; y < ey; y++) {
-    for (var x = cx; x < ex; x++) {
-      var idx = y*w + x;
-      var localVar = Math.abs(gray[idx] - gray[idx+1]) + Math.abs(gray[idx] - gray[idx+2])
-                   + Math.abs(gray[idx] - gray[idx+w]) + Math.abs(gray[idx] - gray[idx-1]);
-      sum += localVar;
-      count++;
-    }
-  }
-  return count > 0 ? sum/count : 0;
-}
-
-// Sobel边缘检测 → 评估纹路复杂度
-function detectPalmLines(data, w, h) {
-  var gray = new Float32Array(w*h);
-  for (var i = 0; i < w*h; i++) {
-    var idx = i*4;
-    gray[i] = 0.299*data[idx] + 0.587*data[idx+1] + 0.114*data[idx+2];
-  }
-  // 采样中心60%区域（掌纹最集中的区域）
-  var sx = Math.floor(w*0.2), ex = Math.floor(w*0.8);
-  var sy = Math.floor(h*0.2), ey = Math.floor(h*0.8);
-  var edgeSum = 0, edgeCount = 0;
-  for (var y = sy+1; y < ey-1; y++) {
-    for (var x = sx+1; x < ex-1; x++) {
-      var idx = y*w + x;
-      var gx = Math.abs(gray[idx-1] - gray[idx+1]);
-      var gy = Math.abs(gray[idx-w] - gray[idx+w]);
-      var mag = Math.sqrt(gx*gx + gy*gy);
-      edgeSum += mag;
-      edgeCount++;
-      if (edgeCount % 50 === 0 && edgeCount > 0) {
-        // 提前判断：如果前50个样本中高梯度像素比例过低，快速返回
-        if (edgeCount === 50 && edgeSum / 50 < 8) return 0.15;
-      }
-    }
-  }
-  var avgEdge = edgeSum / Math.max(edgeCount, 1);
-  // 归一化：健康掌纹的Sobel均值在10-30之间
-  var score = Math.min(1, Math.max(0, (avgEdge - 5) / 25));
-  return score;
-}
-
-// 拉普拉斯方差 → 模糊度检测
-function detectBlur(data, w, h) {
-  var gray = new Float32Array(w*h);
-  for (var i = 0; i < w*h; i++) {
-    var idx = i*4;
-    gray[i] = 0.299*data[idx] + 0.587*data[idx+1] + 0.114*data[idx+2];
-  }
-  var sum = 0, sumSq = 0, count = 0;
-  var step = 8; // 跳行采样，性能优化
-  for (var y = 2*step; y < h-2*step; y += step) {
-    for (var x = 2*step; x < w-2*step; x += step) {
-      var idx = y*w + x;
-      var lap = 4*gray[idx] - gray[idx-w*step] - gray[idx+w*step] - gray[idx-step] - gray[idx+step];
-      sum += lap;
-      sumSq += lap*lap;
-      count++;
-    }
-  }
-  var variance = (sumSq/count) - (sum/count)*(sum/count);
-  return Math.sqrt(Math.abs(variance));
+  return {valid:true};
 }
 
 // 替换原有的简单检测
