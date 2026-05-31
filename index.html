@@ -990,6 +990,35 @@ body {
   <!-- ========== 移动端底部个签装饰 ========== -->
   <div class="signature-bar mobile-sig sig-bottom">— 欲买桂花同载酒，终不似，少年游 —</div>
 
+  <!-- ========== 屏幕4: 管理员查询工具（?admin 访问） ========== -->
+  <div class="screen" id="screen-admin">
+    <div style="text-align:center;margin-top:40px;">
+      <div style="font-size:2rem;">🔓</div>
+      <h2 style="font-size:1.2rem;font-weight:700;margin:8px 0;color:#f59e0b;">管理员查询工具</h2>
+      <p style="font-size:0.75rem;color:var(--text-muted);">输入用户信息，查看完整未加密报告</p>
+    </div>
+    <div class="input-card" style="margin-top:16px;">
+      <div class="input-group">
+        <label>✦ 对方姓名</label>
+        <input type="text" id="admin-name" placeholder="输入姓名" maxlength="20" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <label>✦ 出生日期</label>
+        <input type="date" id="admin-birthday">
+      </div>
+      <button class="cta-btn" onclick="adminShowResult()" style="margin-top:4px;">🔍 查询完整报告</button>
+    </div>
+    <!-- ★ 完整报告结果区域 -->
+    <div id="admin-result" style="display:none;width:100%;margin-top:16px;">
+      <div class="result-card" style="border-color:rgba(245,158,11,0.3);">
+        <div class="card-title" style="color:#f59e0b;"><span class="icon">🔓</span> 完整性格报告（未加密）</div>
+        <div id="admin-report-content"></div>
+        <button class="cta-btn" onclick="copyAdminReport()" style="margin-top:14px;font-size:0.9rem;animation:none;">📋 一键复制报告文字</button>
+      </div>
+    </div>
+    <button class="retry-btn" onclick="location.href='/'">🏠 返回首页</button>
+  </div>
+
 </div>
 
 <!-- ============================================================
@@ -1553,6 +1582,116 @@ function showToast(msg) {
     toast.style.transition = 'opacity 0.5s';
     setTimeout(function() { document.body.removeChild(toast); }, 500);
   }, 2000);
+}
+
+// ============================================================
+// 管理员查询模式（访问 ?admin 进入）
+// ============================================================
+(function() {
+  if (window.location.search.indexOf('admin') !== -1) {
+    document.addEventListener('DOMContentLoaded', function() {
+      // 隐藏所有主屏幕
+      var screens = document.querySelectorAll('.screen');
+      for (var i = 0; i < screens.length; i++) { screens[i].classList.remove('active'); }
+      document.getElementById('screen-admin').classList.add('active');
+      // 隐藏桌面端个签
+      var desktopSigs = document.querySelectorAll('.desktop-sig');
+      for (var i = 0; i < desktopSigs.length; i++) { desktopSigs[i].style.display = 'none'; }
+    });
+  }
+})();
+
+function adminShowResult() {
+  var name = document.getElementById('admin-name').value.trim();
+  var birthday = document.getElementById('admin-birthday').value;
+  if (!name || !birthday) { alert('请填写姓名和出生日期'); return; }
+
+  var parts = birthday.split('-');
+  var year = parseInt(parts[0], 10);
+  var month = parseInt(parts[1], 10);
+  var day = parseInt(parts[2], 10);
+
+  var pIdx = getPersonalityIndex(name, month, day);
+  var personality = PERSONALITY_DB[pIdx];
+  var zodiac = getZodiac(month, day);
+  var animal = getChineseZodiac(year);
+
+  var colorIdx = getVariant(pIdx, month, day, LUCKY_COLORS.length);
+  var dirIdx = getVariant(pIdx, month + day, day, LUCKY_DIRECTIONS.length);
+  var loveIdx = getVariant(pIdx, month, day + 3, 3);
+  var careerIdx = getVariant(pIdx, day, month + 5, 3);
+  var keywordIdx = getVariant(pIdx, month + day, day + 7, 3);
+
+  var loveOpts = [personality.love, '灵魂伴侣近在眼前', '旧情复燃的可能'];
+  var careerOpts = [personality.career, '贵人即将出现', '跳槽最佳时机已到'];
+  var keywordOpts = [personality.keyword, '吸引力法则', '蜕变'];
+
+  var html = '';
+  html += '<div style="text-align:center;margin-bottom:14px;">';
+  html += '<span class="zodiac-badge">♈ ' + zodiac + '</span> ';
+  html += '<span class="zodiac-badge">' + animal + '</span>';
+  html += '<div style="font-size:1.3rem;font-weight:800;margin:8px 0;background:linear-gradient(135deg,#ec4899,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + name + '</div>';
+  html += '<span class="personality-tag" style="display:inline-block;">' + personality.name + '</span>';
+  html += '</div>';
+
+  html += '<div style="margin-top:6px;"><strong>🌟 性格画像：</strong></div>';
+  html += '<ul class="trait-list">';
+  for (var i = 0; i < personality.free.length; i++) {
+    html += '<li>' + personality.free[i] + '</li>';
+  }
+  html += '</ul>';
+
+  html += '<div class="fortune-tags" style="margin-bottom:12px;">';
+  html += '<div class="fortune-tag"><div class="ft-label">🎨 幸运色</div><div class="ft-value">' + getLuckyColor(colorIdx) + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">🔢 幸运数</div><div class="ft-value">' + getLuckyNumber(name, month, day) + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">🧭 幸运方位</div><div class="ft-value">' + getLuckyDirection(dirIdx) + '</div></div>';
+  html += '</div>';
+
+  html += '<div style="margin-top:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">';
+  html += '<strong>🔐 深度解读（管理员可见）：</strong></div>';
+  html += '<ul class="trait-list">';
+  for (var i = 0; i < personality.locked.length; i++) {
+    html += '<li>' + personality.locked[i] + '</li>';
+  }
+  html += '</ul>';
+
+  html += '<div class="fortune-tags">';
+  html += '<div class="fortune-tag"><div class="ft-label">💝 情感运势</div><div class="ft-value">' + loveOpts[loveIdx] + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">💼 事业运势</div><div class="ft-value">' + careerOpts[careerIdx] + '</div></div>';
+  html += '<div class="fortune-tag"><div class="ft-label">🧘 2026关键词</div><div class="ft-value">' + keywordOpts[keywordIdx] + '</div></div>';
+  html += '</div>';
+
+  html += '<p style="margin-top:10px;font-size:0.78rem;color:var(--text-muted);text-align:center;">以上为' + name + '的深度性格报告完整版。</p>';
+
+  // 如果有手掌图片，也加上
+  if (palmImageData) {
+    var analysis = analyzePalm(palmImageData);
+    var reading = getPalmReading(analysis);
+    html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">';
+    html += '<strong>🔍 AI掌纹报告：</strong>';
+    html += '<p>🧬 生命线（' + '★'.repeat(reading.life.level) + '）: ' + reading.life.text + '</p>';
+    html += '<p>🧠 智慧线（' + '★'.repeat(reading.wisdom.level) + '）: ' + reading.wisdom.text + '</p>';
+    html += '<p>💖 感情线（' + '★'.repeat(reading.love.level) + '）: ' + reading.love.text + '</p>';
+    html += '<p>💼 事业线（' + '★'.repeat(reading.career.level) + '）: ' + reading.career.text + '</p>';
+    html += '<p style="color:var(--gradient-1);text-align:center;">综合评分：' + reading.overall + '/16 分</p>';
+    html += '</div>';
+  }
+
+  document.getElementById('admin-report-content').innerHTML = html;
+  document.getElementById('admin-result').style.display = 'block';
+  window.scrollTo({ top: document.getElementById('admin-result').offsetTop - 20, behavior: 'smooth' });
+}
+
+function copyAdminReport() {
+  var content = document.getElementById('admin-report-content').innerText;
+  if (!content) return;
+  var textarea = document.createElement('textarea');
+  textarea.value = '═══ 双面人格测试 · 完整报告 ═══\n\n' + content + '\n\n以上为完整版性格报告，感谢参与测试 ✨';
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+  showToast('✅ 报告已复制，可直接粘贴发给对方！');
 }
 
 // ============================================================
