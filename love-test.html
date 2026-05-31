@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>💔 恋爱人格测试｜v3</title>
+<title>💔 恋爱人格测试 v4</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding:20px 16px}
@@ -20,142 +18,114 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a1a;c
 .progress{display:flex;gap:4px;margin-bottom:20px}
 .progress .dot{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.1)}
 .progress .dot.done{background:linear-gradient(90deg,#f472b6,#ec4899)}
-.q-num{font-size:0.75rem;color:#f472b6;margin-bottom:6px;font-weight:600}
-.q-title{font-size:1.1rem;font-weight:700;margin-bottom:16px;line-height:1.4}
-.opt{display:block;width:100%;padding:14px 16px;margin-bottom:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);color:#e0e0e0;font-size:0.95rem;text-align:left;transition:all 0.2s}
+.qn{font-size:0.75rem;color:#f472b6;margin-bottom:6px;font-weight:600}
+.qq{font-size:1.1rem;font-weight:700;margin-bottom:16px;line-height:1.4}
+.opt{display:block;width:100%;padding:14px 16px;margin-bottom:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);color:#e0e0e0;font-size:0.95rem;text-align:left;cursor:pointer;transition:all 0.2s}
 .opt:active{border-color:#f472b6;background:rgba(244,114,182,0.12)}
-.result-area{display:none}
-.r-emoji{font-size:60px;text-align:center;margin-bottom:10px}
-.r-type{text-align:center;display:block;padding:10px 24px;border-radius:25px;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;margin:10px auto;width:fit-content}
-.r-score{text-align:center;font-size:0.85rem;color:#f472b6;margin:8px 0}
-.r-desc{line-height:1.8;color:#b8b8d0}
-.lock-box{margin-top:16px;padding:20px;border-radius:14px;background:rgba(244,114,182,0.05);border:1px dashed rgba(244,114,182,0.2);text-align:center}
-.lock-box .li{font-size:44px;margin-bottom:8px}
-.lock-box h4{color:#f472b6;margin-bottom:4px}
-.lock-box p{font-size:0.8rem;color:#888;margin-bottom:12px}
-.btn-ad{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:1px;animation:pulse 2.5s infinite}
+.hidden{display:none}
+.re{font-size:60px;text-align:center;margin-bottom:10px}
+.rt{display:block;text-align:center;padding:10px 24px;border-radius:25px;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;margin:10px auto;width:fit-content}
+.rs{text-align:center;font-size:0.85rem;color:#f472b6;margin:8px 0}
+.rd{line-height:1.8;color:#b8b8d0}
+.lock{margin-top:16px;padding:20px;border-radius:14px;background:rgba(244,114,182,0.05);border:1px dashed rgba(244,114,182,0.2);text-align:center}
+.li{font-size:44px;margin-bottom:8px}
+.lock h4{color:#f472b6;margin-bottom:4px}
+.lock p{font-size:0.8rem;color:#888;margin-bottom:12px}
+.ba{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:1px;animation:pulse 2.5s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(244,114,182,0.3)}50%{box-shadow:0 0 40px rgba(236,72,153,0.5)}}
-.btn-share{width:100%;margin-top:14px;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:#aaa;font-size:0.9rem}
-.btn-retry{width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:50px;color:#666;font-size:0.85rem}
+.bs{width:100%;margin-top:14px;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:#aaa;font-size:0.9rem;cursor:pointer}
+.br{width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:50px;color:#666;font-size:0.85rem;cursor:pointer}
 .foot{text-align:center;font-size:0.7rem;color:#555;margin:20px 0}
-.tcount{text-align:center;font-size:0.75rem;color:#666;margin-top:16px}
 </style>
 </head>
 <body>
-<div class="container" id="app">
-<div id="intro">
+<div class="container">
+<div id="p1">
   <div class="hero"><div class="icon">💔</div><h1>恋爱人格测试</h1><p>10题测出你的恋爱类型</p></div>
   <div class="card" style="text-align:center">
-    <p style="color:#aaa;font-size:0.9rem;margin-bottom:16px">已有 <b style="color:#f472b6" id="ct">289,341</b> 人完成</p>
-    <button onclick="start()" style="width:100%;padding:16px;font-size:1.1rem;font-weight:700;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border:none;border-radius:50px;cursor:pointer;letter-spacing:2px">💘 开始测试</button>
+    <p style="color:#aaa;font-size:0.9rem;margin-bottom:16px">已有 <b style="color:#f472b6" id="ct">289,431</b> 人完成</p>
+    <button onclick="go()" style="width:100%;padding:16px;font-size:1.1rem;font-weight:700;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border:none;border-radius:50px;cursor:pointer;letter-spacing:2px">💘 开始测试</button>
   </div>
   <p class="foot">⚠️ 仅供娱乐参考</p>
 </div>
-<div id="quiz" style="display:none">
+<div id="p2" class="hidden">
   <div class="progress" id="pb"></div>
   <div class="card">
-    <div class="q-num" id="qn"></div>
-    <div class="q-title" id="qq"></div>
+    <div class="qn" id="qn"></div>
+    <div class="qq" id="qq"></div>
     <div id="qo"></div>
   </div>
 </div>
-<div id="result" style="display:none">
-  <div class="result-area" id="ra">
-    <div class="r-emoji" id="re"></div>
-    <div class="r-type" id="rt"></div>
-    <div class="r-score" id="rs"></div>
-    <div class="card"><div class="r-desc" id="rd"></div></div>
-    <div class="lock-box" id="lock">
-      <div class="li">🔒</div><h4>深度恋爱报告已加密</h4><p>观看15秒广告解锁完整分析</p>
-      <button class="btn-ad" onclick="unlock()">🔓 观看广告解锁</button>
-    </div>
-    <div id="full" style="display:none"><div class="card" style="border-color:rgba(244,114,182,0.2)"><div id="fc"></div></div></div>
-    <button class="btn-share" onclick="share()">📤 分享给朋友测一测</button>
-    <button class="btn-retry" onclick="retry()">🔄 重新测试</button>
+<div id="p3" class="hidden">
+  <div class="re" id="re"></div>
+  <div class="rt" id="rt"></div>
+  <div class="rs" id="rs"></div>
+  <div class="card"><div class="rd" id="rd"></div></div>
+  <div class="lock" id="lk">
+    <div class="li">🔒</div><h4>深度报告已加密</h4><p>观看15秒广告解锁完整分析</p>
+    <button class="ba" onclick="un()">🔓 观看广告解锁</button>
   </div>
+  <div id="fr" class="hidden"><div class="card" style="border-color:rgba(244,114,182,0.2)"><div id="fc"></div></div></div>
+  <button class="bs" onclick="sh()">📤 分享给朋友</button>
+  <button class="br" onclick="re()">🔄 重新测试</button>
   <p class="foot">⚠️ 仅供娱乐参考</p>
 </div>
 </div>
 <script>
 var Q=[
-  {q:"约会时，你最看重对方的什么？",o:["外表颜值","谈吐和思想","经济条件","感觉对了就行"]},
-  {q:"吵架后你会怎么做？",o:["立刻道歉哄对方","冷静下来再沟通","等对方先来找你","吵完就忘无所谓"]},
-  {q:"你理想的第一次约会地点？",o:["浪漫高级餐厅","安静书店咖啡厅","游乐场电玩城","大自然户外徒步"]},
-  {q:"发现对象跟异性聊天频繁，你？",o:["直接质问","偷偷观察","假装没看到","跟朋友吐槽"]},
-  {q:"你更重视感情中的什么？",o:["激情和新鲜感","稳定和安全感","自由和空间","忠诚和信任"]},
-  {q:"恋爱中最怕什么？",o:["被背叛欺骗","失去自由","吵架冷战","平淡无趣"]},
-  {q:"别人眼中你是什么样的恋人？",o:["热情浪漫型","温柔体贴型","独立高冷型","幽默有趣型"]},
-  {q:"你愿意为对象做出改变吗？",o:["完全愿意","看情况","不太愿意","对方改我就改"]},
-  {q:"最让你心动的表白方式？",o:["当众大声告白","私下温柔私语","写在信里","用行动表达就够了"]},
-  {q:"你认为对的人最重要的是？",o:["三观一致","性格互补","能一起成长","无条件包容你"]}
+  {q:"约会时你最看重什么？",o:["外表颜值","谈吐思想","经济条件","感觉对了"]},
+  {q:"吵架后你怎么做？",o:["立刻道歉","冷静沟通","等对方先","无所谓"]},
+  {q:"理想第一次约会地点？",o:["高级餐厅","书店咖啡","游乐场","户外自然"]},
+  {q:"对象跟异性聊天频繁？",o:["直接质问","偷偷观察","装没看到","找朋友吐槽"]},
+  {q:"感情中最重视什么？",o:["激情新鲜","稳定安全","自由空间","忠诚信任"]},
+  {q:"恋爱中最怕什么？",o:["被背叛","失自由","冷暴力","太平淡"]},
+  {q:"别人眼中你是怎样？",o:["热情浪漫","温柔体贴","独立高冷","幽默有趣"]},
+  {q:"愿意为对象改变吗？",o:["完全愿意","看情况","不太愿意","互相改"]},
+  {q:"最心动表白方式？",o:["当众告白","私下温柔","写信表达","行动证明"]},
+  {q:"对的人最重要是？",o:["三观一致","性格互补","一起成长","包容你"]}
 ];
-var S=[0,0,0,0,0],C=0;
-function start(){
-  S=[0,0,0,0,0];C=0;
-  document.getElementById('intro').style.display='none';
-  document.getElementById('result').style.display='none';
-  document.getElementById('quiz').style.display='block';
-  var p=document.getElementById('pb');p.innerHTML='';
-  for(var i=0;i<10;i++){var d=document.createElement('div');d.className='dot';d.id='d'+i;p.appendChild(d)}
-  showQ();
+var A=[0,0,0,0,0],N=0;
+function go(){A=[0,0,0,0,0];N=0;d('p1').className='hidden';d('p3').className='hidden';d('p2').className='';var p=d('pb');p.innerHTML='';for(var i=0;i<10;i++){var e=document.createElement('div');e.className='dot';e.id='d'+i;p.appendChild(e)}nxt();}
+function d(id){return document.getElementById(id)}
+function pick(i){
+  A[i]++;N++;if(d('d'+(N-1)))d('d'+(N-1)).classList.add('done');
+  if(N>=10){fin()}else{nxt()}
 }
-function showQ(){
-  if(C>=10){finish();return}
-  var q=Q[C];
-  document.getElementById('qn').textContent='第 '+(C+1)+'/10 题';
-  document.getElementById('qq').textContent=q.q;
-  var o=document.getElementById('qo');o.innerHTML='';
-  q.o.forEach(function(opt,idx){
-    var b=document.createElement('button');b.className='opt';b.textContent=opt;
-    b.addEventListener('click',function(){
-      S[idx]++;C++;
-      var dot=document.getElementById('d'+(C-1));if(dot)dot.classList.add('done');
-      if(C>=10){finish()}else{showQ()}
-    });
-    o.appendChild(b);
-  });
+function nxt(){
+  var q=Q[N];d('qn').textContent='第 '+(N+1)+'/10 题';d('qq').textContent=q.q;
+  var o=d('qo');o.innerHTML='';
+  for(var i=0;i<4;i++){o.innerHTML+='<button class="opt" onclick="pick('+i+')">'+q.o[i]+'</button>'}
 }
-function finish(){
-  document.getElementById('quiz').style.display='none';
-  document.getElementById('result').style.display='block';
-  document.getElementById('full').style.display='none';
-  document.getElementById('lock').style.display='block';
-  var m=Math.max.apply(null,S),i=S.indexOf(m);
+function fin(){
+  d('p2').className='hidden';d('p3').className='';d('fr').className='hidden';d('lk').className='lock';
+  var m=0,idx=0;for(var i=0;i<5;i++){if(A[i]>m){m=A[i];idx=i}}
   var T=[
-    {e:'🔥',n:'热情浪漫型',s:'热情指数 '+Math.round(m/10*100)+'%',d:'恋爱中热烈如火，不保留不隐藏。浪漫是你与生俱来的天赋——提前一个月准备惊喜，把约会变成电影。你的爱意从不打折，每段感情全力以赴。注意：太炽热有时会灼伤对方，适时降温更长久。'},
-    {e:'🌊',n:'温柔细腻型',s:'温柔指数 '+Math.round(m/10*100)+'%',d:'你的爱像山间溪流，不急不缓却始终向前。记得对方每个小习惯、每次随口提到的心愿。会在对方生病时熬粥、加班时送宵夜。你需要能读懂你沉默的人。你的温柔本身就是最稀缺的魅力。'},
-    {e:'🦅',n:'独立高冷型',s:'独立指数 '+Math.round(m/10*100)+'%',d:'感情中保持清醒独立，不轻易迷失自我。不黏人不查岗不翻手机——不是不在意，是相信好的感情不需要监视。高冷外表下藏着热忱的心，只有耐心走进的人才能看到。不将就是对爱情最大的尊重。'},
-    {e:'🎭',n:'幽默风趣型',s:'幽默指数 '+Math.round(m/10*100)+'%',d:'朋友圈里公认的开心果，和你在一起永远不无聊。用笑声化解尴尬，用段子掩盖深情。偶尔要卸下面具——有时候对方需要的不只是笑，而是一个认真的眼神和真诚的爱意表达。'},
-    {e:'💎',n:'理智稳健型',s:'理智指数 '+Math.round(m/10*100)+'%',d:'感情中头脑清醒，不靠冲动做决定。像评估项目一样认真对待感情——不是冷漠，是对双方负责。一旦确认是对的人，忠诚和坚定远超常人。爱或许不浪漫，但绝对可靠。'}
+    {e:'🔥',n:'热情浪漫型',s:'热情指数 '+Math.round(m/10*100)+'%',t:'恋爱中热烈如火，不保留不隐藏。浪漫是你与生俱来的天赋——提前一个月准备惊喜，把约会变成电影。你的爱意从不打折，每段感情全力以赴。'},
+    {e:'🌊',n:'温柔细腻型',s:'温柔指数 '+Math.round(m/10*100)+'%',t:'你的爱像山间溪流，不急不缓却始终向前。记得对方每个小习惯、每次随口提到的心愿。会在对方生病时熬粥、加班时送宵夜。'},
+    {e:'🦅',n:'独立高冷型',s:'独立指数 '+Math.round(m/10*100)+'%',t:'感情中保持清醒独立，不轻易迷失自我。不黏人不查岗——相信好感情不需要监视。高冷外表下藏着热忱的心。'},
+    {e:'🎭',n:'幽默风趣型',s:'幽默指数 '+Math.round(m/10*100)+'%',t:'朋友圈公认的开心果，和你在一起永远不无聊。用笑声化解尴尬，用段子掩盖深情。偶尔要卸下面具表达真心。'},
+    {e:'💎',n:'理智稳健型',s:'理智指数 '+Math.round(m/10*100)+'%',t:'感情中头脑清醒，不靠冲动做决定。像评估项目一样认真对待感情。一旦确认是对的人，忠诚远超常人。'}
   ];
-  var t=T[i];
-  document.getElementById('re').textContent=t.e;
-  document.getElementById('rt').textContent=t.n;
-  document.getElementById('rs').textContent=t.s;
-  document.getElementById('rd').textContent=t.d;
-  window.scrollTo({top:0,behavior:'smooth'});
+  var t=T[idx];d('re').textContent=t.e;d('rt').textContent=t.n;d('rs').textContent=t.s;d('rd').textContent=t.t;
+  window.scrollTo(0,0);
 }
-function unlock(){
+function un(){
   setTimeout(function(){
-    document.getElementById('full').style.display='block';
-    document.getElementById('lock').style.display='none';
-    var i=S.indexOf(Math.max.apply(null,S));
+    d('fr').className='';d('lk').className='hidden';
+    var idx=0,m=0;for(var i=0;i<5;i++){if(A[i]>m){m=A[i];idx=i}}
     var F=[
-      '💘 深度报告\n\n🔥 恋爱人格：热情浪漫型\n\n爱情观：全力以赴不留余地。每次心动都是新开始，每段感情都像第一段那样投入。\n\n🎯 最佳匹配：温柔细腻型\n你的热情被对方的温柔承接。\n\n💡 建议：学会在激情中保持理性。\n\n📅 2026：夏季桃花旺，秋季可能遇正缘。\n⭐ 综合评分：87分',
-      '💘 深度报告\n\n🌊 恋爱人格：温柔细腻型\n\n相信日久生情胜过一见钟情。爱藏在每个日常细节里。\n\n🎯 最佳匹配：幽默风趣型\n对方的笑声融化你的沉闷，你的温柔稳定对方的活泼。\n\n💡 建议：别总把对方放第一位，学会说"我要"。\n\n📅 2026：春天缘起，秋天升温。\n⭐ 综合评分：91分',
-      '💘 深度报告\n\n🦅 恋爱人格：独立高冷型\n\n宁缺毋滥，等待配得上你灵魂深度的人。\n\n🎯 最佳匹配：理智稳健型\n两个独立的人，不黏不腻却默契十足。\n\n💡 建议：偶尔放下防备，给Ta走进你世界的机会。\n\n📅 2026：冬季工作场合可能遇缘。\n⭐ 综合评分：84分',
-      '💘 深度报告\n\n🎭 恋爱人格：幽默风趣型\n\n用笑声装点关系，让爱情像永不散场的喜剧。\n\n🎯 最佳匹配：温柔细腻型\n对方细腻让你的幽默有温暖底色。\n\n💡 建议：偶尔卸下搞笑面具，真心话更打动人。\n\n📅 2026：全年桃花旺，5月10月关键。\n⭐ 综合评分：85分',
-      '💘 深度报告\n\n💎 恋爱人格：理智稳健型\n\n像选股票一样选伴侣——不是势利，是认真。\n\n🎯 最佳匹配：独立高冷型\n两个理智型，高效又舒服。\n\n💡 建议：偶尔感性，别用Excel评估感情。\n\n📅 2026：事业感情双丰收。\n⭐ 综合评分：90分'
+      '💘 深度报告\n\n🔥 热情浪漫型\n爱情观：全力以赴不留余地。每次心动都是新开始。\n🎯 最佳匹配：温柔细腻型\n💡 建议：学会在激情中保持理性\n📅 2026：夏季桃花旺，秋遇正缘\n⭐ 87分',
+      '💘 深度报告\n\n🌊 温柔细腻型\n相信日久生情胜过一见钟情。\n🎯 最佳匹配：幽默风趣型\n💡 建议：别总把对方放第一位\n📅 2026：春缘起，秋升温\n⭐ 91分',
+      '💘 深度报告\n\n🦅 独立高冷型\n宁缺毋滥，等待配得上你灵魂的人。\n🎯 最佳匹配：理智稳健型\n💡 建议：偶尔放下防备\n📅 2026：冬季工作场合遇缘\n⭐ 84分',
+      '💘 深度报告\n\n🎭 幽默风趣型\n用笑声让爱情像永不散场的喜剧。\n🎯 最佳匹配：温柔细腻型\n💡 建议：真心话比玩笑更动人\n📅 2026：全年桃花旺\n⭐ 85分',
+      '💘 深度报告\n\n💎 理智稳健型\n像选股一样选伴侣——是认真不是势利。\n🎯 最佳匹配：独立高冷型\n💡 建议：偶尔感性\n📅 2026：事业感情双丰收\n⭐ 90分'
     ];
-    document.getElementById('fc').innerHTML=F[i].replace(/\n/g,'<br>');
-  },1500);
+    d('fc').innerHTML=F[idx].replace(/\n/g,'<br>')
+  },1500)
 }
-function share(){
-  if(navigator.share){navigator.share({title:'💔 超准恋爱人格测试',text:'测完我震惊了！来测测你的恋爱类型！',url:location.href}).catch(function(){})}
-  else{prompt('复制链接分享：',location.href)}
-}
-function retry(){document.getElementById('result').style.display='none';document.getElementById('intro').style.display='block';window.scrollTo({top:0,behavior:'smooth'})}
-(function(){var n=289300+Math.floor(Math.random()*200);setInterval(function(){var e=document.getElementById('ct');if(e){n+=Math.floor(Math.random()*8)+1;e.textContent=n.toLocaleString()}},6000)})();
+function sh(){if(navigator.share){navigator.share({title:'💔 超准恋爱测试',text:'测完震惊了！来测测你的恋爱类型！',url:location.href}).catch(function(){})}else{prompt('复制链接：',location.href)}}
+function re(){d('p3').className='hidden';d('p1').className='';window.scrollTo(0,0)}
+setInterval(function(){var e=d('ct');if(e){var n=parseInt(e.textContent.replace(/,/g,''))||289000;n+=Math.floor(Math.random()*9)+1;e.textContent=n.toLocaleString()}},6000);
 </script>
 </body>
 </html>
