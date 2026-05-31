@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>👻 测你内心藏着几个灵魂 Hm1</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a1a;color:#e0e0e0;min-height:100vh;padding:20px 16px}
+.container{max-width:460px;margin:0 auto}
+.hero{text-align:center;margin:30px 0 20px}
+.hero .icon{font-size:56px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,#a855f7,#7c3aed,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:10px}
+.hero p{color:#888;font-size:0.85rem;margin-top:6px}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:24px 18px;margin-bottom:16px}
+.progress{display:flex;gap:4px;margin-bottom:20px}
+.progress .dot{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.1)}
+.progress .dot.done{background:linear-gradient(90deg,#a855f7,#6366f1)}
+.qn{font-size:0.75rem;color:#a855f7;margin-bottom:6px;font-weight:600}
+.qq{font-size:1.1rem;font-weight:700;margin-bottom:16px;line-height:1.4}
+.opt{display:block;width:100%;padding:14px 16px;margin-bottom:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);color:#e0e0e0;font-size:0.95rem;text-align:left;cursor:pointer;transition:all 0.2s}
+.opt:active{border-color:#a855f7;background:rgba(168,85,247,0.12)}
+.hidden{display:none}
+.re{font-size:60px;text-align:center;margin-bottom:10px}
+.rt{display:block;text-align:center;padding:10px 24px;border-radius:25px;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;margin:10px auto;width:fit-content}
+.rs{text-align:center;font-size:0.85rem;color:#a855f7;margin:8px 0}
+.rd{line-height:1.8;color:#b8b8d0}
+.lock{margin-top:16px;padding:20px;border-radius:14px;background:rgba(168,85,247,0.05);border:1px dashed rgba(168,85,247,0.2);text-align:center}
+.li{font-size:44px;margin-bottom:8px}.lock h4{color:#a855f7;margin-bottom:4px}.lock p{font-size:0.8rem;color:#888;margin-bottom:12px}
+.ba{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:1px;animation:pulse 2.5s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(168,85,247,0.3)}50%{box-shadow:0 0 40px rgba(99,102,241,0.5)}}
+.bs{width:100%;margin-top:14px;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:#aaa;font-size:0.9rem;cursor:pointer}
+.br{width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:50px;color:#666;font-size:0.85rem;cursor:pointer}
+.foot{text-align:center;font-size:0.7rem;color:#555;margin:20px 0}
+</style></head>
+<body><div class="container">
+<div id="p1"><div class="hero"><div class="icon">👻</div><h1>内心灵魂测试</h1><p>测测你体内藏着几个灵魂</p></div>
+<div class="card" style="text-align:center"><p style="color:#aaa;font-size:0.9rem;margin-bottom:16px">已有 <b style="color:#a855f7" id="ct">345,721</b> 人完成</p>
+<button onclick="go()" style="width:100%;padding:16px;font-size:1.1rem;font-weight:700;background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;border:none;border-radius:50px;cursor:pointer;letter-spacing:2px">👻 开始测试</button></div>
+<p class="foot">⚠️ 仅供娱乐参考</p></div>
+<div id="p2" class="hidden"><div class="progress" id="pb"></div><div class="card"><div class="qn" id="qn"></div><div class="qq" id="qq"></div><div id="qo"></div></div></div>
+<div id="p3" class="hidden"><div class="re" id="re"></div><div class="rt" id="rt"></div><div class="rs" id="rs"></div><div class="card"><div class="rd" id="rd"></div></div>
+<div class="lock" id="lk"><div class="li">🔒</div><h4>灵魂报告已加密</h4><p>观看15秒广告解锁深度分析</p><button class="ba" onclick="un()">🔓 观看广告解锁</button></div>
+<div id="fr" class="hidden"><div class="card" style="border-color:rgba(168,85,247,0.2)"><div id="fc"></div></div></div>
+<button class="bs" onclick="sh()">📤 分享给朋友</button><button class="br" onclick="re()">🔄 重新测试</button><p class="foot">⚠️ 仅供娱乐参考</p></div></div>
+<script>
+var Q=[{q:"深夜独处时你感觉？",o:["脑子停不下来想很多","平静享受独处","莫名感到害怕","好像有另一个自己在说话"]},{q:"你做决定时？",o:["理性分析权衡利弊","直觉说了算","经常后悔改主意","感觉有好几个声音在争论"]},{q:"朋友眼中的你？",o:["性格鲜明始终如一","时而开朗时而忧郁","判若两人捉摸不透","多重人格切换自如"]},{q:"面对压力时？",o:["反而兴奋战斗力飙升","瞬间崩溃需要安慰","表面淡定内心崩溃","不同场景完全不同的自己"]},{q:"你的社交状态？",o:["社牛本牛到处聊","社恐躲在角落","时而社牛时而社恐","不同场合不同人格"]},{q:"做梦醒来后？",o:["完全不记得","记得很清晰","分不清梦和现实","梦里自己完全不一样"]},{q:"你相信？",o:["科学至上","冥冥中有安排","灵魂真的存在","我经历过无法解释的事"]},{q:"遇到突发状况？",o:["冷静处理","先慌再稳","完全懵掉","身体自己会动"]},{q:"你的情绪开关？",o:["很稳定","大起大落","看心情","每天都在切换"]},{q:"照镜子时？",o:["这就是我","这个人好陌生","有时候不认识自己","镜子里好像不是自己"]}];
+var A=[0,0,0,0,0],N=0;
+function d(id){return document.getElementById(id)}
+function go(){A=[0,0,0,0,0];N=0;d('p1').className='hidden';d('p3').className='hidden';d('p2').className='';var p=d('pb');p.innerHTML='';for(var i=0;i<10;i++){var e=document.createElement('div');e.className='dot';e.id='d'+i;p.appendChild(e)}nxt();}
+function pick(i){A[i]++;N++;if(d('d'+(N-1)))d('d'+(N-1)).classList.add('done');if(N>=10){fin()}else{nxt()}}
+function nxt(){var q=Q[N];d('qn').textContent='第 '+(N+1)+'/10 题';d('qq').textContent=q.q;var o=d('qo');o.innerHTML='';for(var i=0;i<4;i++){o.innerHTML+='<button class="opt" onclick="pick('+i+')">'+q.o[i]+'</button>'}}
+function fin(){d('p2').className='hidden';d('p3').className='';d('fr').className='hidden';d('lk').className='lock';var m=0,idx=0;for(var i=0;i<5;i++){if(A[i]>m){m=A[i];idx=i}}
+var T=[{e:'😇',n:'纯净单灵魂',s:'单一指数 '+Math.round(m/10*100)+'%',t:'你内心住着一个纯粹的灵魂。表里如一、始终如一是你最大的特质。你不纠结不内耗，活得坦荡通透。但偶尔也要允许自己有不一样的一面——完美的单一性也会让生活少了些色彩。'},{e:'😈',n:'双面灵魂体',s:'双面指数 '+Math.round(m/10*100)+'%',t:'你体内住着两个截然不同的灵魂——白天是理性的成年人大脑，夜晚是叛逆的青春少年。这种双面性让你在不同场合游刃有余，但也常常陷入自我拉扯。学会让他们和平共处，你的两种人格都是你的一部分。'},{e:'🎭',n:'多重人格型',s:'多重指数 '+Math.round(m/10*100)+'%',t:'你不是一个人在战斗——你体内至少住着三个完全不同的灵魂。工作时雷厉风行，独处时敏感脆弱，聚会时空前释放。你的人生就是一场不断切换的舞台剧，每个角色都精彩。'},{e:'🌪️',n:'灵魂风暴型',s:'风暴指数 '+Math.round(m/10*100)+'%',t:'你的内心世界如同十二级风暴——无数声音、无数想法、无数人格在其中碰撞。你是天才也是疯子，是天生的创造者。这种混乱不是病，是你与生俱来的魔法。学会驾驭它，你将所向无敌。'},{e:'🕊️',n:'灵魂升华型',s:'升华指数 '+Math.round(m/10*100)+'%',t:'你已经超越了单一或多重人格的范畴——你拥有一种罕见的内在和谐。你理解自己每一面，接纳每一种人格，你已不是分裂而是融合。你是自己灵魂的主人，这份清醒的智慧让身边的人都感到安宁。'}];
+var t=T[idx];d('re').textContent=t.e;d('rt').textContent=t.n;d('rs').textContent=t.s;d('rd').textContent=t.t;window.scrollTo(0,0)}
+function un(){setTimeout(function(){d('fr').className='';d('lk').className='hidden';var idx=0,m=0;for(var i=0;i<5;i++){if(A[i]>m){m=A[i];idx=i}};var F=['👻 灵魂深度报告\n\n😇 纯净单灵魂\n📍 灵魂纯度：98%\n📍 内耗指数：5%\n📍 人格切换：几乎为零\n\n💡 你的灵魂是一颗未经污染的钻石，纯粹而珍贵。你需要的是偶尔尝试不同的人生体验，让这颗钻石折射出不同的光彩。\n⭐ 灵魂评分：90分','👻 灵魂深度报告\n\n😈 双面灵魂体\n📍 灵魂纯度：50%+50%\n📍 内耗指数：60%\n📍 人格切换：频繁\n\n💡 两个灵魂是你的左膀右臂，不要压抑任何一方。白天用理性的灵魂工作，夜晚让感性的灵魂创作。接受双面性，你的人生会比别人丰富一倍。\n⭐ 灵魂评分：88分','👻 灵魂深度报告\n\n🎭 多重人格型\n📍 灵魂数量：3-5个\n📍 内耗指数：75%\n📍 人格切换：随时随地\n\n💡 你不是分裂，你是拥有了比别人更多的可能性。每个灵魂都有自己的天赋——学会在不同场景召唤正确的灵魂。最强的不是压制，而是整合。\n⭐ 灵魂评分：85分','👻 灵魂深度报告\n\n🌪️ 灵魂风暴型\n📍 灵魂数量：不可计数\n📍 内耗指数：95%\n📍 人格切换：不受控制\n\n💡 你不是疯了，你是被赋予了超乎常人的感知力和创造力。历史上最伟大的艺术家和发明家大多属于此类型。你需要的不是压制，而是一个合适的出口——创作会是你最好的救赎。\n⭐ 灵魂评分：82分','👻 灵魂深度报告\n\n🕊️ 灵魂升华型\n📍 灵魂状态：已融合\n📍 内耗指数：0%\n📍 人格切换：自由掌控\n\n💡 恭喜，你已经达到了人格发展的最高阶段。你理解并接受了内心的每一个声音，完成了灵魂的整合。这是一种罕见的平衡状态，你已经准备好去帮助更多的人。\n⭐ 灵魂评分：98分'];d('fc').innerHTML=F[idx].replace(/\n/g,'<br>')},1500)}
+function sh(){if(navigator.share){navigator.share({title:'👻 测你内心藏着几个灵魂',text:'测完震住了！来测测你体内有几个灵魂！',url:location.href}).catch(function(){})}else{prompt('复制链接：',location.href)}}
+function re(){d('p3').className='hidden';d('p1').className='';window.scrollTo(0,0)}
+setInterval(function(){var e=d('ct');if(e){var n=parseInt(e.textContent.replace(/,/g,''))||345000;n+=Math.floor(Math.random()*9)+1;e.textContent=n.toLocaleString()}},6000);
+</script></body></html>
