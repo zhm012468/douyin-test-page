@@ -216,7 +216,7 @@ function showReport(record){
   b+='<div class="tag-item"><div class="l">🧘 2026关键词</div><div class="v">'+keywordOpts[kI]+'</div></div>';
   b+='</div>';
   // 掌纹区域
-  b+='<div id="palm-admin-section">';
+  b+='<div id="palm-admin-section" data-has-palm="false">';
   b+='<hr class="divider">';
   b+='<h3>🔍 掌纹解读</h3>';
   b+='<div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:12px;padding:16px;text-align:center;color:var(--text-muted);font-size:0.82rem;">';
@@ -240,9 +240,9 @@ function downloadReport(){
   var clone = document.createElement('div');
   if(header) clone.appendChild(header.cloneNode(true));
   clone.appendChild(body.cloneNode(true));
-  // ★ 移除未识别手掌的占位区块（不截图无用区域）
+  // ★ 未识别手掌 → 不截图掌纹区块
   var palmSection = clone.querySelector('#palm-admin-section');
-  if(palmSection && palmSection.textContent.indexOf('未识别手掌')!==-1){
+  if(palmSection && palmSection.getAttribute('data-has-palm')==='false'){
     palmSection.remove();
   }
   clone.style.padding = '20px';
