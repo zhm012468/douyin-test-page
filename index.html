@@ -1589,15 +1589,18 @@ function showToast(msg) {
 // ============================================================
 (function() {
   if (window.location.search.indexOf('admin') !== -1) {
-    document.addEventListener('DOMContentLoaded', function() {
-      // 隐藏所有主屏幕
+    // 立即执行，不等DOMContentLoaded
+    setTimeout(function() {
       var screens = document.querySelectorAll('.screen');
       for (var i = 0; i < screens.length; i++) { screens[i].classList.remove('active'); }
       document.getElementById('screen-admin').classList.add('active');
       // 隐藏桌面端个签
       var desktopSigs = document.querySelectorAll('.desktop-sig');
       for (var i = 0; i < desktopSigs.length; i++) { desktopSigs[i].style.display = 'none'; }
-    });
+      // 隐藏移动端个签
+      var mobileSigs = document.querySelectorAll('.mobile-sig');
+      for (var i = 0; i < mobileSigs.length; i++) { mobileSigs[i].style.display = 'none'; }
+    }, 50);
   }
 })();
 
