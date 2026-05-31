@@ -828,7 +828,7 @@ body {
     </div>
 
     <p class="test-count" id="test-count">已有 128,936 人完成测试</p>
-    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v4.7</p>
+    <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:4px;letter-spacing:1px;">v4.8</p>
   </div>
 
   <!-- ========== 屏幕2: 加载动画 ========== -->
@@ -1437,16 +1437,16 @@ function onPalmPick(e){
   };r.readAsDataURL(f);
 }
 function clearPalm(){palmData=null;var p=document.getElementById('palmPreview');p.src='';p.style.display='none';document.getElementById('palmBox').classList.remove('has-img');document.getElementById('palmTag').style.display='none';document.getElementById('palmFile').value='';}
-// 手心识别（超宽松版）—— 有肤色就放行
+// 手心识别——只拦截纯色平面(地板/天花板)
 function classifyPalm(d){
-  var w=d.width,h=d.height,total=w*h,skin=0;
-  for(var i=0;i<total;i++){
+  var total=d.width*d.height,sum=0;
+  for(var i=0;i<total;i+=16){
     var idx=i*4,r=d[idx],g=d[idx+1],b=d[idx+2];
-    // 极度宽松的肤色判定
-    if(r>35&&g>15&&b>2&&(r+g+b)>70)skin++;
+    sum+=Math.abs(r-g)+Math.abs(g-b)+Math.abs(b-r);
   }
-  // 极低门槛：5%像素有肤色就通过
-  if(skin/total<0.05)return '未识别到人体手掌，请重新拍摄';
+  var avg=sum/(total/16);
+  // 纯色平面(地板/天花板/纯黑纯白)方差极低，有物体则方差高
+  if(avg<8)return '未识别到有效图像，请拍摄手掌';
   return 'ok';
 }
 
