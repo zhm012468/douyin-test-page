@@ -29,7 +29,7 @@ function d(id){return document.getElementById(id)}
 function previewImg(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){d('preview').src=ev.target.result;d('preview').style.display='block';d('upload').classList.add('has-img');d('genBtn').disabled=false;imgData=ev.target.result};r.readAsDataURL(f)}
 function generate(){
   if(!imgData)return;d('genBtn').disabled=true;d('genBtn').textContent='⏳ 生成中...';d('loading').style.display='block';d('result').style.display='none';
-  fetch('http://101.34.75.89:8081/api/cartoon',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:imgData})}).then(r=>r.json()).then(data=>{
+  fetch('http://101.34.75.89:8088/api/cartoon',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:imgData})}).then(r=>r.json()).then(data=>{
     d('loading').style.display='none';d('result').style.display='block';
     if(data.error){alert('生成失败：'+data.error);d('genBtn').disabled=false;d('genBtn').textContent='🎨 重新生成';return}
     if(data.Data&&data.Data.ImageURL){d('resultImg').src=data.Data.ImageURL}else if(data.Data&&data.Data.ResultImage){d('resultImg').src='data:image/png;base64,'+data.Data.ResultImage}
