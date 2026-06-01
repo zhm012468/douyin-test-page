@@ -24,9 +24,15 @@ function msg(t,c){var e=D(c);e.style.display='block';e.textContent=t;setTimeout(
 function P(e){var f=e.target.files[0];if(!f)return;msg('⏳ 图片处理中...','okm');
   var r=new FileReader();r.onload=function(ev){
     var img=new Image();img.onload=function(){
-      var c=document.createElement('canvas');var m=Math.min(img.width,1024);var s=m/img.width;c.width=m;c.height=Math.floor(img.height*s);
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      I=c.toDataURL('image/jpeg',0.85);
+      // ★ 自动裁剪：取中心正方形（假设人脸居中）
+      var size=Math.min(img.width,img.height,1024);
+      var sx=(img.width-size)/2,sy=(img.height-size)/2;
+      var c=document.createElement('canvas');c.width=size;c.height=size;
+      // ★ 增强对比度，让光线更均匀
+      var ctx=c.getContext('2d');ctx.filter='contrast(1.05) brightness(1.02)';
+      ctx.drawImage(img,sx,sy,size,size,0,0,size,size);
+      ctx.filter='none';
+      I=c.toDataURL('image/jpeg',0.88);
       D('pv').src=I;D('pv').style.display='block';D('up').classList.add('has');D('gb').disabled=false;msg('✅ 图片就绪 ('+(I.length/1024).toFixed(0)+'KB)','okm');
     };img.onerror=function(){msg('❌ 图片加载失败，请换一张','erm')};img.src=ev.target.result;
   };r.readAsDataURL(f);
