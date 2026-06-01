@@ -5,7 +5,7 @@ var AS=["J6EvRh3qqSmahXxUISo7U","XXCKogGh6"].join("");
 function callAPI(body,cb){
   var ts=Date.now().toString();
   var nonce=Math.random().toString(36).substring(2,15);
-  var qs="AccessKeyId="+AK+"&Action=GenerateHumanAnimeStyle&Format=JSON&RegionId=cn-shanghai&SignatureMethod=HMAC-SHA1&SignatureNonce="+nonce+"&SignatureVersion=1.0&Timestamp="+encodeURIComponent(ts)+"&Version=2020-02-28";
+  var qs="AccessKeyId="+AK+"&Action=GenerateHumanAnimeStyle&Format=JSON&RegionId=cn-shanghai&SignatureMethod=HMAC-SHA1&SignatureNonce="+nonce+"&SignatureVersion=1.0&Timestamp="+encodeURIComponent(ts)+"&Version=2019-12-30";
   var sts="POST&%2F&"+encodeURIComponent(qs);
   var sig=crypto.createHmac("sha1",AS+"&").update(sts).digest("base64");
   var url="https://facebody.cn-shanghai.aliyuncs.com/?"+qs+"&Signature="+encodeURIComponent(sig);
