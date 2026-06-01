@@ -3,7 +3,7 @@ var AK=["LTAI5t7Dzv3wbDoM","ag3WC3pZ"].join("");
 var AS=["J6EvRh3qqSmahXxUISo7U","XXCKogGh6"].join("");
 
 function callAPI(body,cb){
-  var ts=Date.now().toString();
+  var ts=new Date().toISOString().replace(/[:-]/g,"").substring(0,15)+"Z";
   var nonce=Math.random().toString(36).substring(2,15);
   var qs="AccessKeyId="+AK+"&Action=GenerateHumanAnimeStyle&Format=JSON&RegionId=cn-shanghai&SignatureMethod=HMAC-SHA1&SignatureNonce="+nonce+"&SignatureVersion=1.0&Timestamp="+encodeURIComponent(ts)+"&Version=2019-12-30";
   var sts="POST&%2F&"+encodeURIComponent(qs);
